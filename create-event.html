@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <title>CRM</title>
+  </head>
+  <body>
+    <div id="root">
+      <header>
+        <a href="#" class="logo">CRM</a>
+        <div></div>
+        <a href="#" class="profile-button">
+          <img src="img/profile-icon.svg" width="37" height="37">
+          <p>Имя пользователя</p>
+        </a>
+        <img src="img/notion.svg" height="26.18" width="22.8">
+        <img src="img/logout.svg" height="30.83" width="37">
+      </header>
+      <main>
+        <nav>
+          <a href="index.html" class="navigation nav-events">Мероприятия</a>
+          <a href="create-event.html" class="navigation nav-create-event" style="background-color: #dedab4;">Создать<br>мероприятие</a>
+          <a href="create-message.html" class="navigation nav-message">Сообщения<br>для рассылки</a>
+        </nav>
+        <form class="add-new-event-form">
+          <label class="name-lable" for="name">Название:</label>
+          <input id="name" type="text" name="name" required class="form-field">
+          <label class="description-lable" for="description">Описание:</label>
+          <textarea id="description" name="description" required class="form-field"></textarea>
+          <div class="form-field">
+            <label class="date-lable">Срок проведения</label>
+            <label class="date-from-lable" for="date-from">Начало:</label>
+            <input id="date-from" type="date" name="date-from" required>
+            <label class="date-to-lable" for="date-to">Конец:</label>
+            <input id="date-to" type="date" name="date-to" required>
+          </div>
+          <div class="form-field">
+            <label class="enrollment-date-lable">Срок зачисления студентов</label>
+            <label class="enrollment-date-from-lable" for="enrollment-date-from">Начало:</label>
+            <input id="enrollment-date-from" type="date" name="enrollment-date-from" required>
+            <label class="enrollment-date-to-lable" for="enrollment-date-to">Конец:</label>
+            <input id="enrollment-date-to" type="date" name="enrollment-date-to" required>
+          </div>
+          <label class="number-of-participants-lable" for="number-of-participants" class="form-field">Количество мест:</label>
+          <input id="number-of-participants" type="number" name="name" required>
+          <label class="supervisor-lable" for="supervisor">Руководитель:</label>
+          <input id="supervisor" type="text" name="supervisor" required class="form-field">
+
+          <label class="chat-link-lable" for="chat-link">Ссылка на огр. чат:</label>
+          <input id="chat-link" type="input" name="chat-link" required class="form-field">
+          <button class="new-event-form-save-button">Сохранить</button>
+        </form>
+      </main>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

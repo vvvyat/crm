@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <title>CRM</title>
+  </head>
+  <body>
+    <div id="root">
+      <header>
+        <a href="#" class="logo">CRM</a>
+        <div></div>
+        <a href="#" class="profile-button">
+          <img src="img/profile-icon.svg" width="37" height="37">
+          <p>Имя пользователя</p>
+        </a>
+        <img src="img/notion.svg" height="26.18" width="22.8">
+        <img src="img/logout.svg" height="30.83" width="37">
+      </header>
+      <main>
+        <nav>
+          <a href="index.html" class="navigation nav-events">Мероприятия</a>
+          <a href="create-event.html" class="navigation nav-create-event">Создать<br>мероприятие</a>
+          <a href="create-message.html" class="navigation nav-message" style="background-color: #dedab4;">Сообщения<br>для рассылки</a>
+        </nav>
+        <form class="message-form">
+            <label class="message-form-lable" for="approval">Если зачислен на мероприятие:</label>
+            <textarea id="approval" name="approval-message" required></textarea>
+            <label class="message-form-lable" for="rejection">Если пришел отказ:</label>
+            <textarea id="rejection" name="rejection-message"></textarea>
+            <button class="message-form-save-button">Сохранить</button>
+        </form>
+      </main>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
