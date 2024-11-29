@@ -4,13 +4,17 @@ body {
     font-size: 16px;
 }
 
+button {
+    cursor: pointer;
+}
+
 header {
     width: 100%;
     height: 70px;
     background-color: #c7bf9e;
     border-bottom: 5px solid #d9d9d9;
     display: grid;
-    grid-template-columns: 10.8% 54% 18% 2.7% 14.5%;
+    grid-template-columns: 10.8% 61.7% 15.7% 14.5%;
     align-items: center;
 }
 
@@ -44,6 +48,20 @@ main {
     height: 100vh;
 }
 
+.short-event-info {
+    display: grid;
+    grid-template-columns: 10.8% 78.4% 10.8%;
+    height: 100vh;
+}
+
+aside {
+    border-left: 5px solid #d9d9d9;
+    background-color: #c7bf9e;
+    padding: 75px 5%;
+    display: flex;
+    flex-direction: column;
+}
+
 nav {
     border-right: 5px solid #d9d9d9;
     display: flex;
@@ -51,22 +69,17 @@ nav {
     background-color: #c7bf9e;
 }
 
-.navigation {
+nav button {
     width: 100%;
-
     text-align: center;
     padding: 22px 0;
+    border: none;
     border-bottom: 5px solid #d9d9d9;
-    border-right: 5px solid #d9d9d9;
-
     background-color: #c7bf9e;
+    cursor: pointer;
 }
 
-.navigation:hover {
-    background-color: #dedab4;
-}
-
-.events-container {
+.events-container, .event-info-container, .curators-container, .students-container {
     padding-left: 36px;
     padding-right: 68px;
 }
@@ -77,6 +90,7 @@ nav {
     background-color: #c7bf9e;
     border-radius: 32px;
     border: 5px solid #d9d9d9;
+    cursor: pointer;
 }
 
 .event h2 {
@@ -98,7 +112,7 @@ nav {
     display: flex;
 }
 
-.search {
+.search-form{
     background-color: #dedab4;
     border-radius: 32px;
     margin-left: 18px;
@@ -106,7 +120,7 @@ nav {
     width: 50%;
 }
 
-#search {
+.search {
     margin-left: 5px;
     width: 80%;
     border: none;
@@ -117,37 +131,7 @@ nav {
     font-family: 'Philosopher', Arial, Helvetica, sans-serif;
 }
 
-.message-form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 68px;
-    padding-left: 36px;
-    padding-right: 68px;
-}
-
-.message-form-lable {
-    margin: 0;
-    margin-left: 38px;
-    margin-bottom: 13px;
-    font-size: 20px;
-}
-
-.message-form textarea {
-    background: #c7bf9e !important;
-    outline: none;
-    color: #000000;
-    font-size: 16px;
-    font-family: 'Philosopher', Arial, Helvetica, sans-serif;
-    margin-bottom: 45px;
-    padding: 20px;
-    border: 5px solid #d9d9d9;
-    border-radius: 32px;
-    height: 159px;
-    resize: vertical;
-    overflow: hidden;
-}
-
-.message-form-save-button, .new-event-form-save-button {
+.delete-button, .save-button, .close-button {
     background: #c7bf9e !important;
     padding: 16px 0;
     outline: none;
@@ -157,11 +141,68 @@ nav {
     font-family: 'Philosopher', Arial, Helvetica, sans-serif;
     border: 5px solid #d9d9d9;
     border-radius: 32px;
-    width: 18%;
+    width: 20%;
     margin-bottom: 30px;
 }
 
-.add-new-event-form {
+.send-request-button, .show-more-button {
+    background: #dedab4 !important;
+    padding: 16px 0;
+    outline: none;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Philosopher', Arial, Helvetica, sans-serif;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    margin-bottom: 20px;
+}
+
+.more-info {
+    position: absolute;
+    background: #d9d9d9 !important;
+    padding: 16px;
+    padding-bottom: 40px;
+    border: 5px solid #c7bf9e;
+    border-radius: 32px;
+    position: absolute;
+    top: 60vh;
+    left: 70%;
+    line-height: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.short-event-info .manager {
+    width: 44.8%;
+}
+
+.short-event-info .close-button {
+    position: absolute;
+    top: 80vh;
+}
+
+.more-info li {
+    list-style-image: url(../img/marker.svg);
+    padding-left: 20px;
+}
+
+.delete-event-button {
+    background: #d9d9d9 !important;
+    padding: 16px 0;
+    outline: none;
+    color: #000000;
+    font-size: 16px;
+    font-family: 'Philosopher', Arial, Helvetica, sans-serif;
+    border: 5px solid #c7bf9e;
+    border-radius: 32px;
+    width: 20%;
+    margin-bottom: 30px;
+    margin-left: 40px;
+}
+
+.event-form {
     display: flex;
     flex-direction: column;
     margin-top: 36px;
@@ -169,18 +210,18 @@ nav {
     padding-right: 68px;
 }
 
-.add-new-event-form label {
+.event-form label {
     margin: 0;
     margin-left: 38px;
     margin-bottom: 5px;
 }
 
-.form-field {
+.event-form input, .event-form textarea, .event-form div {
     margin: 0;
     margin-bottom: 13px;
 }
 
-.add-new-event-form input, .add-new-event-form textarea {
+.event-form input, .event-form textarea {
     background: #c7bf9e !important;
     outline: none;
     color: #000000;
@@ -191,22 +232,149 @@ nav {
     border-radius: 32px;
 }
 
-.add-new-event-form textarea {
+.event-form textarea {
     padding: 20px;
     height: 126px;
     resize: vertical;
     overflow: hidden;
 }
 
-#number-of-participants {
+.number-of-participants {
     text-align: center;
-    width: 22%;
 }
 
-#chat-link, #supervisor {
-    width: 44.8%;
+input[type=date] {
+    margin-left: 10px;
 }
 
-.new-event-form-save-button {
+.save-button {
     margin-top: 30px;
+}
+
+.event-info-container .title, .event-info-container .discription, .event-info-container .eventDates,  .event-info-container .numberSeats,
+.event-info-container .manager, .event-info-container .chatUrl, .event-info-container .enrollmentDates {
+    padding: 17px;
+    background-color: #c7bf9e;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    margin-bottom: 40px;
+}
+
+.event-info-container .title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 75px;
+}
+
+.event-info-container .discription {
+    height: 92px;   
+}
+
+.organization-info {
+    display: grid;
+    gap: 3%;
+    grid-template-columns: 44.8% 44.8%;
+}
+
+.close-button {
+    margin-top: 60px;
+}
+
+.curators-container, .students-container {
+    margin-top: 75px;
+}
+
+.student, .students-header {
+    display: grid;
+    column-gap: 1.9%;
+    grid-template-columns: 6.7% 20.8% 31.1% 22.8% 11%;
+    background-color: #c7bf9e;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    margin-bottom: 40px;
+}
+
+.student, .curator {
+    min-height: 100px;
+}
+
+.student p, .students-header p, .curator p, .curators-header p, .curator-requests-header p, .curator-requests p,
+.student-requests-header p, .student-requests p {
+    margin: 0;
+    padding: 18px 0;
+}
+
+.counter {
+    text-align: center;
+    border-right: 5px solid #d9d9d9;
+}
+
+.curator, .curators-header {
+    display: grid;
+    column-gap: 1.9%;
+    grid-template-columns: 6.7% 28.2% 17.2% 21.1% 19.2%;
+    background-color: #c7bf9e;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    margin-bottom: 40px;
+}
+
+.event-form .edit-event-label {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 45px;
+}
+
+.curator-requests-header, .student-requests-header {
+    display: grid;
+    column-gap: 1.9%;
+    grid-template-columns: 6.7% 25% 1fr;
+    background-color: #c7bf9e;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    margin-bottom: 40px;
+}
+
+.curator-requests, .student-requests {
+    display: grid;
+    column-gap: 1.9%;
+    grid-template-columns: 6.7% 25% 30% 1fr;
+    background-color: #c7bf9e;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    margin-bottom: 40px;
+    min-height: 100px;
+    position: relative;
+}
+
+.accept {
+    background: #dedab4 !important;
+    border: none;
+    outline: none;
+    color: #000000;
+    font-size: 16px;
+    font-family: 'Philosopher', Arial, Helvetica, sans-serif;
+    border-radius: 32px;
+    height: 43px;
+    width: 126px;
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    margin-top: -21.5px;
+}
+
+.reject {
+    background: #d9d9d9 !important;
+    border: none;
+    outline: none;
+    color: #000000;
+    font-size: 16px;
+    font-family: 'Philosopher', Arial, Helvetica, sans-serif;
+    border-radius: 32px;
+    height: 43px;
+    width: 126px;
+    position: absolute;
+    top: 50%;
+    left: 82.15%;
+    margin-top: -21.5px;
 }
