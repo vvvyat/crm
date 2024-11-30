@@ -5,4 +5,4 @@ import { Student } from './components/student/router'
 
 export const root = createRoot(document.getElementById('root')!)
 
-root.render(<Student />)
+root.render(<Administrator />)

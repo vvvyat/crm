@@ -65,6 +65,138 @@ const studentsList = [
         competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
         telegramUrl: '@telegtamUrl',
         vkUrl: 'vk.com'
+    },
+    {
+        eventId: 1,
+        studentId: 3,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Данил',
+        lastName: 'Константинович',
+        surname: 'Максимов',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 1,
+        studentId: 4,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Михаил',
+        lastName: 'Романович',
+        surname: 'Горкунов',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 2,
+        studentId: 5,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Ксения',
+        lastName: 'Михайловна',
+        surname: 'Зайцева',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 2,
+        studentId: 6,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Елена',
+        lastName: 'Дмитриевна',
+        surname: 'Новокрещенных',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 2,
+        studentId: 7,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Глеб',
+        lastName: 'Сергеевич',
+        surname: 'Чашин',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 3,
+        studentId: 8,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Иан',
+        lastName: 'Викторович',
+        surname: 'Иванов',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 3,
+        studentId: 9,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Антон',
+        lastName: 'Дмитриеевич',
+        surname: 'Воложанинов',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 3,
+        studentId: 10,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Кирилл',
+        lastName: 'Сергеевич',
+        surname: 'Ковальчук',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 3,
+        studentId: 11,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Екатерина',
+        lastName: 'Олеговна',
+        surname: 'Мальцева',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 3,
+        studentId: 12,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Анна',
+        lastName: 'Сергеевна',
+        surname: 'Бисерова',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 3,
+        studentId: 13,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Елизавета',
+        lastName: 'Ивановна',
+        surname: 'Архипова',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
+    },
+    {
+        eventId: 3,
+        studentId: 14,
+        studentStatus: 'Приступил(а) к мероприятию',
+        firstName: 'Сергей',
+        lastName: 'Максимович',
+        surname: 'Курочкин',
+        competencies: 'Наблюдательность, Принятие инициативы, Принятие решений',
+        telegramUrl: '@telegtamUrl',
+        vkUrl: 'vk.com'
     }
 ]
 
