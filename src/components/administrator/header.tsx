@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Header: React.FC = React.memo(() => {
+    const logoRef = useRef<HTMLAnchorElement>(null)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const onLogoClick = () => {
+            navigate('/')
+        }
+
+        logoRef.current?.addEventListener('click', onLogoClick)
+    }, [])
+
     return (
         <header>
-            <a className="logo">CRM</a>
-            <form className="search-form">
-                <label className="search-lable">Поиск</label>
-                <input className="search" type="text" name="search"/>
-            </form>
+            <a ref={logoRef} className="logo">CRM</a>
+            <div></div>
             <div className="profile-button">
                 <img src="img/profile-icon.svg" width="37" height="37"/>
                 <p>Имя пользователя</p>

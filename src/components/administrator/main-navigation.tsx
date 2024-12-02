@@ -1,43 +1,19 @@
 import React, { useEffect, useRef } from "react"
-import { useMatch, useNavigate } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 
-export const MainNavigation: React.FC<{
-    changeIsConfirmOpen: () => void;
-    createFormRef: React.RefObject<HTMLFormElement>;
-}> = React.memo(({
-    changeIsConfirmOpen,
-    createFormRef
-}) => {
-    const {page} = useMatch('/:page')?.params || {}
+export const MainNavigation: React.FC = React.memo(() => {
+    const page = useLocation().pathname
     const eventsListButtonRef = useRef<HTMLButtonElement>(null)
     const createEventButtonRef = useRef<HTMLButtonElement>(null)
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log('эффект')
         const onEventsListButtonClick = () => {
-            /*changeIsConfirmOpen()
-            const confirmButton = document.querySelector('.create-event-warning-confirm')
-            const cancelButton = document.querySelector('.create-event-warning-cancel')
-            console.log(confirmButton)
-            console.log(cancelButton)
-            if (createFormRef.current) {
-                createFormRef.current.style.filter = 'blur(5px)'
-            }
-            confirmButton?.addEventListener('click', () => {
-                console.log('click')
-                navigate('/')
-            })
-            cancelButton?.addEventListener('click', () => {
-                createFormRef.current?.style.removeProperty('filter')
-                changeIsConfirmOpen()
-                console.log('click')
-            })*/
             navigate('/')
         }
 
         const onCreateEventButtonClick = () => {
-            navigate('/create-event')
+            navigate('/create')
         }
 
         eventsListButtonRef.current?.addEventListener('click', onEventsListButtonClick)
@@ -45,17 +21,22 @@ export const MainNavigation: React.FC<{
     }, [])
 
     useEffect(() => {
-        if (page === undefined && eventsListButtonRef.current) {
+        if (page === '/' && eventsListButtonRef.current && createEventButtonRef.current) {
             eventsListButtonRef.current.style.backgroundColor = '#dedab4'
-        } else if (page === 'create-event' && createEventButtonRef.current) {
+            createEventButtonRef.current.style.backgroundColor = '#c7bf9e'
+        } else if (page === '/create' && createEventButtonRef.current && eventsListButtonRef.current) {
             createEventButtonRef.current.style.backgroundColor = '#dedab4'
+            eventsListButtonRef.current.style.backgroundColor = '#c7bf9e'
         }
     }, [page])
 
     return (
-        <nav>
-            <button ref={eventsListButtonRef} className="events-button">Мероприятия</button>
-            <button ref={createEventButtonRef} className="create-event-button">Создать<br/>мероприятие</button>
-        </nav>
+        <>
+            <nav>
+                <button ref={eventsListButtonRef} className="events-button">Мероприятия</button>
+                <button ref={createEventButtonRef} className="create-event-button">Создать<br/>мероприятие</button>
+            </nav>
+            <Outlet />
+        </>
     )
 })

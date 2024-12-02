@@ -2,7 +2,6 @@ import { FormatDate } from "../../utils";
 import { Event } from "../../consts";
 import React, { useEffect, useRef} from "react";
 import { useNavigate } from "react-router-dom";
-import { MainNavigation } from "./main-navigation"
 
 const EventPreview: React.FC<{
     event: Event
@@ -12,12 +11,10 @@ const EventPreview: React.FC<{
 
     useEffect(() => {
         const onEventPreviewClick = () => {
-            navigate('/event-info')
+            navigate('/event/id/info')
         }
 
         eventRef.current?.addEventListener('click', onEventPreviewClick)
-
-        return () =>  eventRef.current?.removeEventListener('click', onEventPreviewClick)
     }, [])
 
     return (
@@ -38,27 +35,10 @@ export const EventsList: React.FC<{
     events: Array<Event>;
 }> = React.memo(({events}) => {
     return (
-        <>
-            <header>
-                <a className="logo">CRM</a>
-                <form className="search-form">
-                    <label className="search-lable">Поиск</label>
-                    <input className="search" type="text" name="search"/>
-                </form>
-                <div className="profile-button">
-                    <img src="img/profile-icon.svg" width="37" height="37"/>
-                    <p>Имя пользователя</p>
-                </div>
-                <img src="img/logout.svg" height="30.83" width="37"/>
-            </header>
-            <main>
-                <MainNavigation />
-                <div className="events-container">
-                    {events.map(event => {
-                        return < EventPreview key={event.id} event={event} />
-                    })}
-                </div>
-            </main>
-        </>
+        <div className="events-container">
+            {events.map(event => {
+                return < EventPreview key={event.id} event={event} />
+            })}
+        </div>
     )
 })
