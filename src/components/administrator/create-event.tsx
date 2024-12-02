@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { studentsList } from "../../mock"
+import { ExitCreateContext } from "./exit-create-context";
 import { useNavigate } from "react-router-dom";
 
 type Inputs = {
@@ -16,10 +17,9 @@ type Inputs = {
 }
 
 export const CreateEvent: React.FC = React.memo(() => {
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-    const createFormRef = useRef<HTMLFormElement>(null)
-    const confirmButtonRef = useRef<HTMLButtonElement>(null)
-    const cancelButtonRef = useRef<HTMLButtonElement>(null)
+    //const [isCreateFormEmpty, setIsCreateFormEmpty] = useState(true)
+    const {isModalOpen} = useContext(ExitCreateContext)
+    const [isModalOpenInForm, setIsModalOpenInForm] = useState(isModalOpen)
     const navigate = useNavigate()
 
     const {
@@ -35,34 +35,20 @@ export const CreateEvent: React.FC = React.memo(() => {
         reset()
     }
 
-    const isFormEmpty = () => {
+    /*const isFormEmpty = () => {
         const inputs = watch()
         for(const inputValue of Object.values(inputs))
             if ( inputValue !== '') return false
         return true;
     }
 
-    /*const onEventsListButtonClick = () => {
-        if (!isFormEmpty()) {
-            if (createFormRef.current) 
-                createFormRef.current.style.filter = 'blur(5px)'
-            setIsConfirmOpen(true)
-            if (confirmButtonRef?.current)
-                confirmButtonRef?.current.addEventListener('click', () => {
-                    navigate('/')
-                })
-            if (cancelButtonRef?.current)
-                cancelButtonRef?.current.addEventListener('click', () => {
-                    createFormRef.current?.style.removeProperty('filter')
-                    setIsConfirmOpen(false)
-                })
-        }
-        navigate('/')
-    }*/
+    useEffect(()=>{
+        setIsCreateFormEmpty(isFormEmpty())
+    })*/
     
     return (
-        <>
-            <form ref={createFormRef} onSubmit={handleSubmit(onSubmit)} className="add-new-event-form event-form">
+        <ExitCreateContext.Provider value={{isModalOpen: isModalOpenInForm}}>
+            <form onSubmit={handleSubmit(onSubmit)} className="add-new-event-form event-form">
                 <label className="title-lable">Название:</label>
                 <input type="text" {...register("title", { required: true, maxLength: 70 })} />
                 {errors.title?.type === "required" && <span className="warning">Обязательное поле!</span>}
@@ -134,15 +120,27 @@ export const CreateEvent: React.FC = React.memo(() => {
                 <button disabled={isSubmitting} className="save-button">Сохранить</button>
             </form>
 
-            {isConfirmOpen && (
+            {isModalOpen && (
                 <div className="warning-modal">
                     <p className="warning-text">Изменения будут утеряны.<br/>Вы уверены?</p>
                     <div className="warning-buttons">
-                        <button ref={confirmButtonRef} className="create-event-warning-confirm">Да</button>
-                        <button ref={cancelButtonRef} className="create-event-warning-cancel">Отмена</button>
+                        <button className="create-event-warning-confirm"
+                            onClick={() => {
+                                    navigate('/')
+                                }
+                            }
+                        >Да</button>
+                        <button className="create-event-warning-cancel"
+                            onClick={() => {
+                                    setIsModalOpenInForm(false)
+                                    console.log(isModalOpenInForm)
+                                    console.log(isModalOpen)
+                                }
+                            }
+                        >Отмена</button>
                     </div>
                 </div>)
             }
-        </>
+        </ExitCreateContext.Provider>
     )
 })
