@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react"
+import React from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { studentsList } from "../../mock"
-import { ExitCreateContext } from "./exit-create-context";
-import { useNavigate } from "react-router-dom";
+import { useBlocker } from "react-router-dom";
+import { ConfigProvider, Select } from "antd";
 
 type Inputs = {
     title: string;
@@ -17,11 +17,6 @@ type Inputs = {
 }
 
 export const CreateEvent: React.FC = React.memo(() => {
-    //const [isCreateFormEmpty, setIsCreateFormEmpty] = useState(true)
-    const {isModalOpen} = useContext(ExitCreateContext)
-    const [isModalOpenInForm, setIsModalOpenInForm] = useState(isModalOpen)
-    const navigate = useNavigate()
-
     const {
         register,
         handleSubmit,
@@ -35,27 +30,27 @@ export const CreateEvent: React.FC = React.memo(() => {
         reset()
     }
 
-    /*const isFormEmpty = () => {
+    console.log(watch())
+
+    const isFormEmpty = () => {
         const inputs = watch()
         for(const inputValue of Object.values(inputs))
-            if ( inputValue !== '') return false
+            if ( inputValue ) return false
         return true;
     }
 
-    useEffect(()=>{
-        setIsCreateFormEmpty(isFormEmpty())
-    })*/
+    const blocker = useBlocker(() => !isFormEmpty());
     
     return (
-        <ExitCreateContext.Provider value={{isModalOpen: isModalOpenInForm}}>
+        <>
             <form onSubmit={handleSubmit(onSubmit)} className="add-new-event-form event-form">
                 <label className="title-lable">Название:</label>
-                <input type="text" {...register("title", { required: true, maxLength: 70 })} />
+                <input type="text" autoComplete="off" {...register("title", { required: true, maxLength: 70 })} />
                 {errors.title?.type === "required" && <span className="warning">Обязательное поле!</span>}
                 {errors.title?.type === "maxLength" && <span className="warning">Максимальная длина 70 символов.</span>}
 
                 <label className="description-lable">Описание:</label>
-                <textarea {...register("discriptionText", { required: true })}></textarea>
+                <textarea autoComplete="off" {...register("discriptionText", { required: true })}></textarea>
                 {errors.discriptionText && <span className="warning">Обязательное поле!</span>}
 
                 <div>
@@ -105,42 +100,70 @@ export const CreateEvent: React.FC = React.memo(() => {
                 {errors.numberSeats && <span className="warning">{errors.numberSeats.message}</span>}
 
                 <label className="manager-lable">Руководитель:</label>
-                <select className="manager" defaultValue={""} {...register("managerId", { required: true })}>
-                    <option value="" disabled hidden></option>
-                    {studentsList.map((student) => {
-                        return <option key={student.studentId} value={student.studentId}>{`${student.surname} ${student.firstName} ${student.lastName}`}</option>
-                    })}
-                </select>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            fontSize: 16,
+                            fontFamily: 'Philosopher',
+                            paddingSM: 13,
+                            borderRadius: 32,
+                            colorText: '#000000',
+                            controlHeight: 54,
+                            lineWidth: 5,
+                            controlOutlineWidth: 0
+                        },
+                        components: {
+                            Select: {
+                                activeOutlineColor: '#d9d9d9',
+                                hoverBorderColor: '#d9d9d9',
+                                activeBorderColor: '#d9d9d9',
+                                optionActiveBg: '#dedab4',
+                                optionFontSize: 16,
+                                optionSelectedBg: '#dedab4',
+                                optionSelectedColor: '#000000',
+                                optionSelectedFontWeight: 400,
+                                selectorBg: '#c7bf9e',
+                                
+                            },
+                        },
+                    }}
+                >
+                    <Select
+                        className="manager"
+                        popupClassName="manager-popup"
+                        notFoundContent="Не найдено"
+                        showSearch
+                        optionFilterProp="label"
+                        filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                        }
+                        options={studentsList.map((student) => {
+                            return {
+                                value: student.studentId,
+                                label: `${student.surname} ${student.firstName} ${student.lastName}`
+                            }
+                        })}
+                        {...register("managerId", { required: true })}
+                    />
+                </ConfigProvider>
                 {errors.managerId && <span className="warning">Обязательное поле!</span>}
 
                 <label className="chat-link-lable">Ссылка на огр. чат:</label>
-                <input className="chat-link" type="input" {...register("chatUrl", { required: true })}/>
+                <input className="chat-link" type="input" autoComplete="off" {...register("chatUrl", { required: true })}/>
                 {errors.chatUrl && <span className="warning">Обязательное поле!</span>}
 
                 <button disabled={isSubmitting} className="save-button">Сохранить</button>
             </form>
 
-            {isModalOpen && (
+            {blocker.state === "blocked" && (
                 <div className="warning-modal">
                     <p className="warning-text">Изменения будут утеряны.<br/>Вы уверены?</p>
                     <div className="warning-buttons">
-                        <button className="create-event-warning-confirm"
-                            onClick={() => {
-                                    navigate('/')
-                                }
-                            }
-                        >Да</button>
-                        <button className="create-event-warning-cancel"
-                            onClick={() => {
-                                    setIsModalOpenInForm(false)
-                                    console.log(isModalOpenInForm)
-                                    console.log(isModalOpen)
-                                }
-                            }
-                        >Отмена</button>
+                        <button className="create-event-warning-confirm" onClick={() => blocker.proceed()}>Да</button>
+                        <button className="create-event-warning-cancel" onClick={() => blocker.reset()}>Отмена</button>
                     </div>
                 </div>)
             }
-        </ExitCreateContext.Provider>
+        </>
     )
 })

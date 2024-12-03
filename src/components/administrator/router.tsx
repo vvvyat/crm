@@ -10,6 +10,7 @@ import { EventSettings } from "./event-settings";
 import { Main } from "./main";
 import { MainNavigation } from "./main-navigation";
 import { EventNavigation } from "./event-navigation";
+import { CreateMessages } from "./messages";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
                         <Route path="info" element={<EventInfo event={events[0]} />}></Route>
                         <Route path="curators" element={<CuratorsList curators={curatorsList} />}></Route>
                         <Route path="students" element={<StudentsList students={studentsList} />}></Route>
+                        <Route path="messages" element={<CreateMessages />}></Route>
                         <Route path="settings" element={<EventSettings event={events[0]}/>}></Route>
                     </Route>
                 </Route>

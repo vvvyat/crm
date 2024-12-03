@@ -18,10 +18,11 @@ export const Header: React.FC = React.memo(() => {
             <a ref={logoRef} className="logo">CRM</a>
             <div></div>
             <div className="profile-button">
-                <img src="img/profile-icon.svg" width="37" height="37"/>
+                <img src="../../../img/profile-icon.svg" width="37" height="37"/>
                 <p>Имя пользователя</p>
             </div>
-            <img src="img/logout.svg" height="30.83" width="37"/>
+            <img src="../../../img/notion.svg"></img>
+            <img src="../../../img/logout.svg" height="30.83" width="37"/>
         </header>
     )
 })
