@@ -1,61 +1,71 @@
 import { FormatDate } from "../../utils";
-import { Event } from "../../consts";
-import React, { useEffect, useRef} from "react";
+import { EventData, EventState } from "../../consts";
+import React, { useEffect, useRef, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { MainNavigation } from "./main-navigation"
 
 const EventPreview: React.FC<{
-    event: Event
+    event: EventData
 }> = React.memo(({event}) => {
-    const eventRef = useRef<HTMLDivElement>(null);
-    const navigate = useNavigate();
+    const eventRef = useRef<HTMLDivElement>(null)
+    const navigate = useNavigate()
+    const [stateBGColor, setStateBGColor] = useState('#d9d9d9')
 
     useEffect(() => {
         const onEventPreviewClick = () => {
-            navigate('/eventInfo')
+            navigate('/my-event/id/info')
         }
 
         eventRef.current?.addEventListener('click', onEventPreviewClick)
+
+        switch (event.condition) {
+            case EventState.Preparation:
+                setStateBGColor('#d9d9d9')
+                break
+            case EventState.RegistrationIsOpen:
+                setStateBGColor('greenyellow')
+                break
+            case EventState.NoPlacesLeft:
+                setStateBGColor('yellow')
+                break
+            case EventState.RegistrationIsClosed:
+                setStateBGColor('orange')
+                break
+            case EventState.InProgress:
+                setStateBGColor('cornflowerblue')
+                break
+            case EventState.Completed:
+                setStateBGColor('indianred')
+                break
+            case EventState.Error:
+                setStateBGColor('darkred')
+                break
+        }
     }, [])
 
     return (
         <div ref={eventRef} id={`${event.id}`} className="event">
-            <h2>{event.title}</h2>
-            <p>{event.discriptionText}</p>
+            <div className="title-status-container">
+                <h2>{event.title}</h2>
+                <p className="event-status" style={{backgroundColor: stateBGColor}}>{event.condition}</p>
+            </div>
+            <p>{event.descriptionText.length > 400 ? `${event.descriptionText.substring(0, 400)}...` : event.descriptionText}</p>
             <div className="event-info">
                 <p><b>Срок проведения:</b> {FormatDate(event.eventStartDate)} - {FormatDate(event.eventEndDate)}</p>
                 <p><b>Срок зачисления студентов:</b> {FormatDate(event.enrollmentStartDate)} - {FormatDate(event.enrollmentEndDate)}</p>
-                <p><b>Количество мест:</b> {event.numberSeats}</p>
+                <p><b>Количество мест:</b> {event.numberSeatsStudent}</p>
             </div>
         </div>
     )
 })
 
 export const MyEventsList: React.FC<{
-    events: Array<Event>;
+    events: Array<EventData>;
 }> = React.memo(({events}) => {
     return (
-        <>
-            <header>
-                <a className="logo">CRM</a>
-                <form className="search-form">
-                    <label className="search-lable">Поиск</label>
-                    <input className="search" type="text" name="search"/>
-                </form>
-                <div className="profile-button">
-                    <img src="img/profile-icon.svg" width="37" height="37"/>
-                    <p>Имя пользователя</p>
-                </div>
-                <img src="img/logout.svg" height="30.83" width="37"/>
-            </header>
-            <main>
-                <MainNavigation />
-                <div className="events-container">
-                    {events.map(event => {
-                        return < EventPreview key={event.id} event={event} />
-                    })}
-                </div>
-            </main>
-        </>
+        <div className="events-container">
+        {events.map(event => {
+                return < EventPreview key={event.id} event={event} />
+            })}
+        </div>
     )
 })

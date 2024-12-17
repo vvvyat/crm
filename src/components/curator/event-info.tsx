@@ -2,15 +2,15 @@ import { FormatDate, GetManagerById } from "../../utils";
 import { EventData, Manager } from "../../consts";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 export const MoreInfo: React.FC<{
     event: EventData
 }> = React.memo(({event}) => {
     return (
         <div className="more-info">
-            <img src="../../../img/pin.svg" width={46} height={41}></img>
+            <img src="../../img/pin.svg" width={46} height={41}></img>
             <ul>
                 <li><b>Срок проведения:</b><br/>{FormatDate(event.eventStartDate)} - {FormatDate(event.eventEndDate)}</li>
                 <li><b>Срок зачисления студентов:</b><br/>{FormatDate(event.enrollmentStartDate)} - {FormatDate(event.enrollmentEndDate)}</li>
@@ -22,6 +22,8 @@ export const MoreInfo: React.FC<{
 
 export const EventInfo: React.FC = React.memo(() => {
     const location = useLocation();
+    const [isRequestSended, setIsRequestSended] = useState(false)
+    const [isRequestFaled, setIsRequestFaled] = useState(false)
 
     const {data: event, isLoading, error} = useQuery<EventData>({
         queryKey: ['event'],
@@ -39,7 +41,7 @@ export const EventInfo: React.FC = React.memo(() => {
         }
     })
 
-    const [manager] = useState(event? GetManagerById(managers, 3) : undefined) 
+    const [manager] = useState(event? GetManagerById(managers, event.managerId) : undefined) 
     const [open, setOpen] = useState(false);
     
     if (isLoading) {
@@ -57,6 +59,15 @@ export const EventInfo: React.FC = React.memo(() => {
                         {open && <MoreInfo event={event} />}
                     </div>
                     <aside>
+                        <button disabled={isRequestSended} onClick={async () => {
+                            try {
+                                await axios.put(`http://localhost:8080/events_curators/${event.id}/send/2`)
+                                setIsRequestSended(true)
+                            } catch {
+                                setIsRequestFaled(true)
+                            }
+                        }} className="send-request-button">{isRequestSended ? 'Заявка отправлена': 'Стать куратором'}</button>
+                        {isRequestFaled && <p className="aside-error">Не удалось отправить заявку</p>}
                         <button onClick={() => {setOpen(!open)}} className="show-more-button">Подробнее</button>
                     </aside>
                 </div>

@@ -8,6 +8,10 @@ button {
     cursor: pointer;
 }
 
+p {
+    overflow-wrap: break-word;
+}
+
 header {
     width: 100%;
     height: 70px;
@@ -22,15 +26,6 @@ a {
     text-decoration: none;
     color: #000000;
     cursor: pointer;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: 400;
-    text-align: center;
-
-    border-right: 5px solid #d9d9d9;
-    padding: 22px 0;
 }
 
 .profile-button {
@@ -51,7 +46,7 @@ main {
 
 .short-event-info {
     display: grid;
-    grid-template-columns: 10.8% 78.4% 10.8%;
+    grid-template-columns: 89.2% 10.8%;
     height: 100vh;
 }
 
@@ -70,7 +65,7 @@ nav {
     background-color: #c7bf9e;
 }
 
-nav button {
+nav button, .logo {
     width: 100%;
     text-align: center;
     padding: 22px 0;
@@ -78,6 +73,13 @@ nav button {
     border-bottom: 5px solid #d9d9d9;
     background-color: #c7bf9e;
     cursor: pointer;
+}
+
+.logo {
+    border: none;
+    border-right: 5px solid #d9d9d9;
+    font-size: 24px;
+    font-weight: 400;
 }
 
 .events-container, .event-info-container, .curators-container, .students-container {
@@ -98,8 +100,8 @@ nav button {
     margin: 0;
     background-color: #dedab4;
     border-radius: 32px;
-    display: inline-block;
     padding: 5px 125px 15px 25px;
+    display: block;
 }
 
 .event p {
@@ -175,6 +177,10 @@ nav button {
     align-items: center;
 }
 
+.event-info-container p {
+    margin: 0;
+}
+
 .short-event-info .manager {
     width: 44.8%;
 }
@@ -189,7 +195,7 @@ nav button {
     padding-left: 20px;
 }
 
-.delete-event-button {
+.delete-event-button, .hide-event-button {
     background: #d9d9d9 !important;
     padding: 16px 0;
     outline: none;
@@ -203,7 +209,7 @@ nav button {
     margin-left: 40px;
 }
 
-.event-form {
+.event-form, .profile-form {
     display: flex;
     flex-direction: column;
     margin-top: 36px;
@@ -211,18 +217,18 @@ nav button {
     padding-right: 68px;
 }
 
-.event-form label {
+.event-form label, .profile-form label {
     margin: 0;
     margin-left: 38px;
     margin-bottom: 5px;
 }
 
-.event-form input, .event-form textarea, .event-form div {
+.event-form input, .event-form textarea, .event-form div, .profile-form input, .profile-form textarea {
     margin: 0;
     margin-bottom: 13px;
 }
 
-.event-form input, .event-form textarea {
+.event-form input, .event-form textarea, .profile-form input, .profile-form textarea {
     background: #c7bf9e !important;
     outline: none;
     color: #000000;
@@ -234,7 +240,7 @@ nav button {
     border-radius: 32px;
 }
 
-.event-form textarea {
+.event-form textarea, .profile-form textarea {
     padding: 20px;
     height: 126px;
     resize: vertical;
@@ -272,21 +278,17 @@ input[type=date] {
     margin-top: 75px;
 }
 
-.event-info-container .discription {
-    height: 92px;   
-}
-
 .organization-info {
     display: grid;
-    gap: 3%;
-    grid-template-columns: 44.8% 44.8%;
+    gap: 4%;
+    grid-template-columns: 48% 48%;
 }
 
 .close-button {
     margin-top: 60px;
 }
 
-.curators-container, .students-container {
+.curators-container, .students-container  {
     margin-top: 75px;
 }
 
@@ -410,7 +412,10 @@ input[type=date] {
     padding: 0 80px;
     height: 228px;
     width: 26%;
+}
 
+.edit-warning-modal {
+    margin-top: 0;
 }
 
 .warning-text {
@@ -439,7 +444,7 @@ input[type=date] {
     width: 40%;
 }
 
-.warning-modal .create-event-warning-confirm {
+.warning-modal .create-event-warning-confirm, .edit-event-warning-confirm {
     margin-right: 20%;
 }
 
@@ -498,9 +503,192 @@ input[type=date] {
     background-color: #c7bf9e;
 }
 
-.add-new-event-form .manager {
+.add-new-event-form .manager, .edit-event-form .manager {
     margin: 0;
     margin-bottom: 13px;
     width: 48%;
     border-width: 5px;
+}
+
+.title-status-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.event .event-status {
+    margin: 0;
+    border-radius: 32px;
+    padding: 5px 25px 15px 25px;
+    height: fit-content;
+}
+
+.edit-event-form button:disabled, .edit-profile-form button:disabled, aside button:disabled {
+    filter: contrast(60%);
+}
+
+.profile-form {
+    padding: 0;
+}
+
+.edit-profile-container, .edit-email-container, .edit-password-container {
+    padding: 0 110px;
+}
+
+.profile-form input {
+    width: 50%;
+}
+
+.profile-form label {
+    margin-left: 18px;
+    font-weight: 700;
+}
+
+.profile-form .warning {
+    margin-left: 18px;
+}
+
+.edit-profile-container p, .edit-email-container p, .edit-password-container p {
+    font-size: 24px;
+    margin-top: 35px;
+    font-weight: 700;
+}
+
+.edit-profile-form .name-field {
+    width: 25%;
+} 
+
+.profile-form .save-button {
+    width: 25%;
+    padding: 10px 0;
+}
+
+.edit-email-container .current-email-lable {
+    font-size: 16px;
+    margin: 0;
+    margin-bottom: 5px;
+    margin-left: 18px;
+    margin-top: 36px;
+}
+
+.edit-email-container .current-email {
+    font-size: 16px;
+    font-weight: 400;
+    padding: 13px;
+    border: 5px solid #d9d9d9;
+    background-color: #c7bf9e;
+    border-radius: 32px;
+    width: 50%;
+    margin: 0;
+}
+
+.edit-email-form {
+    margin: 0;
+    margin-top: 13px;
+}
+
+.manager-curator, .manager-curator-header {
+    grid-template-columns: 6.7% 23.2% 17.1% 17.1% 13.3% 15%;
+}
+
+.delete-curator, .delete-student {
+    background: #d9d9d9 !important;
+    border: none;
+    outline: none;
+    color: #000000;
+    font-size: 16px;
+    font-family: 'Philosopher', Arial, Helvetica, sans-serif;
+    border-radius: 32px;
+    height: 43px;
+    width: 126px;
+    position: relative;
+    top: 50%;
+    margin-top: -21.5px;
+}
+
+.manager-student, .manager-student-header {
+    grid-template-columns: 6.7% 20.8% 16.1% 20.8% 13% 15%;
+}
+
+.modal-open * {
+    filter: blur(5px);
+}
+
+.modal-open .warning-modal {
+    filter: none;
+    z-index: 10;
+}
+
+.modal-open .warning-modal * {
+    filter: none;
+}
+
+.name-field-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.name-container {
+    display: grid;
+    gap: 2%;
+    grid-template-columns: 30% 30% 30%;
+}
+
+.name-field-container input {
+    width: 88%;
+}
+
+.notificationsModal {
+    background-color: #d9d9d9;
+    border: 5px solid #c7bf9e;
+    border-radius: 15px;
+
+    position: absolute;
+    top: 85px;
+    right: 2%;
+    padding: 30px;
+    max-height: 75vh;
+    width: 27%;
+}
+
+.notifications-header {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
+}
+
+.modal-error {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+    margin-bottom: -28px;
+    color: red;
+}
+
+.fetch-warnings {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    margin-top: 75px;
+    font-size: 48px;
+}
+
+.aside-error {
+    text-align: center;
+    padding: 0;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.save-error {
+    padding: 0;
+    margin-top: -20px;
+    color: red;
+    margin-left: 18px;
 }

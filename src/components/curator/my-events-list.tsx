@@ -12,7 +12,7 @@ const EventPreview: React.FC<{
 
     useEffect(() => {
         const onEventPreviewClick = () => {
-            navigate('/my-event/id')
+            navigate('/my-event/id/info')
         }
 
         eventRef.current?.addEventListener('click', onEventPreviewClick)

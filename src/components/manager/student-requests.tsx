@@ -1,54 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import { Student } from "../../consts";
-import { EventNavigation } from "./event-navigation";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const StudentRequestsListItem: React.FC<{
     counter: number,
     student: Student
 }> = React.memo(({counter, student}) => {
+    const [aceptedOrRejected, setAceptedOrRejected] = useState(false)
+    
     return (
-        <section className="curator-requests" id={`${student.studentId}`}>
+        <section className={aceptedOrRejected ? 'curator-requests hidden' : 'curator-requests'} id={`${student.studentId}`}>
             <p className="counter">{counter}</p>
             <p className="name">{`${student.surname} ${student.firstName} ${student.lastName}`}</p>
             <p className="skills">{student.competencies}</p>
-            <button className="accept">Принять</button>
-            <button className="reject">Отклонить</button>
+            <button onClick={async () => {
+                try {
+                    await axios.put(`http://localhost:8080/events_students/${3}/accept/${student.studentId}`)
+                    setAceptedOrRejected(true)
+                } catch {
+                    console.log('Не удалось принять заявку')
+                }
+            }} className="accept">Принять</button>
+            <button onClick={async () => {
+                try {
+                    await axios.put(`http://localhost:8080/events_students/${3}/reject/${student.studentId}`)
+                    setAceptedOrRejected(true)
+                } catch {
+                    console.log('Не удалось отклонить заявку')
+                }
+            }} className="reject">Отклонить</button>
         </section>
     )
 })
 
-export const StudentRequestsList: React.FC<{
-    students: Array<Student>
-}> = React.memo(({students}) => {
+export const StudentRequestsList: React.FC = React.memo(() => {
+    const {data: studentRequsets, isLoading, error} = useQuery<Student[]>({
+        queryKey: ['student-requests'],
+        queryFn: async () => {
+            const res = await axios.get(`http://localhost:8080/events_students/${3}/waiting_students`)
+            return res.data
+        }
+    })
 
-    return (
-        <>
-            <header>
-                <a className="logo">CRM</a>
-                <form className="search-form">
-                    <label className="search-lable">Поиск</label>
-                    <input className="search" type="text" name="search"/>
-                </form>
-                <div className="profile-button">
-                    <img src="img/profile-icon.svg" width="37" height="37"/>
-                    <p>Имя пользователя</p>
+    if (isLoading) {
+        return <p className="fetch-warnings">Загрузка...</p>
+    } else if (error) {
+        return <p className="fetch-warnings">При загрузке произошла ошибка</p>
+    } else if (studentRequsets && studentRequsets.length === 0) {
+        return <p className="fetch-warnings">Заявок нет</p>
+    }else {
+        return (
+            <div className="students-container">
+                <div className="student-requests-header">
+                    <p className="counter"></p>
+                    <p>Имя</p>
+                    <p>Компетенции</p>
                 </div>
-                <img src="img/logout.svg" height="30.83" width="37"/>
-            </header>
-            <main>
-                <EventNavigation />
-                <div className="students-container">
-                    <div className="student-requests-header">
-                        <p className="counter"></p>
-                        <p>Имя</p>
-                        <p>Компетенции</p>
-                    </div>
-                    {students.map((student, index) => {
-                        return < StudentRequestsListItem key={student.studentId} counter={index + 1} student={student} />
-                    })}
-                </div>
-            </main>
-        </>
-    )
+                {studentRequsets?.map((student, index) => {
+                    return < StudentRequestsListItem key={student.studentId} counter={index + 1} student={student} />
+                })}
+            </div>
+        )
+    }
 })
 
