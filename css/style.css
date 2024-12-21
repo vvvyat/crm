@@ -300,6 +300,7 @@ input[type=date] {
     border: 5px solid #d9d9d9;
     border-radius: 32px;
     margin-bottom: 40px;
+    padding-right: 30px;
 }
 
 .student, .curator {
@@ -325,6 +326,7 @@ input[type=date] {
     border: 5px solid #d9d9d9;
     border-radius: 32px;
     margin-bottom: 40px;
+    padding-right: 30px;
 }
 
 .event-form .edit-event-label {
