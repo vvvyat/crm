@@ -1,6 +1,5 @@
 import React from "react";
 import {createBrowserRouter, createRoutesFromElements, Outlet, Route, RouterProvider} from "react-router-dom";
-import { events } from "../../mock";
 import { EventsList } from "./events-list";
 import { CreateEvent } from "./create-event";
 import { EventInfo } from "./event-info";
@@ -29,11 +28,11 @@ const router = createBrowserRouter(
                         <Route path="edit-password" element={<EditPassword />}></Route>
                     </Route>
                     <Route element={<MainNavigation/>}>
-                        <Route index element={<EventsList events={events} />}></Route>
+                        <Route index element={<EventsList />}></Route>
                         <Route path="create" element={<CreateEvent />}></Route>
                     </Route>
                     <Route path="event/:id" element={<EventNavigation/>}>
-                        <Route path="info" element={<EventInfo event={events[0]} />}></Route>
+                        <Route path="info" element={<EventInfo />}></Route>
                         <Route path="curators" element={<CuratorsList />}></Route>
                         <Route path="students" element={<StudentsList />}></Route>
                         <Route path="messages" element={<CreateMessages />}></Route>

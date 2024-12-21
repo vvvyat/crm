@@ -1,7 +1,8 @@
 import React from "react";
 import { Student } from "../../consts";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useStudentsQuery } from "../../fetch/students";
+import { useParams } from "react-router-dom";
+import { FormatName, GetStudentCuratorStatus } from "../../utils";
 
 const StudentsListItem: React.FC<{
     counter: number,
@@ -10,22 +11,17 @@ const StudentsListItem: React.FC<{
     return (
         <section className="student" id={`${student.studentId}`}>
             <p className="counter">{counter}</p>
-            <p className="name">{`${student.surname} ${student.firstName} ${student.lastName}`}</p>
+            <p className="name">{FormatName(student)}</p>
             <p className="skills">{student.competencies}</p>
             <p className="curator-name">Имя куратора</p>
-            <p className="state">{student.statusRequest}</p>
+            <p className="state">{GetStudentCuratorStatus(student.statusRequest)}</p>
         </section>
     )
 })
 
 export const StudentsList: React.FC = React.memo(() => {
-    const {data: students, isLoading, error} = useQuery<Student[]>({
-        queryKey: ['students'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events_students/${1}/students`)
-            return res.data
-        }
-    })
+    const params = useParams()
+    const {data: students, isLoading, error} = useStudentsQuery(Number(params.id))
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>

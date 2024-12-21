@@ -1,12 +1,14 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 
 export const EventNavigation: React.FC = React.memo(() => {
+    const params = useParams()
+
     return (
         <>
             <nav>
                 <NavLink
-                    to="/event/id/info"
+                    to={`/event/${params.id}/info`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -14,7 +16,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="info">Описание<br/>мероприятия</button>
                 </NavLink>
                 <NavLink
-                    to="/event/id/curators"
+                    to={`/event/${params.id}/curators`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -22,7 +24,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="curators">Список кураторов</button>
                 </NavLink>
                 <NavLink
-                    to="/event/id/students"
+                    to={`/event/${params.id}/students`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -30,7 +32,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="students">Список студентов</button>
                 </NavLink>
                 <NavLink
-                    to="/event/id/messages"
+                    to={`/event/${params.id}/messages`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -38,7 +40,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="create-messages-button">Сообщения для<br/>рассылки</button>
                 </NavLink>
                 <NavLink
-                    to="/event/id/settings"
+                    to={`/event/${params.id}/settings`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }

@@ -8,4 +8,5 @@ export const root = createRoot(document.getElementById('root')!)
 
 root.render(<Administrator />)
 //root.render(<Student />)
+//root.render(<Curator />)
 //root.render(<Manager />)

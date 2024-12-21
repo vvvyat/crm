@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { GetManagerById } from "../utils";
+import { useActiveEventsQuery } from "../fetch/active-events";
 
 const EventPreview: React.FC<{
     event: EventData,
@@ -41,13 +42,7 @@ const EventPreview: React.FC<{
 })
 
 export const EventsList: React.FC = React.memo(() => {
-    const {data: events, isLoading, error} = useQuery<EventData[]>({
-        queryKey: ['events'],
-        queryFn: async () => {
-            const res = await axios.get('http://localhost:8080/events/active')
-            return res.data
-        }
-    })
+    const {data: events, isLoading, error} = useActiveEventsQuery()
 
     const {data: managers} = useQuery<Manager[]>({
         queryKey: ['managers'],

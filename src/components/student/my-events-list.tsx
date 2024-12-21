@@ -1,5 +1,5 @@
 import { FormatDate } from "../../utils";
-import { EventData, EventState } from "../../consts";
+import { EventData, EventStatus } from "../../consts";
 import React, { useEffect, useRef, useState} from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -18,25 +18,25 @@ const EventPreview: React.FC<{
         eventRef.current?.addEventListener('click', onEventPreviewClick)
 
         switch (event.condition) {
-            case EventState.Preparation:
+            case EventStatus.Preparation:
                 setStateBGColor('#d9d9d9')
                 break
-            case EventState.RegistrationIsOpen:
+            case EventStatus.RegistrationIsOpen:
                 setStateBGColor('greenyellow')
                 break
-            case EventState.NoPlacesLeft:
+            case EventStatus.NoPlacesLeft:
                 setStateBGColor('yellow')
                 break
-            case EventState.RegistrationIsClosed:
+            case EventStatus.RegistrationIsClosed:
                 setStateBGColor('orange')
                 break
-            case EventState.InProgress:
+            case EventStatus.InProgress:
                 setStateBGColor('cornflowerblue')
                 break
-            case EventState.Completed:
+            case EventStatus.Completed:
                 setStateBGColor('indianred')
                 break
-            case EventState.Error:
+            case EventStatus.Error:
                 setStateBGColor('darkred')
                 break
         }

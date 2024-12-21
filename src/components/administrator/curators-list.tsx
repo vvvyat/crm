@@ -1,7 +1,8 @@
 import React from "react";
 import { Curator } from "../../consts";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useCuratorsQuery } from "../../fetch/curators";
+import { useParams } from "react-router-dom";
+import { FormatName, GetStudentCuratorStatus} from "../../utils";
 
 const CuratorsListItem: React.FC<{
     counter: number,
@@ -10,22 +11,17 @@ const CuratorsListItem: React.FC<{
     return (
         <section className="curator" id={`${curator.curatorId}`}>
             <p className="counter">{counter}</p>
-            <p className="name">{`${curator.surname} ${curator.firstName} ${curator.lastName}`}</p>
+            <p className="name">{FormatName(curator)}</p>
             <p className="telegram">{curator.telegramUrl}</p>
             <p className="vk">{curator.vkUrl}</p>
-            <p className="state">{curator.curatorStatus}</p>
+            <p className="state">{GetStudentCuratorStatus(curator.curatorStatus)}</p>
         </section>
     )
 })
 
 export const CuratorsList: React.FC = React.memo(() => {
-    const {data: curators, isLoading, error} = useQuery<Curator[]>({
-        queryKey: ['curators'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events_curators/${1}/curators`)
-            return res.data
-        }
-    })
+    const params = useParams()
+    const {data: curators, isLoading, error} = useCuratorsQuery(Number(params.id))
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>

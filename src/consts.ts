@@ -53,24 +53,48 @@ export type Manager = {
 
 export type Inputs = {
     title: string;
-    discriptionText: string;
+    descriptionText: string;
     eventStartDate: string;
     eventEndDate: string;
     enrollmentStartDate: string;
     enrollmentEndDate: string;
-    numberSeats: number;
+    numberSeatsStudent: number;
     managerId: number;
     chatUrl: string;
 }
 
-export enum EventState {
-    Preparation = "Подготовка",
-    RegistrationIsOpen = "REGISTRATION_OPEN",
-    NoPlacesLeft = "Мест нет",
-    RegistrationIsClosed = "Регистрация закрыта",
-    InProgress = "В процессе проведения",
-    Completed = "Завершено",
-    Hidden = "Скрыто",
-    Deleted = "Удалено",
-    Error = "Ошибка",
+export type CreateUpdateEvent = {
+    title: string;
+    descriptionText: string;
+    adminId: number;
+    managerId: number;
+    eventStartDate: string;
+    eventEndDate: string;
+    enrollmentStartDate: string;
+    enrollmentEndDate: string;
+    numberSeatsStudent: number;
+    numberSeatsCurator: number;
+    condition: string;
 }
+
+export enum EventStatus {
+    Preparation = "PREPARATION",
+    RegistrationIsOpen = "REGISTRATION_OPEN",
+    NoPlacesLeft = "NO_SEATS",
+    RegistrationIsClosed = "REGISTRATION_CLOSED",
+    InProgress = "IN_PROGRESS",
+    Completed = "FINISHED",
+    Hidden = "HIDDEN",
+    Deleted = "DELETED",
+}
+
+export enum StudentCuratorStatus {
+    SentRequest = "SENT_PERSONAL_INFO",
+    Rejected = "REJECTED_FROM_EVENT",
+    AddedInChat = "ADDED_IN_CHAT",
+    StartedEvent = "STARTED_EVENT",
+    EndedEvent = "ENDED_EVENT",
+    Deleted = "DELETED_FROM_EVENT",
+}
+
+export const SERVER_URL = 'http://localhost:8080'

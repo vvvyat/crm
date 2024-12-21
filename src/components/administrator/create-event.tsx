@@ -2,13 +2,13 @@ import React, { useState } from "react"
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { useBlocker } from "react-router-dom";
 import { ConfigProvider, Select } from "antd";
-import { Inputs, Manager } from "../../consts";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { Inputs } from "../../consts";
+import { useNewEventMutation } from "../../fetch/create-event";
+import { FormatName } from "../../utils";
+import { useAllManagersQuery } from "../../fetch/all-managers";
 
 export const CreateEvent: React.FC = React.memo(() => {
     const [isCreateFailed, setIsCreateFailed] = useState(false)
-
     const {
         register,
         reset,
@@ -17,27 +17,22 @@ export const CreateEvent: React.FC = React.memo(() => {
         control,
         formState: { errors, isSubmitting },
     } = useForm<Inputs>()
+    const {mutateAsync: createNewEvent} = useNewEventMutation(setIsCreateFailed, reset)
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        try {
-            await axios.post('http://localhost:8080/events/post', {
-                title: data.title,
-                descriptionText: data.discriptionText,
-                adminId: 4,
-                managerId: data.managerId,
-                eventStartDate: data.eventStartDate + 'T00:00:00.000Z',
-                eventEndDate: data.eventEndDate + 'T00:00:00.000Z',
-                enrollmentStartDate: data.enrollmentStartDate + 'T00:00:00.000Z',
-                enrollmentEndDate: data.enrollmentEndDate + 'T00:00:00.000Z',
-                numberSeatsStudent: data.numberSeats,
-                numberSeatsCurator: 1,
-                condition: "PREPARATION"
-            })
-            setIsCreateFailed(false)
-            reset()
-        } catch {
-            setIsCreateFailed(true)
-        }
+        createNewEvent({
+            title: data.title,
+            descriptionText: data.descriptionText,
+            adminId: 4,
+            managerId: data.managerId,
+            eventStartDate: data.eventStartDate + 'T00:00:00.000Z',
+            eventEndDate: data.eventEndDate + 'T00:00:00.000Z',
+            enrollmentStartDate: data.enrollmentStartDate + 'T00:00:00.000Z',
+            enrollmentEndDate: data.enrollmentEndDate + 'T00:00:00.000Z',
+            numberSeatsStudent: data.numberSeatsStudent,
+            numberSeatsCurator: 1,
+            condition: "PREPARATION"
+        })
     }
 
     const isFormEmpty = () => {
@@ -49,13 +44,7 @@ export const CreateEvent: React.FC = React.memo(() => {
 
     const blocker = useBlocker(() => !isFormEmpty());
 
-    const {data: managers} = useQuery<Manager[]>({
-        queryKey: ['managers'],
-        queryFn: async () => {
-            const res = await axios.get('http://localhost:8080/users/all-managers')
-            return res.data
-        }
-    })
+    const {data: managers} = useAllManagersQuery()
     
     return (
         <>
@@ -66,8 +55,8 @@ export const CreateEvent: React.FC = React.memo(() => {
                 {errors.title?.type === "maxLength" && <span className="warning">Максимальная длина 70 символов.</span>}
 
                 <label className="description-lable">Описание:</label>
-                <textarea autoComplete="off" disabled={blocker.state === "blocked"} {...register("discriptionText", { required: true })}></textarea>
-                {errors.discriptionText && <span className="warning">Обязательное поле!</span>}
+                <textarea autoComplete="off" disabled={blocker.state === "blocked"} {...register("descriptionText", { required: true })}></textarea>
+                {errors.descriptionText && <span className="warning">Обязательное поле!</span>}
 
                 <div>
                     <label className="date-lable">Срок проведения</label>
@@ -109,11 +98,11 @@ export const CreateEvent: React.FC = React.memo(() => {
                 </div>
 
                 <label className="number-of-participants-lable">Количество мест:</label>
-                <input className="number-of-participants" type="number" disabled={blocker.state === "blocked"} {...register("numberSeats", { required: true, min: 1, max: 99999, validate: seats => seats % 1 === 0 || 'Количество участников должно быть целым числом.'})} />
-                {errors.numberSeats?.type === "required" && <span className="warning">Обязательное поле!</span>}
-                {errors.numberSeats?.type === "min" && <span className="warning">Количество участников не должно быть меньше 1.</span>}
-                {errors.numberSeats?.type === "max" && <span className="warning">Количество участников не должно превышать 99999.</span>}
-                {errors.numberSeats && <span className="warning">{errors.numberSeats.message}</span>}
+                <input className="number-of-participants" type="number" disabled={blocker.state === "blocked"} {...register("numberSeatsStudent", { required: true, min: 1, max: 99999, validate: seats => seats % 1 === 0 || 'Количество участников должно быть целым числом.'})} />
+                {errors.numberSeatsStudent?.type === "required" && <span className="warning">Обязательное поле!</span>}
+                {errors.numberSeatsStudent?.type === "min" && <span className="warning">Количество участников не должно быть меньше 1.</span>}
+                {errors.numberSeatsStudent?.type === "max" && <span className="warning">Количество участников не должно превышать 99999.</span>}
+                {errors.numberSeatsStudent && <span className="warning">{errors.numberSeatsStudent.message}</span>}
 
                 <label className="manager-lable">Руководитель:</label>
                 <Controller
@@ -163,7 +152,7 @@ export const CreateEvent: React.FC = React.memo(() => {
                                 options={managers?.map((manager) => {
                                     return {
                                         value: manager.managerId,
-                                        label: `${manager.surname} ${manager.firstName} ${manager.lastName}`
+                                        label: FormatName(manager)
                                     }
                                 })}
                             />

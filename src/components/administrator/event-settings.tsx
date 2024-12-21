@@ -1,76 +1,68 @@
 import React, { useState } from "react"
-import { EventData, Manager } from "../../consts"
+import { Inputs } from "../../consts"
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { ConfigProvider, Select } from "antd";
-import { Inputs } from "../../consts";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { GetManagerById } from "../../utils";
+import { useEventQuery } from "../../fetch/event";
+import { useAllManagersQuery } from "../../fetch/all-managers";
+import { useUpdateEventMutation } from "../../fetch/update-event";
+import { useHideEventMutation } from "../../fetch/hide-event";
+import { useDeleteEventMutation } from "../../fetch/delete-event";
+import { EventStatus } from "../../consts";
 
 export const EventSettings: React.FC = React.memo(() => {
+    const params = useParams()
     const [isHideConfirmOpen, setIsHideConfirmOpen] = useState(false)
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
     const [isEditFailed, setIsEditFaled] = useState(false)
     const [isHideFailed, setIsHideFaled] = useState(false)
     const [isDeleteFailed, setIsDeleteFaled] = useState(false)
-    const navigate = useNavigate()
 
-    const {data: event, isLoading, error} = useQuery<EventData>({
-        queryKey: ['event'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events/${1}`)
-            return res.data
-        }
-    })
+    const {data: event, isLoading, error} = useEventQuery(Number(params.id))
+    const {mutateAsync: updateEvent} = useUpdateEventMutation(Number(params.id), setIsEditFaled)
+    const {mutateAsync: hideEvent} = useHideEventMutation(Number(params.id), setIsHideFaled, setIsHideConfirmOpen)
+    const {mutateAsync: deleteEvent} = useDeleteEventMutation(Number(params.id), setIsDeleteFaled)
 
     const {
         register,
         watch,
         control,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting, isDirty },
     } = useForm<Inputs>({
         defaultValues: {
             title: event?.title,
-            discriptionText: event?.descriptionText,
+            descriptionText: event?.descriptionText,
             eventStartDate: event?.eventStartDate.split('T')[0],
             eventEndDate: event?.eventEndDate.split('T')[0],
             enrollmentStartDate: event?.enrollmentStartDate.split('T')[0],
             enrollmentEndDate: event?.enrollmentEndDate.split('T')[0],
-            numberSeats: event?.numberSeatsStudent,
+            numberSeatsStudent: event?.numberSeatsStudent,
             managerId: event?.managerId,
             chatUrl: event?.chatUrl
         }
     })
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        try {
-            await axios.put(`http://localhost:8080/events/update/${1}`, {                
-                title: data.title,
-                descriptionText: data.discriptionText,
-                adminId: 4,
-                managerId: data.managerId,
-                eventStartDate: data.eventStartDate + 'T00:00:00.000Z',
-                eventEndDate: data.eventEndDate + 'T00:00:00.000Z',
-                enrollmentStartDate: data.enrollmentStartDate + 'T00:00:00.000Z',
-                enrollmentEndDate: data.enrollmentEndDate + 'T00:00:00.000Z',
-                numberSeatsStudent: data.numberSeats,
-                numberSeatsCurator: 1,
-                condition: "PREPARATION"
-            })
-            setIsEditFaled(false)
-        } catch {
-            setIsEditFaled(true)
-        }
+        updateEvent({                
+            title: data.title,
+            descriptionText: data.descriptionText,
+            adminId: 4,
+            managerId: data.managerId,
+            eventStartDate: data.eventStartDate + 'T00:00:00.000Z',
+            eventEndDate: data.eventEndDate + 'T00:00:00.000Z',
+            enrollmentStartDate: data.enrollmentStartDate + 'T00:00:00.000Z',
+            enrollmentEndDate: data.enrollmentEndDate + 'T00:00:00.000Z',
+            numberSeatsStudent: data.numberSeatsStudent,
+            numberSeatsCurator: 1,
+            condition: "PREPARATION"
+        })
+        reset()
     }
 
-    const {data: managers} = useQuery<Manager[]>({
-        queryKey: ['managers'],
-        queryFn: async () => {
-            const res = await axios.get('http://localhost:8080/users/all-managers')
-            return res.data
-        }
-    })
+    const {data: managers} = useAllManagersQuery()
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
@@ -86,8 +78,8 @@ export const EventSettings: React.FC = React.memo(() => {
                     {errors.title?.type === "maxLength" && <span className="warning">Максимальная длина 70 символов.</span>}
     
                     <label className="description-lable">Описание:</label>
-                    <textarea autoComplete="off" {...register("discriptionText", { required: true })}></textarea>
-                    {errors.discriptionText && <span className="warning">Обязательное поле!</span>}
+                    <textarea autoComplete="off" {...register("descriptionText", { required: true })}></textarea>
+                    {errors.descriptionText && <span className="warning">Обязательное поле!</span>}
     
                     <div>
                         <label className="date-lable">Срок проведения</label>
@@ -129,11 +121,11 @@ export const EventSettings: React.FC = React.memo(() => {
                     </div>
     
                     <label className="number-of-participants-lable">Количество мест:</label>
-                    <input className="number-of-participants" type="number" {...register("numberSeats", { required: true, min: 1, max: 99999, validate: seats => seats % 1 === 0 || 'Количество участников должно быть целым числом.'})} />
-                    {errors.numberSeats?.type === "required" && <span className="warning">Обязательное поле!</span>}
-                    {errors.numberSeats?.type === "min" && <span className="warning">Количество участников не должно быть меньше 1.</span>}
-                    {errors.numberSeats?.type === "max" && <span className="warning">Количество участников не должно превышать 99999.</span>}
-                    {errors.numberSeats && <span className="warning">{errors.numberSeats.message}</span>}
+                    <input className="number-of-participants" type="number" {...register("numberSeatsStudent", { required: true, min: 1, max: 99999, validate: seats => seats % 1 === 0 || 'Количество участников должно быть целым числом.'})} />
+                    {errors.numberSeatsStudent?.type === "required" && <span className="warning">Обязательное поле!</span>}
+                    {errors.numberSeatsStudent?.type === "min" && <span className="warning">Количество участников не должно быть меньше 1.</span>}
+                    {errors.numberSeatsStudent?.type === "max" && <span className="warning">Количество участников не должно превышать 99999.</span>}
+                    {errors.numberSeatsStudent && <span className="warning">{errors.numberSeatsStudent.message}</span>}
     
                     <label className="manager-lable">Руководитель:</label>
                     <Controller
@@ -181,7 +173,7 @@ export const EventSettings: React.FC = React.memo(() => {
                                     options={managers?.map((manager) => {
                                         return {
                                             value: manager.managerId,
-                                            label: `${manager.surname} ${manager.firstName} ${manager.lastName}`
+                                            label: GetManagerById(managers, manager.managerId)
                                         }
                                     })}
                                 />
@@ -196,7 +188,7 @@ export const EventSettings: React.FC = React.memo(() => {
     
                     <div className="save-delete-buttons">
                         <button disabled={isSubmitting || !isDirty} className="save-button">Сохранить изменения</button>
-                        <button className="hide-event-button" onClick={(evt) => {
+                        <button disabled={event?.condition === EventStatus.Hidden} className="hide-event-button" onClick={(evt) => {
                             evt.preventDefault()
                             setIsHideConfirmOpen(true)
                         }}>Скрыть мероприятие</button>
@@ -205,13 +197,15 @@ export const EventSettings: React.FC = React.memo(() => {
                             setIsDeleteConfirmOpen(true)
                         }}>Удалить мероприятие</button>
                     </div>
+                    {isEditFailed && <p className="save-error">Не удалось сохранить изменения</p>}
+                    {isHideFailed && <p className="save-error">Не удалось скрыть мероприятие</p>}
                 </form>
     
                 {isHideConfirmOpen && (
                     <div className="warning-modal edit-warning-modal">
                         <p className="warning-text">Вы уверены, что хотите скрыть<br/>это мероприятие?</p>
                         <div className="warning-buttons">
-                            <button className="edit-event-warning-confirm" onClick={() => {}}>Да</button>
+                            <button className="edit-event-warning-confirm" onClick={() => hideEvent()}>Да</button>
                             <button className="edit-event-warning-cancel" onClick={() => setIsHideConfirmOpen(false)}>Отмена</button>
                         </div>
                     </div>
@@ -222,14 +216,7 @@ export const EventSettings: React.FC = React.memo(() => {
                         <p className="warning-text">Вы уверены, что хотите удалить<br/>это мероприятие?</p>
                         {isDeleteFailed && <p className="modal-error">Не удалось удалить мероприятие</p>}
                         <div className="warning-buttons">
-                            <button className="edit-event-warning-confirm" onClick={async () => {
-                                try {
-                                    await axios.delete(`http://localhost:8080/events/${1}`)
-                                    navigate('/')
-                                } catch {
-                                    setIsDeleteFaled(true)
-                                }
-                            }}>Да</button>
+                            <button className="edit-event-warning-confirm" onClick={async () => deleteEvent()}>Да</button>
                             <button className="edit-event-warning-cancel" onClick={() => {
                                 setIsDeleteConfirmOpen(false)
                                 setIsDeleteFaled(false)
