@@ -61,7 +61,7 @@ const GetStudentCuratorStatus = (status: string) => {
             statusMessage = 'Заявка отклонена'
             break
         case StudentCuratorStatus.AddedInChat:
-            statusMessage = 'Добавлен(а) в организационный чат'
+            statusMessage = 'Добавлен(а) в чат'
             break
         case StudentCuratorStatus.StartedEvent:
             statusMessage = 'Приступил(а) к мероприятию'
@@ -76,7 +76,6 @@ const GetStudentCuratorStatus = (status: string) => {
 
     return statusMessage
 }
-
 
 const FormatName = (user: Manager | Student | Curator) => {
     return `${user.lastName} ${user.firstName} ${user.surname}`

@@ -13,7 +13,7 @@ const StudentsListItem: React.FC<{
             <p className="counter">{counter}</p>
             <p className="name">{FormatName(student)}</p>
             <p className="skills">{student.competencies}</p>
-            <p className="curator-name">Имя куратора</p>
+            <p className="curator-name">{`${student.curatorLastName || ''} ${student.curatorFirstName || ''} ${student.curatorSurname || ''}`}</p>
             <p className="state">{GetStudentCuratorStatus(student.statusRequest)}</p>
         </section>
     )

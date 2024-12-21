@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { Inputs } from "../../consts"
+import React, { useEffect, useState } from "react"
+import { Inputs, EventStatus } from "../../consts"
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { ConfigProvider, Select } from "antd";
 import { useParams } from "react-router-dom";
@@ -9,7 +9,6 @@ import { useAllManagersQuery } from "../../fetch/all-managers";
 import { useUpdateEventMutation } from "../../fetch/update-event";
 import { useHideEventMutation } from "../../fetch/hide-event";
 import { useDeleteEventMutation } from "../../fetch/delete-event";
-import { EventStatus } from "../../consts";
 
 export const EventSettings: React.FC = React.memo(() => {
     const params = useParams()
@@ -18,11 +17,8 @@ export const EventSettings: React.FC = React.memo(() => {
     const [isEditFailed, setIsEditFaled] = useState(false)
     const [isHideFailed, setIsHideFaled] = useState(false)
     const [isDeleteFailed, setIsDeleteFaled] = useState(false)
-
     const {data: event, isLoading, error} = useEventQuery(Number(params.id))
-    const {mutateAsync: updateEvent} = useUpdateEventMutation(Number(params.id), setIsEditFaled)
-    const {mutateAsync: hideEvent} = useHideEventMutation(Number(params.id), setIsHideFaled, setIsHideConfirmOpen)
-    const {mutateAsync: deleteEvent} = useDeleteEventMutation(Number(params.id), setIsDeleteFaled)
+    const {data: managers} = useAllManagersQuery()
 
     const {
         register,
@@ -31,19 +27,28 @@ export const EventSettings: React.FC = React.memo(() => {
         handleSubmit,
         reset,
         formState: { errors, isSubmitting, isDirty },
-    } = useForm<Inputs>({
-        defaultValues: {
-            title: event?.title,
-            descriptionText: event?.descriptionText,
-            eventStartDate: event?.eventStartDate.split('T')[0],
-            eventEndDate: event?.eventEndDate.split('T')[0],
-            enrollmentStartDate: event?.enrollmentStartDate.split('T')[0],
-            enrollmentEndDate: event?.enrollmentEndDate.split('T')[0],
-            numberSeatsStudent: event?.numberSeatsStudent,
-            managerId: event?.managerId,
-            chatUrl: event?.chatUrl
+    } = useForm<Inputs>()
+
+    useEffect(() => {
+        if (event) {
+            reset({
+                title: event.title,
+                descriptionText: event.descriptionText,
+                eventStartDate: event.eventStartDate.split('T')[0],
+                eventEndDate: event.eventEndDate.split('T')[0],
+                enrollmentStartDate: event.enrollmentStartDate.split('T')[0],
+                enrollmentEndDate: event.enrollmentEndDate.split('T')[0],
+                numberSeatsStudent: event.numberSeatsStudent,
+                managerId: event.managerId,
+                chatUrl: event.chatUrl
+            });
         }
-    })
+    }, [event, reset]);
+    
+
+    const {mutateAsync: updateEvent} = useUpdateEventMutation(Number(params.id), setIsEditFaled)
+    const {mutateAsync: hideEvent} = useHideEventMutation(Number(params.id), setIsHideFaled, setIsHideConfirmOpen)
+    const {mutateAsync: deleteEvent} = useDeleteEventMutation(Number(params.id), setIsDeleteFaled)
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         updateEvent({                
@@ -59,10 +64,7 @@ export const EventSettings: React.FC = React.memo(() => {
             numberSeatsCurator: 1,
             condition: "PREPARATION"
         })
-        reset()
     }
-
-    const {data: managers} = useAllManagersQuery()
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>

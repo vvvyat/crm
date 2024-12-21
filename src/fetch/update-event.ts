@@ -11,8 +11,8 @@ export function useUpdateEventMutation(eventId: number, setIsEditFaled: React.Di
             return res.data
         },
         onSuccess () {
-            queryClient.invalidateQueries({queryKey: ['event']})
             setIsEditFaled(false)
+            queryClient.invalidateQueries({queryKey: ['event']})
         },
         onError () {
             setIsEditFaled(true)
