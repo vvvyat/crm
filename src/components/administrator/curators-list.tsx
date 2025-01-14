@@ -21,11 +21,11 @@ const CuratorsListItem: React.FC<{
 
 export const CuratorsList: React.FC = React.memo(() => {
     const params = useParams()
-    const {data: curators, isLoading, error} = useCuratorsQuery(Number(params.id))
+    const {data: curators, isLoading, isError} = useCuratorsQuery(Number(params.id))
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (curators && curators.length === 0) {
         return <p className="fetch-warnings">Кураторов нет</p>

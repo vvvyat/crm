@@ -42,7 +42,7 @@ export type Curator = {
 }
 
 export type Manager = {
-    managerId: number;
+    id: number;
     firstName: string;
     lastName: string;
     surname: string;
@@ -72,9 +72,8 @@ export type CreateUpdateEvent = {
     eventEndDate: string;
     enrollmentStartDate: string;
     enrollmentEndDate: string;
+    chatUrl: string;
     numberSeatsStudent: number;
-    numberSeatsCurator: number;
-    condition: string;
 }
 
 export enum EventStatus {
@@ -97,4 +96,107 @@ export enum StudentCuratorStatus {
     Deleted = "DELETED_FROM_EVENT",
 }
 
-export const SERVER_URL = 'http://localhost:8080'
+export const SERVER_URL = 'https://84.252.132.66'
+
+export type AuthorizationInputs = {
+    email: string;
+    password: string;
+}
+
+export enum Roles {
+    Administrator = "ADMIN",
+    Manager = "MANAGER",
+    Curator = "CURATOR",
+    Student = "STUDENT",
+}
+
+export type RegistrationInputs = {
+    lastName: string;
+    firstName: string;
+    surname: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    competencies: string;
+    role: Roles;
+    telegramUrl: string;
+    vkUrl: string;
+}
+
+export type ManagerRegistrationInputs = {
+    lastName: string;
+    firstName: string;
+    surname: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    telegramUrl: string;
+    vkUrl: string;
+}
+
+export type RegistrationPayload = {
+    firstName: string;
+    lastName: string;
+    surname: string;
+    email: string;
+    sign: string;
+    telegramUrl: string;
+    vkUrl: string;
+    role: Roles;
+    competencies: string;
+}
+
+export type UserInfo = {
+    id: number;
+    firstName: string;
+    lastName: string;
+    surname: string;
+    telegramUrl: string;
+    vkUrl: string;
+    role_enum: Roles;
+    competencies: string;
+}
+
+export type EditProfile = {
+    firstName: string;
+    lastName: string;
+    surname: string;
+    telegramUrl: string;
+    vkUrl: string;
+    competencies: string;
+}
+
+export type EmailInputs = {
+    oldEmail: string;
+    newEmail: string;
+}
+
+export type PasswordInputs = {
+    oldPassword: string;
+    newPassword: string;
+}
+
+export type Message = {
+    id: number;
+    eventId: number;
+    text: string;
+    messageStatus: string;
+    editDate: string;
+}
+
+export type UpdateMessage = {
+    messageId: number;
+    text: string;
+}
+
+export type MessagesInputs = {
+    approvalMessage: string;
+    rejectionMessage: string;
+}
+
+export type Notification = {
+    notificationId: number;
+    eventTitle: string;
+    messageText: string;
+    sent_at: string;
+  }

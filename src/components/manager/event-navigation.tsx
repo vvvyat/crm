@@ -1,12 +1,14 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 
 export const EventNavigation: React.FC = React.memo(() => {
+    const params = useParams()
+
     return (
         <>
             <nav>
                 <NavLink
-                    to="/my-event/id/info"
+                    to={`/manager/my-event/${params.id}/info`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -14,7 +16,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="info">Описание<br/>мероприятия</button>
                 </NavLink>
                 <NavLink
-                    to="/my-event/id/curator-requests"
+                    to={`/manager/my-event/${params.id}/curator-requests`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -22,7 +24,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="curator-requests-nav">Заявки на<br/>кураторство</button>
                 </NavLink>
                 <NavLink
-                    to="/my-event/id/student-requests"
+                    to={`/manager/my-event/${params.id}/student-requests`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -30,7 +32,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="student-requests-nav">Заявки на<br/>мероприятие</button>
                 </NavLink>
                 <NavLink
-                    to="/my-event/id/curators"
+                    to={`/manager/my-event/${params.id}/curators`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -38,7 +40,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="curators">Список кураторов</button>
                 </NavLink>
                 <NavLink
-                    to="/my-event/id/students"
+                    to={`/manager/my-event/${params.id}/students`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }

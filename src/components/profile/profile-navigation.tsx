@@ -6,7 +6,7 @@ export const ProfileNavigation: React.FC = React.memo(() => {
         <>
             <nav>
                 <NavLink
-                    to="/edit-profile"
+                    to={`/${sessionStorage.getItem('role')}/edit-profile`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -14,7 +14,7 @@ export const ProfileNavigation: React.FC = React.memo(() => {
                     <button className="events-button">Редактировать<br/>профиль</button>
                 </NavLink>
                 <NavLink
-                    to="/edit-email"
+                    to={`/${sessionStorage.getItem('role')}/edit-email`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -22,7 +22,7 @@ export const ProfileNavigation: React.FC = React.memo(() => {
                     <button className="create-event-button">Изменить почту</button>
                 </NavLink>
                 <NavLink
-                    to="/edit-password"
+                    to={`/${sessionStorage.getItem('role')}/edit-password`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }

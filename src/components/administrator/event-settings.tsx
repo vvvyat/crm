@@ -9,6 +9,8 @@ import { useAllManagersQuery } from "../../fetch/all-managers";
 import { useUpdateEventMutation } from "../../fetch/update-event";
 import { useHideEventMutation } from "../../fetch/hide-event";
 import { useDeleteEventMutation } from "../../fetch/delete-event";
+import { useUserInfoQuery } from "../../fetch/user-info";
+import moment from "moment";
 
 export const EventSettings: React.FC = React.memo(() => {
     const params = useParams()
@@ -17,8 +19,9 @@ export const EventSettings: React.FC = React.memo(() => {
     const [isEditFailed, setIsEditFaled] = useState(false)
     const [isHideFailed, setIsHideFaled] = useState(false)
     const [isDeleteFailed, setIsDeleteFaled] = useState(false)
-    const {data: event, isLoading, error} = useEventQuery(Number(params.id))
+    const {data: event, isLoading, isError} = useEventQuery(Number(params.id))
     const {data: managers} = useAllManagersQuery()
+    const {data: userInfo} = useUserInfoQuery()
 
     const {
         register,
@@ -34,10 +37,10 @@ export const EventSettings: React.FC = React.memo(() => {
             reset({
                 title: event.title,
                 descriptionText: event.descriptionText,
-                eventStartDate: event.eventStartDate.split('T')[0],
-                eventEndDate: event.eventEndDate.split('T')[0],
-                enrollmentStartDate: event.enrollmentStartDate.split('T')[0],
-                enrollmentEndDate: event.enrollmentEndDate.split('T')[0],
+                eventStartDate: moment(event.eventStartDate).format('YYYY-MM-DD'),
+                eventEndDate: moment(event.eventEndDate).format('YYYY-MM-DD'),
+                enrollmentStartDate: moment(event.enrollmentStartDate).format('YYYY-MM-DD'),
+                enrollmentEndDate: moment(event.enrollmentEndDate).format('YYYY-MM-DD'),
                 numberSeatsStudent: event.numberSeatsStudent,
                 managerId: event.managerId,
                 chatUrl: event.chatUrl
@@ -51,24 +54,23 @@ export const EventSettings: React.FC = React.memo(() => {
     const {mutateAsync: deleteEvent} = useDeleteEventMutation(Number(params.id), setIsDeleteFaled)
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        updateEvent({                
+        updateEvent({
             title: data.title,
             descriptionText: data.descriptionText,
-            adminId: 4,
+            adminId: userInfo ? userInfo.id : 0,
             managerId: data.managerId,
-            eventStartDate: data.eventStartDate + 'T00:00:00.000Z',
-            eventEndDate: data.eventEndDate + 'T00:00:00.000Z',
-            enrollmentStartDate: data.enrollmentStartDate + 'T00:00:00.000Z',
-            enrollmentEndDate: data.enrollmentEndDate + 'T00:00:00.000Z',
-            numberSeatsStudent: data.numberSeatsStudent,
-            numberSeatsCurator: 1,
-            condition: "PREPARATION"
+            eventStartDate: moment(data.eventStartDate).format(),
+            eventEndDate: moment(data.eventEndDate).format(),
+            enrollmentStartDate: moment(data.enrollmentStartDate).format(),
+            enrollmentEndDate: moment(data.enrollmentEndDate).format(),
+            chatUrl: data.chatUrl,
+            numberSeatsStudent: data.numberSeatsStudent
         })
     }
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else {
         return (
@@ -93,9 +95,12 @@ export const EventSettings: React.FC = React.memo(() => {
                         <label className="date-to-lable">Конец:</label>
                         <input type="date" {...register("eventEndDate", { required: 'Обязательное поле!', validate: (end) => {
                             if (!watch("eventStartDate")) return
-                            const startDate = new Date(watch("eventStartDate")).getTime()
-                            const endDate = new Date(end).getTime()
-                            return startDate <= endDate || 'Начало события должно происходить раньше, чем конец.'
+                            const startDate = moment(watch("eventStartDate"))
+                            const endDate = moment(end)
+                            if (moment().isAfter(startDate)) {
+                                return 'Нельзя создать событие, которое уже началось / завершилось.'
+                            }
+                            return endDate.isAfter(startDate) || 'Начало события должно происходить раньше, чем конец.'
                         }})} />
                         {errors.eventEndDate && <span className="date-warning">{errors.eventEndDate.message}</span>}
                     </div>
@@ -109,15 +114,16 @@ export const EventSettings: React.FC = React.memo(() => {
     
                         <label className="enrollment-date-to-lable">Конец:</label>
                         <input type="date" {...register("enrollmentEndDate", { required: 'Обязательное поле!', validate: (enEnd) => {
-                            if (!watch("enrollmentStartDate")) return
-                            const enStartDate = new Date(watch("enrollmentStartDate")).getTime()
-                            const enEndDate = new Date(enEnd).getTime()
-                            const start = new Date(watch("eventStartDate")).getTime()
-                            if (enStartDate > enEndDate) {
+                            if (!watch("enrollmentStartDate") || !watch("eventStartDate")) return
+                            const enStartDate = moment(watch("enrollmentStartDate"))
+                            const enEndDate = moment(enEnd)
+                            const start = moment(watch("eventStartDate"))
+                            if (enStartDate.isSameOrAfter(enEndDate)) {
                                 return 'Начало набора должно происходить раньше, чем конец.'
                             }
-                            if (!watch("eventStartDate")) return
-                            return enEndDate <= start || 'Набор участников должен завершиться до начала события.'
+                            if (enEndDate.isAfter(start)) {
+                                return 'Набор участников должен завершиться до начала события.'
+                            }
                         }})} />
                         {errors.enrollmentEndDate && <span className="date-warning">{errors.enrollmentEndDate.message}</span>}
                     </div>
@@ -174,8 +180,8 @@ export const EventSettings: React.FC = React.memo(() => {
                                     }
                                     options={managers?.map((manager) => {
                                         return {
-                                            value: manager.managerId,
-                                            label: GetManagerById(managers, manager.managerId)
+                                            value: manager.id,
+                                            label: GetManagerById(managers, manager.id)
                                         }
                                     })}
                                 />
@@ -185,15 +191,21 @@ export const EventSettings: React.FC = React.memo(() => {
                     {errors.managerId && <span className="warning">Обязательное поле!</span>}
     
                     <label className="chat-link-lable">Ссылка на огр. чат:</label>
-                    <input className="chat-link" type="input" autoComplete="off" {...register("chatUrl", { required: true })}/>
-                    {errors.chatUrl && <span className="warning">Обязательное поле!</span>}
+                    <input className="chat-link" type="input" autoComplete="off" {...register("chatUrl", {
+                        required: 'Обязательное поле!',
+                        pattern: {
+                            value: /^http.*\./,
+                            message: 'Невалидная ссылка.',
+                        }
+                    })}/>
+                    {errors.chatUrl && <span className="warning">{errors.chatUrl.message}</span>}
     
                     <div className="save-delete-buttons">
                         <button disabled={isSubmitting || !isDirty} className="save-button">Сохранить изменения</button>
-                        <button disabled={event?.condition === EventStatus.Hidden} className="hide-event-button" onClick={(evt) => {
+                        <button className="hide-event-button" onClick={(evt) => {
                             evt.preventDefault()
                             setIsHideConfirmOpen(true)
-                        }}>Скрыть мероприятие</button>
+                        }}>{event?.condition === EventStatus.Hidden ? 'Показать мероприятие' : 'Скрыть мероприятие'}</button>
                         <button className="delete-event-button" onClick={(evt) => {
                             evt.preventDefault()
                             setIsDeleteConfirmOpen(true)
@@ -205,7 +217,10 @@ export const EventSettings: React.FC = React.memo(() => {
     
                 {isHideConfirmOpen && (
                     <div className="warning-modal edit-warning-modal">
-                        <p className="warning-text">Вы уверены, что хотите скрыть<br/>это мероприятие?</p>
+                        {event?.condition === EventStatus.Hidden ?
+                            <p className="warning-text">Вы уверены, что хотите показать<br/>это мероприятие?</p> :
+                            <p className="warning-text">Вы уверены, что хотите скрыть<br/>это мероприятие?</p>
+                        }
                         <div className="warning-buttons">
                             <button className="edit-event-warning-confirm" onClick={() => hideEvent()}>Да</button>
                             <button className="edit-event-warning-cancel" onClick={() => setIsHideConfirmOpen(false)}>Отмена</button>

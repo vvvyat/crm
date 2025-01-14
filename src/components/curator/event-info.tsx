@@ -1,9 +1,10 @@
-import { FormatDate, GetManagerById } from "../../utils";
-import { EventData, Manager } from "../../consts";
+import { FormatDate, FormatName } from "../../utils";
+import { EventData } from "../../consts";
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useEventQuery } from "../../fetch/event";
+import { useUserInfoByIdQuery } from "../../fetch/user-info-by-id";
 
 export const MoreInfo: React.FC<{
     event: EventData
@@ -21,32 +22,18 @@ export const MoreInfo: React.FC<{
 })
 
 export const EventInfo: React.FC = React.memo(() => {
-    const location = useLocation();
+    const params = useParams()
+    const {data: event, isLoading, isError} = useEventQuery(Number(params.id))
+    const {data: manager} = useUserInfoByIdQuery(event ? event.managerId : 0)
+
     const [isRequestSended, setIsRequestSended] = useState(false)
     const [isRequestFaled, setIsRequestFaled] = useState(false)
 
-    const {data: event, isLoading, error} = useQuery<EventData>({
-        queryKey: ['event'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events/${location.pathname.split('/').slice(-1)[0]}`)
-            return res.data
-        }
-    })
-
-    const {data: managers} = useQuery<Manager[]>({
-        queryKey: ['managers'],
-        queryFn: async () => {
-            const res = await axios.get('http://localhost:8080/users/all-managers')
-            return res.data
-        }
-    })
-
-    const [manager] = useState(event? GetManagerById(managers, event.managerId) : undefined) 
     const [open, setOpen] = useState(false);
     
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (event) {
         return (
@@ -55,7 +42,7 @@ export const EventInfo: React.FC = React.memo(() => {
                     <div className="event-info-container">
                         <h2 className="title">{event.title}</h2>
                         <p className="discription">{event.descriptionText}</p>
-                        <p className="manager"><b>Руководитель:</b> {manager ? `${manager.surname} ${manager.firstName} ${manager.lastName}` : 'Ошибка'}</p>
+                        <p className="manager"><b>Руководитель:</b> {manager ? FormatName(manager) : 'Ошибка'}</p>
                         {open && <MoreInfo event={event} />}
                     </div>
                     <aside>

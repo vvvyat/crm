@@ -21,11 +21,11 @@ const StudentsListItem: React.FC<{
 
 export const StudentsList: React.FC = React.memo(() => {
     const params = useParams()
-    const {data: students, isLoading, error} = useStudentsQuery(Number(params.id))
+    const {data: students, isLoading, isError} = useStudentsQuery(Number(params.id))
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (students && students.length === 0) {
         return <p className="fetch-warnings">Студентов нет</p>

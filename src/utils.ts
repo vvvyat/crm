@@ -1,4 +1,4 @@
-import { EventStatus, StudentCuratorStatus, Manager, Student, Curator } from "./consts";
+import { EventStatus, StudentCuratorStatus, Manager, Student, Curator, Roles, UserInfo } from "./consts";
 
 const FormatDate = (date: string) => {
     return new Date(date).toLocaleString(undefined, {
@@ -9,7 +9,7 @@ const FormatDate = (date: string) => {
 }
 
 const GetManagerById = (managers: Array<Manager> | undefined, id: number) => {
-    const manager = managers?.find((manager) => manager.managerId === id)
+    const manager = managers?.find((manager) => manager.id === id)
     return manager ? FormatName(manager) : 'Ошибка'
 }
 
@@ -77,8 +77,22 @@ const GetStudentCuratorStatus = (status: string) => {
     return statusMessage
 }
 
-const FormatName = (user: Manager | Student | Curator) => {
-    return `${user.lastName} ${user.firstName} ${user.surname}`
+const FormatName = (user: Manager | Student | Curator | UserInfo) => {
+    return user.surname ? `${user.lastName} ${user.firstName} ${user.surname}` : `${user.lastName} ${user.firstName}`
 }
 
-export {FormatDate, GetManagerById, GetEventStatus, FormatName, GetStudentCuratorStatus}
+const GetRole = (role: Roles) => {
+    switch (role) {
+        case Roles.Administrator:
+            return 'admin'
+        case Roles.Manager:
+            return 'manager'
+        case Roles.Curator:
+            return 'curator'
+        case Roles.Student:
+            return 'student'
+    }
+}
+
+
+export {FormatDate, GetManagerById, GetEventStatus, FormatName, GetStudentCuratorStatus, GetRole}

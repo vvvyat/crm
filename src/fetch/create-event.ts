@@ -10,13 +10,13 @@ export function useNewEventMutation(setIsCreateFailed: React.Dispatch<React.SetS
     return useMutation({
         mutationKey: ['new-event'],
         mutationFn: async (payload: CreateUpdateEvent) => {
-            const res = await axios.post(`${SERVER_URL}/events/post`, payload)
+            const res = await axios.post(`${SERVER_URL}/events/post`, payload, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
             return res.data
         },
         onSuccess () {
             queryClient.invalidateQueries({queryKey: ['admin-events']})
             reset()
-            navigate('/')
+            navigate('/admin/events')
         },
         onError () {
             setIsCreateFailed(true)

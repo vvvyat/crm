@@ -6,7 +6,7 @@ export function useAllManagersQuery() {
     return useQuery<Manager[]>({
         queryKey: ['all-managers'],
         queryFn: async () => {
-            const res = await axios.get(`${ SERVER_URL}/users/all-managers`)
+            const res = await axios.get(`${ SERVER_URL}/users/all-managers`, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
             return res.data
         }
     })

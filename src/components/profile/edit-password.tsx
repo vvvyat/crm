@@ -1,46 +1,50 @@
-import React from "react"
+import React, { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
-
-type ProfileInputs = {
-    password1: string;
-    password2: string;
-}
+import { PasswordInputs } from "../../consts"
+import { useEditPasswordMutation } from "../../fetch/edit-password"
 
 export const EditPassword: React.FC = React.memo(() => {
+    const [isFailed, setIsFailed] = useState(false)
+
     const {
         register,
         handleSubmit,
         reset,
         watch,
         formState: { errors, isSubmitting },
-    } = useForm<ProfileInputs>()
+    } = useForm<PasswordInputs>()
 
-    const onSubmit: SubmitHandler<ProfileInputs> = (data) => {
-        console.log(data)
-        reset()
+    const {mutateAsync: editPassword} = useEditPasswordMutation(setIsFailed, reset)
+
+    const onSubmit: SubmitHandler<PasswordInputs> = (data) => {
+        editPassword({
+            oldPassword: data.oldPassword,
+            newPassword: data.newPassword
+        })
     }
 
     return (
         <div className="edit-password-container">
             <p>Изменить пароль</p>
             <form onSubmit={handleSubmit(onSubmit)} className="edit-password-form profile-form">
-                <label className="password1-lable">Новый пароль</label>
-                <input type="text" autoComplete="off" {...register("password1", {required: true, deps: ['password2']})} />
-                {errors.password1 && <span className="warning">Обязательное поле!</span>}
+                <label>Текущий пароль</label>
+                <input type="text" autoComplete="off" {...register("oldPassword", {required: true, deps: ['newPassword']})} />
+                {errors.oldPassword && <span className="warning">Обязательное поле!</span>}
 
-                <label className="password2-lable">Новый пароль (ещё раз)</label>
-                <input type="text" autoComplete="off" {...register("password2", {
+                <label>Новый пароль</label>
+                <input type="text" autoComplete="off" {...register("newPassword", {
                     required: 'Обязательное поле!',
-                    validate: (password2) => {
-                        const password1 = watch("password1")
-                        if (password1 !== password2) {
-                            return 'Пароли не совпадают.'
+                    validate: (newPassword) => {
+                        const oldPassword = watch('oldPassword')
+                        if (oldPassword && newPassword && oldPassword === newPassword) {
+                            return 'Новый пароль должен отличаться от используемого.'
                         }
                     }
                 })} />
-                {errors.password2 && <span className="warning">{errors.password2.message}</span>}
+                {errors.newPassword && <span className="warning">{errors.newPassword.message}</span>}
 
                 <button disabled={isSubmitting} className="save-button">Сохранить изменения</button>
+                {isFailed && <p className="edit-profile-error">Не удалось сохранить изменения.</p>}
             </form>
         </div>
     )

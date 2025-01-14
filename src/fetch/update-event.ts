@@ -7,12 +7,12 @@ export function useUpdateEventMutation(eventId: number, setIsEditFaled: React.Di
     return useMutation({
         mutationKey: ['update-event'],
         mutationFn: async (payload: CreateUpdateEvent) => {
-            const res = await axios.put(`${SERVER_URL}/events/update/${eventId}`, payload)
+            const res = await axios.put(`${SERVER_URL}/events/update/${eventId}`, payload, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
             return res.data
         },
         onSuccess () {
             setIsEditFaled(false)
-            queryClient.invalidateQueries({queryKey: ['event']})
+            queryClient.invalidateQueries({queryKey: ['event', eventId]})
         },
         onError () {
             setIsEditFaled(true)

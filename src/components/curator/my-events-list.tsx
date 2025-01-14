@@ -1,6 +1,6 @@
-import { FormatDate } from "../../utils";
-import { EventData, EventStatus } from "../../consts";
-import React, { useEffect, useRef, useState} from "react";
+import { FormatDate, GetEventStatus } from "../../utils";
+import { EventData } from "../../consts";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const EventPreview: React.FC<{
@@ -8,45 +8,12 @@ const EventPreview: React.FC<{
 }> = React.memo(({event}) => {
     const eventRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
-    const [stateBGColor, setStateBGColor] = useState('#d9d9d9')
-
-    useEffect(() => {
-        const onEventPreviewClick = () => {
-            navigate('/my-event/id/info')
-        }
-
-        eventRef.current?.addEventListener('click', onEventPreviewClick)
-
-        switch (event.condition) {
-            case EventStatus.Preparation:
-                setStateBGColor('#d9d9d9')
-                break
-            case EventStatus.RegistrationIsOpen:
-                setStateBGColor('greenyellow')
-                break
-            case EventStatus.NoPlacesLeft:
-                setStateBGColor('yellow')
-                break
-            case EventStatus.RegistrationIsClosed:
-                setStateBGColor('orange')
-                break
-            case EventStatus.InProgress:
-                setStateBGColor('cornflowerblue')
-                break
-            case EventStatus.Completed:
-                setStateBGColor('indianred')
-                break
-            case EventStatus.Error:
-                setStateBGColor('darkred')
-                break
-        }
-    }, [])
 
     return (
-        <div ref={eventRef} id={`${event.id}`} className="event">
+        <div onClick={() => navigate(`/curator/my-event/${event.id}/info`)} ref={eventRef} id={`${event.id}`} className="event">
             <div className="title-status-container">
                 <h2>{event.title}</h2>
-                <p className="event-status" style={{backgroundColor: stateBGColor}}>{event.condition}</p>
+                <p className="event-status" style={{backgroundColor: GetEventStatus(event.condition).statusBGColor}}>{GetEventStatus(event.condition).statusMessage}</p>
             </div>
             <p>{event.descriptionText.length > 400 ? `${event.descriptionText.substring(0, 400)}...` : event.descriptionText}</p>
             <p><b>Руководитель:</b> {event.managerId}</p>

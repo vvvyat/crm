@@ -9,13 +9,13 @@ export function useDeleteEventMutation(eventId: number, setIsDeleteFaled: React.
     return useMutation({
         mutationKey: ['delete-event'],
         mutationFn: async () => {
-            const res = await axios.delete(`${SERVER_URL}/events/delete/${eventId}`)
+            const res = await axios.delete(`${SERVER_URL}/events/delete/${eventId}`, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
             return res.data
         },
         onSuccess () {
             queryClient.invalidateQueries({queryKey: ['admin-events']})
             setIsDeleteFaled(false)
-            navigate('/')
+            navigate('/admin/events')
         },
         onError () {
             setIsDeleteFaled(true)

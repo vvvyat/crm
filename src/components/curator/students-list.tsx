@@ -1,5 +1,7 @@
 import React from "react";
 import { Student } from "../../consts";
+import { useStudentsQuery } from "../../fetch/students";
+import { useParams } from "react-router-dom";
 
 const StudentsListItem: React.FC<{
     counter: number,
@@ -16,23 +18,29 @@ const StudentsListItem: React.FC<{
     )
 })
 
-export const StudentsList: React.FC<{
-    students: Array<Student>
-}> = React.memo(({students}) => {
+export const StudentsList: React.FC = React.memo(() => {
+    const params = useParams()
+    const {data: students, isLoading, isError} = useStudentsQuery(Number(params.id))
 
-    return (
-        <div className="curators-container">
-            <div className="curators-header">
-                <p className="counter"></p>
-                <p>Имя</p>
-                <p>Telegram</p>
-                <p>ВКонтакте</p>
-                <p>Статус</p>
+    if (isLoading) {
+        return <p className="fetch-warnings">Загрузка...</p>
+    } else if (isError) {
+        return <p className="fetch-warnings">При загрузке произошла ошибка</p>
+    } else if (students) {
+        return (
+            <div className="curators-container">
+                <div className="curators-header">
+                    <p className="counter"></p>
+                    <p>Имя</p>
+                    <p>Telegram</p>
+                    <p>ВКонтакте</p>
+                    <p>Статус</p>
+                </div>
+                {students.map((student, index) => {
+                    return < StudentsListItem key={student.studentId} counter={index + 1} student={student} />
+                })}
             </div>
-            {students.map((student, index) => {
-                return < StudentsListItem key={student.studentId} counter={index + 1} student={student} />
-            })}
-        </div>
-    )
+        )
+    }
 })
 

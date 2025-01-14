@@ -6,7 +6,7 @@ export const MainNavigation: React.FC = React.memo(() => {
         <>
             <nav>
                 <NavLink
-                    to="/"
+                    to={`/${sessionStorage.getItem('role')}/events`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -14,7 +14,7 @@ export const MainNavigation: React.FC = React.memo(() => {
                     <button className="events-button">Мероприятия</button>
                 </NavLink>
                 <NavLink
-                    to="/my-events"
+                    to={`/${sessionStorage.getItem('role')}/my-events`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }

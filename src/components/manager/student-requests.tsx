@@ -1,55 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
 import { Student } from "../../consts";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useStudentRequestsQuery } from "../../fetch/student-requests";
+import { useParams } from "react-router-dom";
+import { FormatName } from "../../utils";
+import { useStudentAcceptMutation } from "../../fetch/student-accept";
+import { useStudentRejectMutation } from "../../fetch/student-reject";
 
 const StudentRequestsListItem: React.FC<{
     counter: number,
+    eventId: number,
     student: Student
-}> = React.memo(({counter, student}) => {
-    const [aceptedOrRejected, setAceptedOrRejected] = useState(false)
-    
+}> = React.memo(({counter, eventId, student}) => {    
+    const {mutateAsync: accept} = useStudentAcceptMutation(eventId, student.studentId)
+    const {mutateAsync: reject} = useStudentRejectMutation(eventId, student.studentId)
+
     return (
-        <section className={aceptedOrRejected ? 'curator-requests hidden' : 'curator-requests'} id={`${student.studentId}`}>
+        <section className='curator-requests' id={`${student.studentId}`}>
             <p className="counter">{counter}</p>
-            <p className="name">{`${student.surname} ${student.firstName} ${student.lastName}`}</p>
+            <p className="name">{FormatName(student)}</p>
             <p className="skills">{student.competencies}</p>
-            <button onClick={async () => {
-                try {
-                    await axios.put(`http://localhost:8080/events_students/${3}/accept/${student.studentId}`)
-                    setAceptedOrRejected(true)
-                } catch {
-                    console.log('Не удалось принять заявку')
-                }
-            }} className="accept">Принять</button>
-            <button onClick={async () => {
-                try {
-                    await axios.put(`http://localhost:8080/events_students/${3}/reject/${student.studentId}`)
-                    setAceptedOrRejected(true)
-                } catch {
-                    console.log('Не удалось отклонить заявку')
-                }
-            }} className="reject">Отклонить</button>
+            <button onClick={() => accept()} className="accept">Принять</button>
+            <button onClick={() => reject()} className="reject">Отклонить</button>
         </section>
     )
 })
 
 export const StudentRequestsList: React.FC = React.memo(() => {
-    const {data: studentRequsets, isLoading, error} = useQuery<Student[]>({
-        queryKey: ['student-requests'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events_students/${3}/waiting_students`)
-            return res.data
-        }
-    })
+    const params = useParams()
+    const {data: studentRequsets, isLoading, isError} = useStudentRequestsQuery(Number(params.id))
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (studentRequsets && studentRequsets.length === 0) {
         return <p className="fetch-warnings">Заявок нет</p>
-    }else {
+    }else if (studentRequsets) {
         return (
             <div className="students-container">
                 <div className="student-requests-header">
@@ -57,8 +43,8 @@ export const StudentRequestsList: React.FC = React.memo(() => {
                     <p>Имя</p>
                     <p>Компетенции</p>
                 </div>
-                {studentRequsets?.map((student, index) => {
-                    return < StudentRequestsListItem key={student.studentId} counter={index + 1} student={student} />
+                {studentRequsets.map((student, index) => {
+                    return < StudentRequestsListItem key={student.studentId} counter={index + 1} eventId={Number(params.id)} student={student} />
                 })}
             </div>
         )

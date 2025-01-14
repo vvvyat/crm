@@ -6,9 +6,12 @@ import { Inputs } from "../../consts";
 import { useNewEventMutation } from "../../fetch/create-event";
 import { FormatName } from "../../utils";
 import { useAllManagersQuery } from "../../fetch/all-managers";
+import { useUserInfoQuery } from "../../fetch/user-info";
+import moment from "moment";
 
 export const CreateEvent: React.FC = React.memo(() => {
     const [isCreateFailed, setIsCreateFailed] = useState(false)
+
     const {
         register,
         reset,
@@ -17,21 +20,22 @@ export const CreateEvent: React.FC = React.memo(() => {
         control,
         formState: { errors, isSubmitting },
     } = useForm<Inputs>()
+    
     const {mutateAsync: createNewEvent} = useNewEventMutation(setIsCreateFailed, reset)
+    const {data: userInfo} = useUserInfoQuery()
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         createNewEvent({
             title: data.title,
             descriptionText: data.descriptionText,
-            adminId: 4,
+            adminId: userInfo ? userInfo.id : 0,
             managerId: data.managerId,
-            eventStartDate: data.eventStartDate + 'T00:00:00.000Z',
-            eventEndDate: data.eventEndDate + 'T00:00:00.000Z',
-            enrollmentStartDate: data.enrollmentStartDate + 'T00:00:00.000Z',
-            enrollmentEndDate: data.enrollmentEndDate + 'T00:00:00.000Z',
-            numberSeatsStudent: data.numberSeatsStudent,
-            numberSeatsCurator: 1,
-            condition: "PREPARATION"
+            eventStartDate: moment(data.eventStartDate).format(),
+            eventEndDate: moment(data.eventEndDate).format(),
+            enrollmentStartDate: moment(data.enrollmentStartDate).format(),
+            enrollmentEndDate: moment(data.enrollmentEndDate).format(),
+            chatUrl: data.chatUrl,
+            numberSeatsStudent: data.numberSeatsStudent
         })
     }
 
@@ -68,9 +72,12 @@ export const CreateEvent: React.FC = React.memo(() => {
                     <label className="date-to-lable">Конец:</label>
                     <input type="date" disabled={blocker.state === "blocked"} {...register("eventEndDate", { required: 'Обязательное поле!', validate: (end) => {
                         if (!watch("eventStartDate")) return
-                        const startDate = new Date(watch("eventStartDate")).getTime()
-                        const endDate = new Date(end).getTime()
-                        return startDate <= endDate || 'Начало события должно происходить раньше, чем конец.'
+                        const startDate = moment(watch("eventStartDate"))
+                        const endDate = moment(end)
+                        if (moment().isAfter(startDate)) {
+                            return 'Нельзя создать событие, которое уже началось / завершилось.'
+                        }
+                        return endDate.isAfter(startDate) || 'Начало события должно происходить раньше, чем конец.'
                     }})} />
                     {errors.eventEndDate && <span className="date-warning">{errors.eventEndDate.message}</span>}
                 </div>
@@ -84,15 +91,16 @@ export const CreateEvent: React.FC = React.memo(() => {
 
                     <label className="enrollment-date-to-lable">Конец:</label>
                     <input type="date" disabled={blocker.state === "blocked"} {...register("enrollmentEndDate", { required: 'Обязательное поле!', validate: (enEnd) => {
-                        if (!watch("enrollmentStartDate")) return
-                        const enStartDate = new Date(watch("enrollmentStartDate")).getTime()
-                        const enEndDate = new Date(enEnd).getTime()
-                        const start = new Date(watch("eventStartDate")).getTime()
-                        if (enStartDate > enEndDate) {
+                        if (!watch("enrollmentStartDate") || !watch("eventStartDate")) return
+                        const enStartDate = moment(watch("enrollmentStartDate"))
+                        const enEndDate = moment(enEnd)
+                        const start = moment(watch("eventStartDate"))
+                        if (enStartDate.isSameOrAfter(enEndDate)) {
                             return 'Начало набора должно происходить раньше, чем конец.'
                         }
-                        if (!watch("eventStartDate")) return
-                        return enEndDate <= start || 'Набор участников должен завершиться до начала события.'
+                        if (enEndDate.isAfter(start)) {
+                            return 'Набор участников должен завершиться до начала события.'
+                        }
                     }})} />
                     {errors.enrollmentEndDate && <span className="date-warning">{errors.enrollmentEndDate.message}</span>}
                 </div>
@@ -133,7 +141,6 @@ export const CreateEvent: React.FC = React.memo(() => {
                                         optionSelectedColor: '#000000',
                                         optionSelectedFontWeight: 400,
                                         selectorBg: '#c7bf9e',
-                                        
                                     },
                                 },
                             }}
@@ -151,7 +158,7 @@ export const CreateEvent: React.FC = React.memo(() => {
                                 }
                                 options={managers?.map((manager) => {
                                     return {
-                                        value: manager.managerId,
+                                        value: manager.id,
                                         label: FormatName(manager)
                                     }
                                 })}
@@ -162,8 +169,14 @@ export const CreateEvent: React.FC = React.memo(() => {
                 {errors.managerId && <span className="warning">Обязательное поле!</span>}
 
                 <label className="chat-link-lable">Ссылка на огр. чат:</label>
-                <input className="chat-link" type="input" disabled={blocker.state === "blocked"} autoComplete="off" {...register("chatUrl", { required: true })}/>
-                {errors.chatUrl && <span className="warning">Обязательное поле!</span>}
+                <input className="chat-link" type="input" disabled={blocker.state === "blocked"} autoComplete="off" {...register("chatUrl", {
+                    required: 'Обязательное поле!',
+                    pattern: {
+                        value: /^http.*\./,
+                        message: 'Невалидная ссылка.',
+                    },
+                })}/>
+                {errors.chatUrl && <span className="warning">{errors.chatUrl.message}</span>}
 
                 <button disabled={isSubmitting || blocker.state === "blocked"} className="save-button">Создать мероприятие</button>
                 {isCreateFailed && <p className="save-error">Не удалось создать мероприятие</p>}

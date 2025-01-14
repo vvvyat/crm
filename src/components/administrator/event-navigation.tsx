@@ -8,7 +8,7 @@ export const EventNavigation: React.FC = React.memo(() => {
         <>
             <nav>
                 <NavLink
-                    to={`/event/${params.id}/info`}
+                    to={`/admin/event/${params.id}/info`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -16,7 +16,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="info">Описание<br/>мероприятия</button>
                 </NavLink>
                 <NavLink
-                    to={`/event/${params.id}/curators`}
+                    to={`/admin/event/${params.id}/curators`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -24,7 +24,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="curators">Список кураторов</button>
                 </NavLink>
                 <NavLink
-                    to={`/event/${params.id}/students`}
+                    to={`/admin/event/${params.id}/students`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -32,7 +32,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="students">Список студентов</button>
                 </NavLink>
                 <NavLink
-                    to={`/event/${params.id}/messages`}
+                    to={`/admin/event/${params.id}/messages`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -40,7 +40,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="create-messages-button">Сообщения для<br/>рассылки</button>
                 </NavLink>
                 <NavLink
-                    to={`/event/${params.id}/settings`}
+                    to={`/admin/event/${params.id}/settings`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }

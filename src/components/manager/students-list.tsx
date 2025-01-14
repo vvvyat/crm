@@ -1,19 +1,23 @@
 import React, { useRef, useState } from "react";
 import { Student } from "../../consts";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useStudentsQuery } from "../../fetch/students";
+import { useParams } from "react-router-dom";
+import { useDeleteStudentMutation } from "../../fetch/delete-student";
+import { FormatName } from "../../utils";
 
 const StudentsListItem: React.FC<{
     counter: number,
     student: Student,
+    eventId: number,
     studentsRef: React.RefObject<HTMLDivElement>
-}> = React.memo(({counter, student, studentsRef}) => {
+}> = React.memo(({counter, student, eventId, studentsRef}) => {
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
-    const [isDeleted, setIsDeleted] = useState(false)
+    const [isDeleteFailed, setIsDeleteFailed] = useState(false)
+    const {mutateAsync: deleteStudent} = useDeleteStudentMutation(eventId, setIsDeleteFailed)
 
     return (
         <>
-            <section className={isDeleted ? "hidden" : "student manager-student" } id={`${student.studentId}`}>
+            <section className="student manager-student" id={`${student.studentId}`}>
                 <p className="counter">{counter}</p>
                 <p className="name">{`${student.surname} ${student.firstName} ${student.lastName}`}</p>
                 <p className="skills">{student.competencies}</p>
@@ -30,20 +34,9 @@ const StudentsListItem: React.FC<{
 
             {isDeleteConfirmOpen && (
                 <div className="warning-modal">
-                    <p className="warning-text">Вы уверены, что хотите удалить<br/>{`${student.surname} ${student.firstName} ${student.lastName}`}?</p>
+                    <p className="warning-text">Вы уверены, что хотите удалить<br/>{FormatName(student)}?</p>
                     <div className="warning-buttons">
-                        <button className="edit-event-warning-confirm" onClick={async () => {
-                            try {
-                                await axios.delete(`http://localhost:8080/events_students/${student.eventId}/delete/${student.studentId}`)
-                                setIsDeleteConfirmOpen(false)
-                                if (studentsRef.current) {
-                                    studentsRef.current.classList.remove('modal-open')
-                                }
-                                setIsDeleted(true)
-                            } catch {
-                                console.log('Не удалить студента с мероприятия')
-                            }
-                        }}>Да</button>
+                        <button className="edit-event-warning-confirm" onClick={() => deleteStudent()}>Да</button>
                         <button className="edit-event-warning-cancel" onClick={(evt) => {
                             evt.preventDefault()
                             setIsDeleteConfirmOpen(false)
@@ -59,19 +52,13 @@ const StudentsListItem: React.FC<{
 })
 
 export const StudentsList: React.FC = React.memo(() => {
+    const params = useParams()
     const studentsRef = useRef<HTMLDivElement>(null)
-
-    const {data: students, isLoading, error} = useQuery<Student[]>({
-        queryKey: ['students'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events_students/${3}/students`)
-            return res.data
-        }
-    })
+    const {data: students, isLoading, isError} = useStudentsQuery(Number(params.id))
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (students && students.length === 0) {
         return <p className="fetch-warnings">Участников нет</p>
@@ -86,7 +73,8 @@ export const StudentsList: React.FC = React.memo(() => {
                     <p>Статус</p>
                 </div>
                 {students?.map((student, index) => {
-                    return < StudentsListItem key={student.studentId} counter={index + 1} student={student} studentsRef={studentsRef} />
+                    return < StudentsListItem
+                        key={student.studentId} counter={index + 1} student={student} eventId={Number(params.id)} studentsRef={studentsRef} />
                 })}
             </div>
         )
