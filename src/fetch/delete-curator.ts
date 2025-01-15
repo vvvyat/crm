@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { SERVER_URL } from "../consts"
 
-export function useDeleteCuratorMutation(eventId: number, setIsDeleteFaled: React.Dispatch<React.SetStateAction<boolean>>) {
+export function useDeleteCuratorMutation(eventId: number) {
     const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['delete-curator'],
@@ -12,10 +12,6 @@ export function useDeleteCuratorMutation(eventId: number, setIsDeleteFaled: Reac
         },
         onSuccess () {
             queryClient.invalidateQueries({queryKey: ['curators', eventId]})
-            setIsDeleteFaled(false)
-        },
-        onError () {
-            setIsDeleteFaled(true)
         }
     })
 }

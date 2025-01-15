@@ -12,8 +12,7 @@ const CuratorsListItem: React.FC<{
     curatorsRef: React.RefObject<HTMLDivElement>
 }> = React.memo(({counter, eventId, curator, curatorsRef}) => {
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
-    const [isDeleteFailed, setIsDeleteFailed] = useState(false)
-    const {mutateAsync: deleteCurator} = useDeleteCuratorMutation(eventId, setIsDeleteFailed)
+    const {mutateAsync: deleteCurator} = useDeleteCuratorMutation(eventId)
 
     return (
         <>
@@ -36,7 +35,7 @@ const CuratorsListItem: React.FC<{
                 <div className="warning-modal">
                     <p className="warning-text">Вы уверены, что хотите удалить<br/>{FormatName(curator)}?</p>
                     <div className="warning-buttons">
-                        <button className="edit-event-warning-confirm" onClick={() => deleteCurator()}>Да</button>
+                        <button className="edit-event-warning-confirm" onClick={() => deleteCurator(curator.curatorId)}>Да</button>
                         <button className="edit-event-warning-cancel" onClick={(evt) => {
                             evt.preventDefault()
                             setIsDeleteConfirmOpen(false)
@@ -62,7 +61,7 @@ export const CuratorsList: React.FC = React.memo(() => {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (curators && curators.length === 0) {
             return <p className="fetch-warnings">Кураторов нет</p>
-    }else {
+    } else {
         return (
             <div ref={curatorsRef} className="curators-container">
                 <div className="curators-header manager-curator-header">
@@ -73,10 +72,9 @@ export const CuratorsList: React.FC = React.memo(() => {
                     <p>Статус</p>
                 </div>
                 {curators?.map((curator, index) => {
-                    return < CuratorsListItem key={curator.curatorId} counter={index + 1} eventId={Number(params.id)} curator={curator} curatorsRef={curatorsRef}/>
+                    return <CuratorsListItem key={curator.curatorId} counter={index + 1} eventId={Number(params.id)} curator={curator} curatorsRef={curatorsRef}/>
                 })}
             </div>
         )
     }
 })
-
