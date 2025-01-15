@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../../fetch/event";
 import { useUserInfoByIdQuery } from "../../fetch/user-info-by-id";
-import { useIsAbleToSendQuery } from "../../fetch/is-able-to-send";
+import { useIsAbleToSendQuery } from "../../fetch/student-is-able-to-send";
 import { useStudentSendMutation } from "../../fetch/student-send-request";
 
 export const MoreInfo: React.FC<{

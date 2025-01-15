@@ -3,7 +3,7 @@ import { Student } from "../../consts";
 import { useStudentsQuery } from "../../fetch/students";
 import { useParams } from "react-router-dom";
 import { useDeleteStudentMutation } from "../../fetch/delete-student";
-import { FormatName } from "../../utils";
+import { FormatName, GetStudentCuratorStatus } from "../../utils";
 
 const StudentsListItem: React.FC<{
     counter: number,
@@ -19,10 +19,10 @@ const StudentsListItem: React.FC<{
         <>
             <section className="student manager-student" id={`${student.studentId}`}>
                 <p className="counter">{counter}</p>
-                <p className="name">{`${student.surname} ${student.firstName} ${student.lastName}`}</p>
+                <p className="name">{FormatName(student)}</p>
                 <p className="skills">{student.competencies}</p>
-                <p className="curator-name">{`${student.curatorSurname || ''} ${student.curatorFirstName || ''} ${student.curatorLastName || ''}`}</p>
-                <p className="state">{student.statusRequest}</p>
+                <p className="curator-name">{`${student.curatorLastName || ''} ${student.curatorFirstName || ''} ${student.curatorSurname || ''}`}</p>
+                <p className="state">{GetStudentCuratorStatus(student.statusRequest)}</p>
                 <button className="delete-student" disabled={isDeleteConfirmOpen} onClick={(evt) => {
                     evt.preventDefault()
                     if (studentsRef.current) {
@@ -36,7 +36,7 @@ const StudentsListItem: React.FC<{
                 <div className="warning-modal">
                     <p className="warning-text">Вы уверены, что хотите удалить<br/>{FormatName(student)}?</p>
                     <div className="warning-buttons">
-                        <button className="edit-event-warning-confirm" onClick={() => deleteStudent()}>Да</button>
+                        <button className="edit-event-warning-confirm" onClick={() => deleteStudent(student.studentId)}>Да</button>
                         <button className="edit-event-warning-cancel" onClick={(evt) => {
                             evt.preventDefault()
                             setIsDeleteConfirmOpen(false)

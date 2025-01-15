@@ -3,6 +3,7 @@ import {createBrowserRouter, createRoutesFromElements, Outlet, Route, RouterProv
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Authorization } from "./login/authorization";
 import { Registration } from "./login/registration";
+import { RegistrationWithToken } from "./login/register-with-token";
 import { Home } from "./home";
 import { Header } from "./header";
 
@@ -23,6 +24,7 @@ import { EventSettings } from "./administrator/event-settings";
 import { MainNavigation as AdminNavigation } from "./administrator/main-navigation";
 import { EventNavigation as AdminEventNavigation } from "./administrator/event-navigation";
 import { CreateMessages } from "./administrator/messages";
+import { InviteManager } from "./administrator/invite-manager";
 
 // куратор
 import { MainNavigation } from "./main-navigation";
@@ -65,6 +67,10 @@ export const App: React.FC = React.memo(() => {
                         <Navigate to={'/home'} /> :
                         <Registration />}>
                     </Route>
+                    <Route path="register-with-token/:token" element={user ?
+                        <Navigate to={'/home'} /> :
+                        <RegistrationWithToken />}>
+                    </Route>
 
                     <Route path="admin" element={
                         <>
@@ -81,6 +87,7 @@ export const App: React.FC = React.memo(() => {
                         <Route element={<AdminNavigation/>}>
                             <Route path="events" element={<AdminEvents />}></Route>
                             <Route path="create" element={<CreateEvent />}></Route>
+                            <Route path="invite-manager" element={<InviteManager />}></Route>
                         </Route>
                         <Route path="event/:id" element={<AdminEventNavigation />}>
                             <Route path="info" element={<AdminEventInfo />}></Route>

@@ -2,9 +2,10 @@ import { FormatDate, FormatName } from "../../utils";
 import { EventData } from "../../consts";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { useEventQuery } from "../../fetch/event";
 import { useUserInfoByIdQuery } from "../../fetch/user-info-by-id";
+import { useCuratorIsAbleToSendQuery } from "../../fetch/curator-is-able-to-send";
+import { useCuratorSendMutation } from "../../fetch/curator-send-request";
 
 export const MoreInfo: React.FC<{
     event: EventData
@@ -23,19 +24,21 @@ export const MoreInfo: React.FC<{
 
 export const EventInfo: React.FC = React.memo(() => {
     const params = useParams()
-    const {data: event, isLoading, isError} = useEventQuery(Number(params.id))
-    const {data: manager} = useUserInfoByIdQuery(event ? event.managerId : 0)
-
-    const [isRequestSended, setIsRequestSended] = useState(false)
-    const [isRequestFaled, setIsRequestFaled] = useState(false)
-
+    
+    const [isFailed, setIsFailed] = useState(false)
     const [open, setOpen] = useState(false);
     
+    const {data: event, isLoading, isError} = useEventQuery(Number(params.id))
+    const {data: manager} = useUserInfoByIdQuery(event ? event.managerId : 0)
+    const {data: isAbleToSend} = useCuratorIsAbleToSendQuery(Number(params.id))
+    
+    const {mutateAsync: sendRequest} = useCuratorSendMutation(Number(params.id), setIsFailed)
+        
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
     } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
-    } else if (event) {
+    } else if (event && isAbleToSend) {
         return (
             <>
                 <div className="short-event-info">
@@ -46,21 +49,12 @@ export const EventInfo: React.FC = React.memo(() => {
                         {open && <MoreInfo event={event} />}
                     </div>
                     <aside>
-                        <button disabled={isRequestSended} onClick={async () => {
-                            try {
-                                await axios.put(`http://localhost:8080/events_curators/${event.id}/send/2`)
-                                setIsRequestSended(true)
-                            } catch {
-                                setIsRequestFaled(true)
-                            }
-                        }} className="send-request-button">{isRequestSended ? 'Заявка отправлена': 'Стать куратором'}</button>
-                        {isRequestFaled && <p className="aside-error">Не удалось отправить заявку</p>}
+                        <button disabled={isAbleToSend.message === 'false'} onClick={() => sendRequest()} className="send-request-button">{isAbleToSend.message === 'false' ? 'Заявка отправлена': 'Стать куратором'}</button>
+                        {isFailed && <p className="aside-error">Не удалось отправить заявку</p>}
                         <button onClick={() => {setOpen(!open)}} className="show-more-button">Подробнее</button>
                     </aside>
                 </div>
             </>
         )
-    } else {
-        <p className="fetch-warnings">Неизвестная ошибка</p>
     }
 })

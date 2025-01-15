@@ -9,5 +9,6 @@ export function useNotificationsQuery() {
             const res = await axios.get(`${SERVER_URL}/notifications/my`, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
             return res.data
         },
+        refetchInterval: 120 * 1000
     })
 }

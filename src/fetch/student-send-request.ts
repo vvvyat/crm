@@ -12,7 +12,7 @@ export function useStudentSendMutation(eventId: number, setIsFaled: React.Dispat
         },
         onSuccess () {
             setIsFaled(false)
-            queryClient.invalidateQueries({queryKey: ['is-able-to-send', eventId, sessionStorage.getItem('id')]})
+            queryClient.invalidateQueries({queryKey: ['student-is-able-to-send', eventId, sessionStorage.getItem('id')]})
         },
         onError () {
             setIsFaled(true)

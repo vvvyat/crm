@@ -6,8 +6,8 @@ export function useDeleteStudentMutation(eventId: number, setIsDeleteFaled: Reac
     const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['delete-student'],
-        mutationFn: async () => {
-            const res = await axios.delete(`${SERVER_URL}/events-students/${eventId}/delete/${sessionStorage.getItem('id')}`, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
+        mutationFn: async (studentId: number) => {
+            const res = await axios.delete(`${SERVER_URL}/events-students/${eventId}/delete/${studentId}`, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
             return res.data
         },
         onSuccess () {

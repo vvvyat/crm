@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { RegistrationInputs } from "../../consts";
 import { useRegistrationMutation } from "../../fetch/registration";
 
-export const Registration: React.FC = React.memo(() => {
+export const RegistrationWithToken: React.FC = React.memo(() => {
     const {
         register,
         handleSubmit,

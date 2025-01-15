@@ -22,7 +22,7 @@ export const MainNavigation: React.FC = React.memo(() => {
                     <button className="create-event-button">Создать<br/>мероприятие</button>
                 </NavLink>
                 <NavLink
-                    to="/"
+                    to="/admin/invite-manager"
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }

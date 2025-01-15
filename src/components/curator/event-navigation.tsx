@@ -1,12 +1,14 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 
 export const EventNavigation: React.FC = React.memo(() => {
+    const params = useParams()
+
     return (
         <>
             <nav>
                 <NavLink
-                    to="/my-event/id/info"
+                    to={`/curator/my-event/${params.id}/info`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }
@@ -14,7 +16,7 @@ export const EventNavigation: React.FC = React.memo(() => {
                     <button className="info">Описание<br/>мероприятия</button>
                 </NavLink>
                 <NavLink
-                    to="/my-event/id/students"
+                    to={`/curator/my-event/${params.id}/students`}
                     className={({ isActive }) =>
                         isActive ? "nav-active" : ""
                     }

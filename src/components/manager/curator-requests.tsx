@@ -1,55 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
 import { Curator } from "../../consts";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useCuratorRequestsQuery } from "../../fetch/curator-requests";
+import { useParams } from "react-router-dom";
+import { FormatName } from "../../utils";
+import { useCuratorAcceptMutation } from "../../fetch/curator-accept";
+import { useCuratorRejectMutation } from "../../fetch/curator-reject";
 
 const CuratorRequestsListItem: React.FC<{
     counter: number,
+    eventId: number,
     curator: Curator
-}> = React.memo(({counter, curator}) => {
-    const [aceptedOrRejected, setAceptedOrRejected] = useState(false)
-    
+}> = React.memo(({counter, eventId, curator}) => {
+    const {mutateAsync: accept} = useCuratorAcceptMutation(eventId, curator.curatorId)
+    const {mutateAsync: reject} = useCuratorRejectMutation(eventId, curator.curatorId)
+
     return (
-        <section className={aceptedOrRejected ? 'curator-requests hidden' : 'curator-requests'} id={`${curator.curatorId}`}>
+        <section className='curator-requests' id={`${curator.curatorId}`}>
             <p className="counter">{counter}</p>
-            <p className="name">{`${curator.surname} ${curator.firstName} ${curator.lastName}`}</p>
-            <p className="skills">Наблюдательность, Принятие инициативы, Принятие решений, Планирование и организация, Работа под давлением</p>
-            <button onClick={async () => {
-                try {
-                    await axios.put(`http://localhost:8080/events_curators/${3}}/accept/${curator.curatorId}`)
-                    setAceptedOrRejected(true)
-                } catch {
-                    console.log('Не удалось принять заявку куратора')
-                }
-            }} className="accept">Принять</button>
-            <button onClick={async () => {
-                try {
-                    await axios.put(`http://localhost:8080/events_curators/${3}/reject/${curator.curatorId}`)
-                    setAceptedOrRejected(true)
-                } catch {
-                    console.log('Не удалось отклонить заявку куратора')
-                }
-            }} className="reject">Отклонить</button>
+            <p className="name">{FormatName(curator)}</p>
+            <p className="skills">{curator.competencies}</p>
+            <button onClick={() => accept()} className="accept">Принять</button>
+            <button onClick={() => reject()} className="reject">Отклонить</button>
         </section>
     )
 })
 
 export const CuratorRequestsList: React.FC = React.memo(() => {
-    const {data: curatorRequsets, isLoading, error} = useQuery<Curator[]>({
-        queryKey: ['curator-requsets'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events_curators/${3}/waiting_curators`)
-            return res.data
-        }
-    })
-
+    const params = useParams()
+    const {data: curatorRequsets, isLoading, isError} = useCuratorRequestsQuery(Number(params.id))
+    
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (curatorRequsets && curatorRequsets.length === 0) {
         return <p className="fetch-warnings">Заявок на кураторство нет</p>
-    }else {
+    }else if (curatorRequsets) {
         return (
             <div className="curators-container">
                 <div className="curator-requests-header">
@@ -57,8 +43,8 @@ export const CuratorRequestsList: React.FC = React.memo(() => {
                     <p>Имя</p>
                     <p>Компетенции</p>
                 </div>
-                {curatorRequsets?.map((curator, index) => {
-                    return < CuratorRequestsListItem key={curator.curatorId} counter={index + 1} curator={curator} />
+                {curatorRequsets.map((curator, index) => {
+                    return < CuratorRequestsListItem key={curator.curatorId} counter={index + 1} eventId={Number(params.id)} curator={curator} />
                 })}
             </div>
         )

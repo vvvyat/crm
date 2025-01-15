@@ -1,24 +1,28 @@
 import React, { useRef, useState } from "react";
 import { Curator } from "../../consts";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useCuratorsQuery } from "../../fetch/curators";
+import { useParams } from "react-router-dom";
+import { FormatName, GetStudentCuratorStatus } from "../../utils";
+import { useDeleteCuratorMutation } from "../../fetch/delete-curator";
 
 const CuratorsListItem: React.FC<{
     counter: number,
+    eventId: number,
     curator: Curator,
     curatorsRef: React.RefObject<HTMLDivElement>
-}> = React.memo(({counter, curator, curatorsRef}) => {
+}> = React.memo(({counter, eventId, curator, curatorsRef}) => {
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
-    const [isDeleted, setIsDeleted] = useState(false)
+    const [isDeleteFailed, setIsDeleteFailed] = useState(false)
+    const {mutateAsync: deleteCurator} = useDeleteCuratorMutation(eventId, setIsDeleteFailed)
 
     return (
         <>
-            <section className={isDeleted ? "hidden" : "curator manager-curator"} id={`${curator.curatorId}`}>
+            <section className="curator manager-curator" id={`${curator.curatorId}`}>
                 <p className="counter">{counter}</p>
-                <p className="name">{`${curator.surname} ${curator.firstName} ${curator.lastName}`}</p>
+                <p className="name">{FormatName(curator)}</p>
                 <p className="telegram">{curator.telegramUrl}</p>
                 <p className="vk">{curator.vkUrl}</p>
-                <p className="state">{curator.curatorStatus}</p>
+                <p className="state">{GetStudentCuratorStatus(curator.curatorStatus)}</p>
                 <button className="delete-curator" disabled={isDeleteConfirmOpen} onClick={(evt) => {
                     evt.preventDefault()
                     if (curatorsRef.current) {
@@ -30,20 +34,9 @@ const CuratorsListItem: React.FC<{
 
             {isDeleteConfirmOpen && (
                 <div className="warning-modal">
-                    <p className="warning-text">Вы уверены, что хотите удалить<br/>{`${curator.surname} ${curator.firstName} ${curator.lastName}`}?</p>
+                    <p className="warning-text">Вы уверены, что хотите удалить<br/>{FormatName(curator)}?</p>
                     <div className="warning-buttons">
-                        <button className="edit-event-warning-confirm" onClick={async () => {
-                            try {
-                                await axios.delete(`http://localhost:8080/events_curators/${curator.eventId}/delete/${curator.curatorId}`)
-                                setIsDeleteConfirmOpen(false)
-                                if (curatorsRef.current) {
-                                    curatorsRef.current.classList.remove('modal-open')
-                                }
-                                setIsDeleted(true)
-                            } catch {
-                                console.log('Не удалить куратора с мероприятия')
-                            }
-                        }}>Да</button>
+                        <button className="edit-event-warning-confirm" onClick={() => deleteCurator()}>Да</button>
                         <button className="edit-event-warning-cancel" onClick={(evt) => {
                             evt.preventDefault()
                             setIsDeleteConfirmOpen(false)
@@ -59,22 +52,16 @@ const CuratorsListItem: React.FC<{
 })
 
 export const CuratorsList: React.FC = React.memo(() => {
+    const params = useParams()
     const curatorsRef = useRef<HTMLDivElement>(null)
-
-    const {data: curators, isLoading, error} = useQuery<Curator[]>({
-        queryKey: ['curators'],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:8080/events_curators/${3}/curators`)
-            return res.data
-        }
-    })
-
+    const {data: curators, isLoading, isError} = useCuratorsQuery(Number(params.id))
+    
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (error) {
+    } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (curators && curators.length === 0) {
-        return <p className="fetch-warnings">Кураторов нет</p>
+            return <p className="fetch-warnings">Кураторов нет</p>
     }else {
         return (
             <div ref={curatorsRef} className="curators-container">
@@ -86,7 +73,7 @@ export const CuratorsList: React.FC = React.memo(() => {
                     <p>Статус</p>
                 </div>
                 {curators?.map((curator, index) => {
-                    return < CuratorsListItem key={curator.curatorId} counter={index + 1} curator={curator} curatorsRef={curatorsRef}/>
+                    return < CuratorsListItem key={curator.curatorId} counter={index + 1} eventId={Number(params.id)} curator={curator} curatorsRef={curatorsRef}/>
                 })}
             </div>
         )
