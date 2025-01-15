@@ -12,8 +12,7 @@ const StudentsListItem: React.FC<{
     studentsRef: React.RefObject<HTMLDivElement>
 }> = React.memo(({counter, student, eventId, studentsRef}) => {
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
-    const [isDeleteFailed, setIsDeleteFailed] = useState(false)
-    const {mutateAsync: deleteStudent} = useDeleteStudentMutation(eventId, setIsDeleteFailed)
+    const {mutateAsync: deleteStudent} = useDeleteStudentMutation(eventId, setIsDeleteConfirmOpen)
 
     return (
         <>
