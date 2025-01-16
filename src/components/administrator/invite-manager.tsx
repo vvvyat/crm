@@ -14,7 +14,7 @@ export const InviteManager: React.FC = React.memo(() => {
     if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else {
-        const link = `http://localhost:5173/register-with-token/${referalToken}`
+        const link = `https://84.252.132.66/register-with-token/${referalToken}`
         return (
             <>
                 <ConfigProvider

@@ -96,7 +96,7 @@ export enum StudentCuratorStatus {
     Deleted = "DELETED_FROM_EVENT",
 }
 
-export const SERVER_URL = 'https://84.252.132.66'
+export const SERVER_URL = 'https://84.252.132.66/api'
 
 export type AuthorizationInputs = {
     email: string;

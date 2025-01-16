@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { SERVER_URL } from "../consts"
 
-export function useDeleteStudentMutation(eventId: number, setIsDeleteFaled: React.Dispatch<React.SetStateAction<boolean>>) {
+export function useDeleteStudentMutation(eventId: number) {
     const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['delete-student'],
@@ -12,10 +12,6 @@ export function useDeleteStudentMutation(eventId: number, setIsDeleteFaled: Reac
         },
         onSuccess () {
             queryClient.invalidateQueries({queryKey: ['students', eventId]})
-            setIsDeleteFaled(false)
-        },
-        onError () {
-            setIsDeleteFaled(true)
         }
     })
 }

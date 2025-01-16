@@ -2,6 +2,7 @@ body {
     font-family: 'Philosopher', Arial, Helvetica, sans-serif;
     background-color: #dedab4;
     font-size: 16px;
+    margin: 0;
 }
 
 button {
@@ -751,9 +752,9 @@ button:disabled {
 
 .rectangle {
     position: absolute;
-    left: 68.98%;
+    right: 350px;
     width: 38px;
-    height: 25vh;
+    height: 40%;
     background-color: #e6e6e6;
 }
 
@@ -767,6 +768,8 @@ button:disabled {
 
 .login-img {
     height: 100%;
+    justify-self: end;
+    padding-right: 350px;
 }
 
 .login-main {
