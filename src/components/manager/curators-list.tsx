@@ -63,7 +63,8 @@ export const CuratorsList: React.FC = React.memo(() => {
         return <p className="fetch-warnings">Загрузка...</p>
     } else if (event?.condition === EventStatus.RegistrationIsOpen && acceptedError || startedError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
-    } else if (event?.condition === EventStatus.RegistrationIsOpen && curatorsAccepted && curatorsAccepted.length === 0 || curatorsStarted && curatorsStarted.length === 0) {
+    } else if (event?.condition === EventStatus.RegistrationIsOpen && curatorsAccepted && curatorsAccepted.length === 0 ||
+        event?.condition !== EventStatus.RegistrationIsOpen && curatorsStarted && curatorsStarted.length === 0) {
             return <p className="fetch-warnings">Кураторов нет</p>
     } else {
         return (

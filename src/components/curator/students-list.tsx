@@ -1,7 +1,7 @@
 import React from "react";
 import { Student } from "../../consts";
-import { useStudentsQuery } from "../../fetch/students";
 import { useParams } from "react-router-dom";
+import { useStartedStudentsGroupQuery } from "../../fetch/started-students-group";
 
 const StudentsListItem: React.FC<{
     counter: number,
@@ -20,10 +20,12 @@ const StudentsListItem: React.FC<{
 
 export const StudentsList: React.FC = React.memo(() => {
     const params = useParams()
-    const {data: students, isLoading, isError} = useStudentsQuery(Number(params.id))
+    const {data: students, isLoading, isError, error} = useStartedStudentsGroupQuery(Number(params.id))
 
     if (isLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
+    } else if (error?.message === 'Request failed with status code 400') {
+        return <p className="fetch-warnings">Мероприятие ещё не началось</p>
     } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (students) {

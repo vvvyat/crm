@@ -31,8 +31,9 @@ export const StudentsList: React.FC = React.memo(() => {
         return <p className="fetch-warnings">Загрузка...</p>
     } else if (event?.condition === EventStatus.RegistrationIsOpen && acceptedError || startedError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
-    } else if (event?.condition === EventStatus.RegistrationIsOpen && studentsAccepted && studentsAccepted.length === 0 || studentsStarted && studentsStarted.length === 0) {
-        return <p className="fetch-warnings">Участников нет</p>
+    } else if (event?.condition === EventStatus.RegistrationIsOpen && studentsAccepted && studentsAccepted.length === 0 || 
+        event?.condition !== EventStatus.RegistrationIsOpen && studentsStarted && studentsStarted.length === 0) {
+            return <p className="fetch-warnings">Участников нет</p>
     } else {
         return (
             <div className="students-container">
