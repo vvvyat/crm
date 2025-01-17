@@ -7,7 +7,7 @@ export function useCuratorChangeMutation(eventId: number) {
     return useMutation({
         mutationKey: ['curator-change', eventId],
         mutationFn: async ({ studentId, newCuratorId }: { studentId: number, newCuratorId: number }) => {
-            const res = await axios.put(`${SERVER_URL}/events-students/change-curator/${eventId}/students/${studentId}/curator/${newCuratorId}`, {}, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
+            const res = await axios.put(`${SERVER_URL}/events-students/change-curator/${eventId}/students/${studentId}/curator/{newCuratorId}?newCuratorId=${newCuratorId}`, {}, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`}})
             return res.data
         },
         onSuccess () {
