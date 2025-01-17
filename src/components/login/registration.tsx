@@ -73,14 +73,14 @@ export const Registration: React.FC = React.memo(() => {
 
                         <div className="email-password-field-container">
                             <label>Пароль</label>
-                            <input disabled={isSuccess} type="text" autoComplete="off" {...register("password", {required: true, minLength: 8, deps: ['confirmPassword']})} />
+                            <input disabled={isSuccess} type="password" autoComplete="off" {...register("password", {required: true, minLength: 8, deps: ['confirmPassword']})} />
                             {errors.password?.type === "required" && <span className="warning">Обязательное поле!</span>}
                             {errors.password?.type === "minLength" && <span className="warning">Минимальная длина 8 символов.</span>}
                         </div>
 
                         <div className="email-password-field-container">
                             <label>Подтвердите пароль</label>
-                            <input disabled={isSuccess} type="text" autoComplete="off" {...register("confirmPassword", {
+                            <input disabled={isSuccess} type="password" autoComplete="off" {...register("confirmPassword", {
                                 required: 'Обязательное поле!',
                                 validate: (confirmPassword) => {
                                     const password = watch("password")

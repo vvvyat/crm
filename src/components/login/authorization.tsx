@@ -13,7 +13,7 @@ export const Authorization: React.FC<{setUser: React.Dispatch<React.SetStateActi
 
     const [isFailed, setIsFailed] = useState(false)
 
-    const {mutateAsync: authorize} = useAuthorizationMutation(setIsFailed, setUser)
+    const {mutateAsync: authorize, isPending} = useAuthorizationMutation(setIsFailed, setUser)
 
     const onSubmit: SubmitHandler<AuthorizationInputs> = async (data) => {
         authorize({
@@ -45,7 +45,7 @@ export const Authorization: React.FC<{setUser: React.Dispatch<React.SetStateActi
                     <input type="password" autoComplete="off" {...register("password", { required: true })} />
                     {errors.password && <span className="warning">Обязательное поле!</span>}
 
-                    <button disabled={isSubmitting} className="login-button">Войти</button>
+                    <button disabled={isSubmitting || isPending} className="login-button">Войти</button>
                     {isFailed && <p className="login-error">Неверный email или пароль</p>}
                 </form>
                 <NavLink to="/register">

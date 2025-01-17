@@ -12,6 +12,7 @@ export type EventData = {
     numberSeatsCurator: number;
     numberSeatsStudent: number;
     title: string;
+    hasTest: boolean;
 }
 
 export type Student = {
@@ -74,6 +75,8 @@ export type CreateUpdateEvent = {
     enrollmentEndDate: string;
     chatUrl: string;
     numberSeatsStudent: number;
+    hasTest: boolean;
+    testUrl: string | null;
 }
 
 export enum EventStatus {
@@ -144,6 +147,16 @@ export type RegistrationPayload = {
     vkUrl: string;
     role: Roles;
     competencies: string;
+}
+
+export type ManagerRegistrationPayload = {
+    firstName: string;
+    lastName: string;
+    surname: string;
+    email: string;
+    sign: string;
+    telegramUrl: string;
+    vkUrl: string;
 }
 
 export type UserInfo = {

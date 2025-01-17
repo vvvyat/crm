@@ -64,7 +64,9 @@ export const EventSettings: React.FC = React.memo(() => {
             enrollmentStartDate: moment(data.enrollmentStartDate).format(),
             enrollmentEndDate: moment(data.enrollmentEndDate).format(),
             chatUrl: data.chatUrl,
-            numberSeatsStudent: data.numberSeatsStudent
+            numberSeatsStudent: data.numberSeatsStudent,
+            hasTest: false,
+            testUrl: null
         })
     }
 

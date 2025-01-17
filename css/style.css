@@ -856,6 +856,10 @@ button:disabled {
     left: 70%;
 }
 
+.reg-with-token img {
+    top: 55%;
+}
+
 .registr-button {
     background: #c7bf9e !important;
     padding: 10px 0;

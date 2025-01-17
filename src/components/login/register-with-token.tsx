@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { RegistrationInputs } from "../../consts";
-import { useRegistrationMutation } from "../../fetch/registration";
+import { useRegistrationWithTokenMutation } from "../../fetch/registration-with-token";
 
 export const RegistrationWithToken: React.FC = React.memo(() => {
     const {
@@ -16,7 +16,7 @@ export const RegistrationWithToken: React.FC = React.memo(() => {
     const [isSuccess, setIsSuccess] = useState(false)
     const navigate = useNavigate()
 
-    const {mutateAsync: registr} = useRegistrationMutation(setIsFailed, setIsSuccess)
+    const {mutateAsync: registr} = useRegistrationWithTokenMutation(setIsFailed, setIsSuccess)
 
     const onSubmit: SubmitHandler<RegistrationInputs> = async (data) => {
         registr({
@@ -26,14 +26,12 @@ export const RegistrationWithToken: React.FC = React.memo(() => {
             email: data.email,
             sign: data.password,
             telegramUrl: data.telegramUrl,
-            vkUrl: data.vkUrl,
-            role: data.role,
-            competencies: data.competencies,
+            vkUrl: data.vkUrl
         })
     }
 
     return (
-        <div className="registration">
+        <div className="registration reg-with-token">
             <div className={isSuccess ? 'success-registr' : ''}>
                 <h1>Регистрация</h1>
                 <form onSubmit={handleSubmit(onSubmit)} noValidate className="register-form">
@@ -71,14 +69,14 @@ export const RegistrationWithToken: React.FC = React.memo(() => {
 
                         <div className="email-password-field-container">
                             <label>Пароль</label>
-                            <input disabled={isSuccess} type="text" autoComplete="off" {...register("password", {required: true, minLength: 8, deps: ['confirmPassword']})} />
+                            <input disabled={isSuccess} type="password" autoComplete="off" {...register("password", {required: true, minLength: 8, deps: ['confirmPassword']})} />
                             {errors.password?.type === "required" && <span className="warning">Обязательное поле!</span>}
                             {errors.password?.type === "minLength" && <span className="warning">Минимальная длина 8 символов.</span>}
                         </div>
 
                         <div className="email-password-field-container">
                             <label>Подтвердите пароль</label>
-                            <input disabled={isSuccess} type="text" autoComplete="off" {...register("confirmPassword", {
+                            <input disabled={isSuccess} type="password" autoComplete="off" {...register("confirmPassword", {
                                 required: 'Обязательное поле!',
                                 validate: (confirmPassword) => {
                                     const password = watch("password")

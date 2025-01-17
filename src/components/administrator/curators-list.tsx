@@ -1,8 +1,10 @@
 import React from "react";
-import { Curator } from "../../consts";
+import { Curator, EventStatus } from "../../consts";
 import { useCuratorsQuery } from "../../fetch/curators";
 import { useParams } from "react-router-dom";
 import { FormatName, GetStudentCuratorStatus} from "../../utils";
+import { useEventQuery } from "../../fetch/event";
+import { useStartedCuratorsQuery } from "../../fetch/started-curators";
 
 const CuratorsListItem: React.FC<{
     counter: number,
@@ -21,15 +23,17 @@ const CuratorsListItem: React.FC<{
 
 export const CuratorsList: React.FC = React.memo(() => {
     const params = useParams()
-    const {data: curators, isLoading, isError} = useCuratorsQuery(Number(params.id))
-
-    if (isLoading) {
+    const {data: event} = useEventQuery(Number(params.id))
+    const {data: curatorsAccepted, isLoading: acceptedLoading, isError: acceptedError} = useCuratorsQuery(Number(params.id))
+    const {data: curatorsStarted, isLoading: startedLoading, isError: startedError} = useStartedCuratorsQuery(Number(params.id))
+        
+    if (event?.condition === EventStatus.RegistrationIsOpen && acceptedLoading || startedLoading) {
         return <p className="fetch-warnings">Загрузка...</p>
-    } else if (isError) {
+    } else if (event?.condition === EventStatus.RegistrationIsOpen && acceptedError || startedError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
-    } else if (curators && curators.length === 0) {
+    } else if (event?.condition === EventStatus.RegistrationIsOpen && curatorsAccepted && curatorsAccepted.length === 0 || curatorsStarted && curatorsStarted.length === 0) {
         return <p className="fetch-warnings">Кураторов нет</p>
-    }else {
+    } else {
         return (
             <div className="curators-container">
                 <div className="curators-header">
@@ -39,9 +43,14 @@ export const CuratorsList: React.FC = React.memo(() => {
                     <p>ВКонтакте</p>
                     <p>Статус</p>
                 </div>
-                {curators?.map((curator, index) => {
-                    return < CuratorsListItem key={curator.curatorId} counter={index + 1} curator={curator} />
-                })}
+                {event?.condition === EventStatus.RegistrationIsOpen ?
+                    curatorsAccepted?.map((curator, index) => {
+                        return < CuratorsListItem key={curator.curatorId} counter={index + 1} curator={curator} />
+                    }) :
+                    curatorsStarted?.map((curator, index) => {
+                        return < CuratorsListItem key={curator.curatorId} counter={index + 1} curator={curator} />
+                    })
+                }
             </div>
         )
     }

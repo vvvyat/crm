@@ -16,8 +16,13 @@ export const Header: React.FC<{
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (notifications && lastSeen < notifications.length - 1)
+        setLastSeen(0)
+    }, [])
+
+    useEffect(() => {
+        if (notifications && lastSeen < notifications.length - 1) {
             setIsNew(true)
+        }
     }, [isFetching, lastSeen, notifications])
 
     return (
