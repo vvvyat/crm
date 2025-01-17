@@ -56,7 +56,6 @@ const StudentsListItem: React.FC<{
                     >
                         <Select
                             onChange={(value) => {
-                                console.log('st' + student.studentId)
                                 changeCurator({studentId: student.studentId, newCuratorId: value})
                             }}
                             value={curators?.find((curator) => {

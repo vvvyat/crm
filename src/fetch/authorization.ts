@@ -11,7 +11,6 @@ export function useAuthorizationMutation(setIsFailed: React.Dispatch<React.SetSt
             return res.data
         },
         onSuccess: (response) => {
-            console.log(response.access)
             sessionStorage.setItem('token', response.access)
             setUser(true)
         },
