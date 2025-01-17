@@ -56,8 +56,13 @@ const StudentsListItem: React.FC<{
                     >
                         <Select
                             onChange={(value) => {
+                                console.log('st' + student.studentId)
                                 changeCurator({studentId: student.studentId, newCuratorId: value})
                             }}
+                            value={curators?.find((curator) => {
+                                return curator.firstName === student.curatorFirstName &&
+                                curator.lastName === student.curatorLastName &&
+                                curator.surname === student.curatorSurname})?.curatorId}
                             className="manager"
                             popupClassName="manager-popup"
                             notFoundContent="Не найдено"
