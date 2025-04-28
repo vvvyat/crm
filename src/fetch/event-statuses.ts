@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { EventData, SERVER_URL } from "../consts";
+import { Status, SERVER_URL } from "../consts";
 
-export function useMyEventsQuery() {
-  return useQuery<EventData[]>({
-    queryKey: ["my-events"],
+export function useEventStatusesQuery() {
+  return useQuery<Status[]>({
+    queryKey: ["event-statuses"],
     queryFn: async () => {
-      const res = await axios.get(`${SERVER_URL}/events/my`, {
+      const res = await axios.get(`${SERVER_URL}/api/statuses`, {
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
       });
       return res.data;

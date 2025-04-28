@@ -1,17 +1,15 @@
 export type EventData = {
-    adminId: number;
-    chatUrl: string;
+    id: number;
     condition: string;
     descriptionText: string;
-    enrollmentEndDate: string;
-    enrollmentStartDate: string;
-    eventEndDate: string;
-    eventStartDate: string;
-    id: number;
-    managerId: number;
-    numberSeatsCurator: number;
-    numberSeatsStudent: number;
     title: string;
+    adminId: number;
+    managerId: number;
+    eventStartDate: string;
+    eventEndDate: string;
+    enrollmentStartDate: string;
+    enrollmentEndDate: string;
+    numberSeatsStudent: number;
     hasTest: boolean;
 }
 
@@ -30,28 +28,6 @@ export type Student = {
     curatorSurname: string;
 }
 
-export type Curator = {
-    eventId: number;
-    curatorId: number;
-    curatorStatus: string;
-    firstName: string;
-    lastName: string;
-    surname: string;
-    competencies: string;
-    telegramUrl: string;
-    vkUrl: string;
-}
-
-export type Manager = {
-    id: number;
-    firstName: string;
-    lastName: string;
-    surname: string;
-    email: string;
-    telegramUrl: string;
-    vkUrl: string;
-}
-
 export type Inputs = {
     title: string;
     descriptionText: string;
@@ -60,20 +36,16 @@ export type Inputs = {
     enrollmentStartDate: string;
     enrollmentEndDate: string;
     numberSeatsStudent: number;
-    managerId: number;
-    chatUrl: string;
 }
 
 export type CreateUpdateEvent = {
     title: string;
     descriptionText: string;
     adminId: number;
-    managerId: number;
     eventStartDate: string;
     eventEndDate: string;
     enrollmentStartDate: string;
     enrollmentEndDate: string;
-    chatUrl: string;
     numberSeatsStudent: number;
     hasTest: boolean;
     testUrl: string | null;
@@ -90,16 +62,7 @@ export enum EventStatus {
     Deleted = "DELETED",
 }
 
-export enum StudentCuratorStatus {
-    SentRequest = "SENT_PERSONAL_INFO",
-    Rejected = "REJECTED_FROM_EVENT",
-    AddedInChat = "ADDED_IN_CHAT",
-    StartedEvent = "STARTED_EVENT",
-    EndedEvent = "ENDED_EVENT",
-    Deleted = "DELETED_FROM_EVENT",
-}
-
-export const SERVER_URL = 'https://84.252.132.66/api'
+export const SERVER_URL = 'https://localhost/api'
 
 export type AuthorizationInputs = {
     email: string;
@@ -108,9 +71,6 @@ export type AuthorizationInputs = {
 
 export enum Roles {
     Administrator = "ADMIN",
-    Manager = "MANAGER",
-    Curator = "CURATOR",
-    Student = "STUDENT",
 }
 
 export type RegistrationInputs = {
@@ -202,14 +162,209 @@ export type UpdateMessage = {
     text: string;
 }
 
-export type MessagesInputs = {
-    approvalMessage: string;
-    rejectionMessage: string;
+export type Status = {
+    id: number;
+    name: string;
+    isSystem: boolean;
+    displayOrder: number;
+    updatedAt: string;
 }
 
-export type Notification = {
-    notificationId: number;
-    eventTitle: string;
-    messageText: string;
-    sent_at: string;
-  }
+export type CreateUpdateStatus = {
+    name: string;
+    displayOrder: number;
+}
+
+export type StatusFormInputs = {
+    name: string;
+}
+
+export type UpdateStatusOrder = {
+    statusId: number; 
+    payload: CreateUpdateStatus;
+}
+
+/*
+type Participant = {
+    id: number;
+    name: string;
+}
+
+export type StageData = {
+    id: number;
+    title: string; 
+    participants: Participant[]
+}
+
+export const Stages: StageData[] = [
+    {
+        id: 50,
+        title: 'Отправила(а) персональные данные',
+        participants: [
+            {
+                id: 1,
+                name: 'Иванов Иван Иванович',
+            },
+            {
+                id: 2,
+                name: 'Петров Петр Петрович',
+            },
+            {
+                id: 3,
+                name: 'Сидорова Анна Сергеевна',
+            },
+            {
+                id: 4,
+                name: 'Смирнов Алексей Викторович',
+            },
+        ],
+    },
+    {
+        id: 13131313,
+        title: 'Отправила(а) персональные данные',
+        participants: [
+            {
+                id: 1,
+                name: 'Иванов Иван Иванович',
+            },
+            {
+                id: 2,
+                name: 'Петров Петр Петрович',
+            },
+            {
+                id: 3,
+                name: 'Сидорова Анна Сергеевна',
+            },
+            {
+                id: 4,
+                name: 'Смирнов Алексей Викторович',
+            },
+            {
+                id: 5,
+                name: 'Иванов Иван Иванович',
+            },
+            {
+                id: 6,
+                name: 'Петров Петр Петрович',
+            },
+            {
+                id: 7,
+                name: 'Сидорова Анна Сергеевна',
+            },
+            {
+                id: 8,
+                name: 'Смирнов Алексей Викторович',
+            },
+            {
+                id: 9,
+                name: 'Иванов Иван Иванович',
+            },
+            {
+                id: 10,
+                name: 'Петров Петр Петрович',
+            },
+        ],
+    },
+    {
+        id: 1212121,
+        title: 'Отправила(а) персональные данные',
+        participants: [
+            {
+                id: 1,
+                name: 'Иванов Иван Иванович',
+            },
+            {
+                id: 2,
+                name: 'Петров Петр Петрович',
+            },
+            {
+                id: 3,
+                name: 'Сидорова Анна Сергеевна',
+            },
+            {
+                id: 4,
+                name: 'Смирнов Алексей Викторович',
+            },
+        ],
+    },
+    {
+        id: 60,
+        title: 'Прошел(ла) тестирование',
+        participants: [
+            {
+                id: 5,
+                name: 'Кузнецова Екатерина Андреевна',
+            },
+            {
+                id: 6,
+                name: 'Николаев Николай Степанович',
+            },
+            {
+                id: 7,
+                name: 'Васильева Мария Павловна',
+            },
+        ],
+    },
+    {
+        id: 70,
+        title: 'Добавлен(а) в организационный чат',
+        participants: [
+            {
+                id: 8,
+                name: 'Орлов Сергей Валерьевич',
+            },
+            {
+                id: 9,
+                name: 'Федотова Ольга Дмитриевна',
+            },
+            {
+                id: 10,
+                name: 'Зайцева Светлана Игоревна',
+            },
+            {
+                id: 11,
+                name: 'Баранов Василий Александрович',
+            },
+            {
+                id: 12,
+                name: 'Лебедев Максим Сергеевич',
+            },
+        ],
+    },
+    {
+        id: 80,
+        title: 'Приступил(а) к практике',
+        participants: [
+            {
+                id: 13,
+                name: 'Мартынова Дарья Юрьевна',
+            },
+            {
+                id: 14,
+                name: 'Гусев Андрей Николаевич',
+            },
+        ],
+    },
+    {
+        id: 90,
+        title: 'Завершил(а) прохождение практики',
+        participants: [
+            {
+                id: 15,
+                name: 'Тихомирова Анастасия Викторовна',
+            },
+            {
+                id: 16,
+                name: 'Корнева Юлия Владимировна',
+            },
+            {
+                id: 17,
+                name: 'Савельев Валентин Павлович',
+            },
+            {
+                id: 18,
+                name: 'Шульгина Светлана Анатольевна',
+            },
+        ],
+    },
+]*/

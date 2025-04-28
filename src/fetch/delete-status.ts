@@ -1,26 +1,27 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { SERVER_URL } from "../consts";
-import { useNavigate } from "react-router-dom";
 
-export function useDeleteEventMutation(
-  eventId: number,
+export function useDeleteStatusMutation(
+  statusId: number,
+  setIsDeleteConfirmOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsAnyModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
   setIsDeleteFaled: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["delete-event"],
+    mutationKey: ["delete-status", statusId],
     mutationFn: async () => {
-      const res = await axios.delete(`${SERVER_URL}/events/delete/${eventId}`, {
+      const res = await axios.delete(`${SERVER_URL}/api/statuses/${statusId}`, {
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
       });
       return res.data;
     },
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ["admin-events"] });
+      queryClient.invalidateQueries({ queryKey: ["event-statuses"] });
       setIsDeleteFaled(false);
-      navigate("/admin/events");
+      setIsDeleteConfirmOpen(false);
+      setIsAnyModalOpen(false);
     },
     onError() {
       setIsDeleteFaled(true);
