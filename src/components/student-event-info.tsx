@@ -1,11 +1,10 @@
-import { FormatDate, FormatName } from "../../utils";
-import { EventData } from "../../consts";
+import { FormatDate, FormatName } from "../utils";
+import { EventData } from "../consts";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useEventQuery } from "../../fetch/event";
-import { useUserInfoByIdQuery } from "../../fetch/user-info-by-id";
-import { useIsAbleToSendQuery } from "../../fetch/student-is-able-to-send";
-import { useStudentSendMutation } from "../../fetch/student-send-request";
+import { useEventQuery } from "../fetch/event";
+import { useUserInfoByIdQuery } from "../fetch/user-info-by-id";
+import { useStudentSendMutation } from "../fetch/student-send-request";
 
 export const MoreInfo: React.FC<{
     event: EventData
@@ -30,7 +29,6 @@ export const EventInfo: React.FC = React.memo(() => {
 
     const {data: event, isLoading, isError} = useEventQuery(Number(params.id))
     const {data: manager} = useUserInfoByIdQuery(event ? event.managerId : 0)
-    const {data: isAbleToSend} = useIsAbleToSendQuery(Number(params.id))
 
     const {mutateAsync: sendRequest} = useStudentSendMutation(Number(params.id), setIsFailed)
     
@@ -38,7 +36,7 @@ export const EventInfo: React.FC = React.memo(() => {
         return <p className="fetch-warnings">Загрузка...</p>
     } else if (isError) {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
-    } else if (event && isAbleToSend) {
+    } else if (event) {
         return (
             <div className="short-event-info">
                 <div className="event-info-container">
@@ -48,7 +46,7 @@ export const EventInfo: React.FC = React.memo(() => {
                     {open && <MoreInfo event={event} />}
                 </div>
                 <aside>
-                    <button disabled={isAbleToSend.message === 'false'} onClick={() => sendRequest()} className="send-request-button">{isAbleToSend.message === 'false' ? 'Заявка отправлена': 'Поступить'}</button>
+                    <button onClick={() => sendRequest()} className="send-request-button">Отправить заявку</button>
                     {isFailed && <p className="aside-error">Не удалось отправить заявку</p>}
                     <button onClick={() => {setOpen(!open)}} className="show-more-button">Подробнее</button>
                 </aside>

@@ -1,9 +1,8 @@
-import { FormatDate, FormatName } from "../utils";
+import { FormatDate } from "../utils";
 import { EventData } from "../consts";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useActiveEventsQuery } from "../fetch/active-events";
-import { useUserInfoByIdQuery } from "../fetch/user-info-by-id";
 
 const EventPreview: React.FC<{
     event: EventData,
@@ -13,8 +12,6 @@ const EventPreview: React.FC<{
     const [stateBGColor] = useState('greenyellow')
     const [stateMessage] = useState('Регистрация открыта')
 
-    const {data: manager} = useUserInfoByIdQuery(event.managerId)
-
     return (
         <div onClick={() => navigate(`/${sessionStorage.getItem('role')}/event/${event.id}`)} ref={eventRef} id={`${event.id}`} className="event">
             <div className="title-status-container">
@@ -22,7 +19,6 @@ const EventPreview: React.FC<{
                 <p className="event-status" style={{backgroundColor: stateBGColor}}>{stateMessage}</p>
             </div>
             <p>{event.descriptionText.length > 400 ? `${event.descriptionText.substring(0, 400)}...` : event.descriptionText}</p>
-            <p><b>Руководитель:</b> {!manager ? 'Ошибка' : FormatName(manager)}</p>
             <div className="event-info">
                 <p><b>Срок проведения:</b> {FormatDate(event.eventStartDate)} - {FormatDate(event.eventEndDate)}</p>
                 <p><b>Срок зачисления студентов:</b> {FormatDate(event.enrollmentStartDate)} - {FormatDate(event.enrollmentEndDate)}</p>
@@ -41,13 +37,17 @@ export const EventsList: React.FC = React.memo(() => {
         return <p className="fetch-warnings">При загрузке произошла ошибка</p>
     } else if (events && events.length === 0) {
         return <p className="fetch-warnings">Нет активных мероприятий</p>
-    } else {
+    } else if (events) {
         return (
             <div className="events-container">
-                {events?.map(event => {
-                  return < EventPreview key={event.id} event={event} />
-                })}
+                <p style={{textAlign: 'center'}}>Список мероприятий</p>
             </div>
         )
     }
 })
+
+/*
+{events.map(event => {
+    return < EventPreview key={event.id} event={event} />
+})}
+*/

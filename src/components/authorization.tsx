@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
-import { AuthorizationInputs } from "../../consts";
-import { useAuthorizationMutation } from "../../fetch/authorization";
+import { AuthorizationInputs } from "../consts";
+import { useAuthorizationMutation } from "../fetch/authorization";
 
-export const Authorization: React.FC<{setUser: React.Dispatch<React.SetStateAction<boolean>>}> = React.memo(({setUser}) => {
+export const Authorization: React.FC = React.memo(() => {
     const {
         register,
         handleSubmit,
@@ -13,7 +12,7 @@ export const Authorization: React.FC<{setUser: React.Dispatch<React.SetStateActi
 
     const [isFailed, setIsFailed] = useState(false)
 
-    const {mutateAsync: authorize, isPending} = useAuthorizationMutation(setIsFailed, setUser)
+    const {mutateAsync: authorize, isPending} = useAuthorizationMutation(setIsFailed)
 
     const onSubmit: SubmitHandler<AuthorizationInputs> = async (data) => {
         authorize({
@@ -48,9 +47,6 @@ export const Authorization: React.FC<{setUser: React.Dispatch<React.SetStateActi
                     <button disabled={isSubmitting || isPending} className="login-button">Войти</button>
                     {isFailed && <p className="login-error">Неверный email или пароль</p>}
                 </form>
-                <NavLink to="/register">
-                    <button className="to-registration-button">Регистрация</button>
-                </NavLink>
             </div>
 
             <div className="login-img">
