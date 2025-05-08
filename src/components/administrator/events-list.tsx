@@ -23,16 +23,16 @@ const EventPreview: React.FC<{
         <p
           className="event-status"
           style={{
-            backgroundColor: GetEventStatus(event.condition).statusBGColor,
+            backgroundColor: GetEventStatus(event.status).statusBGColor,
           }}
         >
-          {GetEventStatus(event.condition).statusMessage}
+          {GetEventStatus(event.status).statusMessage}
         </p>
       </div>
       <p>
-        {event.descriptionText.length > 400
-          ? `${event.descriptionText.substring(0, 400)}...`
-          : event.descriptionText}
+        {event.description.length > 400
+          ? `${event.description.substring(0, 400)}...`
+          : event.description}
       </p>
       <div className="event-info">
         <p>

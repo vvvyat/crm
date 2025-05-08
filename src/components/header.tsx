@@ -9,11 +9,11 @@ export const Header: React.FC = React.memo(() => {
   return (
     <>
       <header>
-        <NavLink to={`/admin/events`}>
+        <NavLink to={sessionStorage.getItem("role") ? `/admin/events` : `/`}>
           <button className="logo">CRM</button>
         </NavLink>
         <div></div>
-        {sessionStorage.getItem('role') ? (
+        {sessionStorage.getItem("role") ? (
           <div className="profile-buttons">
             <NavLink to={`/admin/edit-profile`}>
               <div className="profile-button">

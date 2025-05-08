@@ -31,7 +31,7 @@ export const EventSettings: React.FC = React.memo(() => {
     if (event) {
       reset({
         title: event.title,
-        descriptionText: event.descriptionText,
+        descriptionText: event.description,
         eventStartDate: moment(event.eventStartDate).format("YYYY-MM-DD"),
         eventEndDate: moment(event.eventEndDate).format("YYYY-MM-DD"),
         enrollmentStartDate: moment(event.enrollmentStartDate).format(
@@ -60,7 +60,7 @@ export const EventSettings: React.FC = React.memo(() => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     updateEvent({
       title: data.title,
-      descriptionText: data.descriptionText,
+      description: data.descriptionText,
       adminId: userInfo ? userInfo.id : 0,
       eventStartDate: moment(data.eventStartDate).format(),
       eventEndDate: moment(data.eventEndDate).format(),
@@ -96,7 +96,7 @@ export const EventSettings: React.FC = React.memo(() => {
               required: true,
               maxLength: 70,
               validate: (title) =>
-                title.trim().length === 0 ||
+                title.trim().length > 0 ||
                 "Название должно содержать символы кроме пробела.",
             })}
           />
@@ -116,7 +116,7 @@ export const EventSettings: React.FC = React.memo(() => {
             {...register("descriptionText", {
               required: true,
               validate: (descriptionText) =>
-                descriptionText.trim().length === 0 ||
+                descriptionText.trim().length > 0 ||
                 "Описание должно содержать символы кроме пробела.",
             })}
           ></textarea>
@@ -253,7 +253,7 @@ export const EventSettings: React.FC = React.memo(() => {
                 setIsHideConfirmOpen(true);
               }}
             >
-              {event?.condition === EventStatus.Hidden
+              {event?.status === EventStatus.Hidden
                 ? "Показать мероприятие"
                 : "Скрыть мероприятие"}
             </button>
@@ -277,7 +277,7 @@ export const EventSettings: React.FC = React.memo(() => {
 
         {isHideConfirmOpen && (
           <div className="warning-modal edit-warning-modal">
-            {event?.condition === EventStatus.Hidden ? (
+            {event?.status === EventStatus.Hidden ? (
               <p className="warning-text">
                 Вы уверены, что хотите показать
                 <br />
