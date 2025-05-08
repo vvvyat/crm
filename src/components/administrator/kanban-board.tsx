@@ -3,7 +3,6 @@ import { StatusFormInputs } from "../../consts";
 import {
   DndContext,
   closestCenter,
-  KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -13,10 +12,9 @@ import {
 import {
   arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEventStatusesQuery } from "../../fetch/event-statuses";
 import { EventStatus } from "./event-status";
@@ -24,11 +22,13 @@ import { useCreateStatusMutation } from "../../fetch/create-status";
 import { useUpdateStatusOrderMutation } from "../../fetch/update-status-order";
 
 export const KanbanBoard: React.FC = React.memo(() => {
+  const params = useParams();
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
   const [isCreateFailed, setIsCreateFailed] = useState(false);
 
-  const { data: statuses, isLoading, isError } = useEventStatusesQuery();
+  const { data: statuses, isLoading, isError } = useEventStatusesQuery(Number(params.id));
 
   const {
     register,
@@ -38,13 +38,14 @@ export const KanbanBoard: React.FC = React.memo(() => {
   } = useForm<StatusFormInputs>();
 
   const { mutateAsync: createStatus } = useCreateStatusMutation(
+    Number(params.id),
     setIsCreateFailed,
     setIsAddModalOpen,
     setIsAnyModalOpen,
     reset
   );
 
-  const { mutateAsync: updateStatusOrder } = useUpdateStatusOrderMutation();
+  const { mutateAsync: updateStatusOrder } = useUpdateStatusOrderMutation(Number(params.id));
 
   const onSubmit: SubmitHandler<StatusFormInputs> = async (data) => {
     createStatus({
@@ -54,9 +55,10 @@ export const KanbanBoard: React.FC = React.memo(() => {
   };
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
     })
   );
 
@@ -75,11 +77,12 @@ export const KanbanBoard: React.FC = React.memo(() => {
 
     if (oldIndex >= 0 && newIndex >= 0) {
       newStatusesOrder.forEach((status, index) => {
+        status.displayOrder = index + 1;
         updateStatusOrder({
           statusId: status.id,
           payload: {
             name: status.name,
-            displayOrder: index + 1,
+            displayOrder: status.displayOrder,
           },
         });
       });
@@ -93,11 +96,7 @@ export const KanbanBoard: React.FC = React.memo(() => {
   } else if (statuses) {
     return (
       <>
-        <div
-          className={
-            isAnyModalOpen ? "crm-module crm-modal-open" : "crm-module"
-          }
-        >
+        <div className="crm-module">
           <div className="crm-buttons">
             <button
               className="button-with-img"
@@ -110,7 +109,7 @@ export const KanbanBoard: React.FC = React.memo(() => {
               <p>Добавить этап</p>
               <img src="/../../img/add-icon.svg" width="20" height="44"></img>
             </button>
-            <NavLink to={`/admin/event/student-data-forms`}>
+            <NavLink to={`/admin/event/${params.id}/student-data-forms`}>
               <button className="nav-button-with-img" disabled={isAnyModalOpen}>
                 <p>К формам</p>
                 <img
@@ -120,7 +119,7 @@ export const KanbanBoard: React.FC = React.memo(() => {
                 ></img>
               </button>
             </NavLink>
-            <NavLink to={`/admin/event/setting-up-robots-and-triggers`}>
+            <NavLink to={`/admin/event/${params.id}/setting-up-robots-and-triggers`}>
               <button className="nav-button-with-img" disabled={isAnyModalOpen}>
                 <p>Настройка роботов и триггеров</p>
                 <img
@@ -159,54 +158,56 @@ export const KanbanBoard: React.FC = React.memo(() => {
         </div>
 
         {isAddModalOpen && (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="stage-modal add-stage-modal"
-          >
-            <h2>Добавление этапа</h2>
-            <input
-              placeholder="Название"
-              type="text"
-              className="stage-title"
-              {...register("name", {
-                required: true,
-                maxLength: 50,
-                validate: (title) =>
-                  title.trim().length > 0 ||
-                  "Название должно содержать символы кроме пробела.",
-              })}
-            ></input>
-            {errors.name?.type === "required" && (
-              <span className="warning">Обязательное поле!</span>
-            )}
-            {errors.name?.type === "maxLength" && (
-              <span className="warning">Максимальная длина 50 символов.</span>
-            )}
-            {errors.name && (
-              <span className="warning">{errors.name.message}</span>
-            )}
+          <div className="stage-modal-container">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="stage-modal add-stage-modal"
+            >
+              <h2>Добавление этапа</h2>
+              <input
+                placeholder="Название"
+                type="text"
+                className="stage-title"
+                {...register("name", {
+                  required: true,
+                  maxLength: 50,
+                  validate: (title) =>
+                    title.trim().length > 0 ||
+                    "Название должно содержать символы кроме пробела.",
+                })}
+              ></input>
+              {errors.name?.type === "required" && (
+                <span className="warning">Обязательное поле!</span>
+              )}
+              {errors.name?.type === "maxLength" && (
+                <span className="warning">Максимальная длина 50 символов.</span>
+              )}
+              {errors.name && (
+                <span className="warning">{errors.name.message}</span>
+              )}
 
-            <div className="stage-modal-buttons">
-              <button className="add-button" disabled={isSubmitting}>
-                Сохранить
-              </button>
-              <button
-                className="cancel-button"
-                disabled={isSubmitting}
-                onClick={(evt) => {
-                  evt.preventDefault();
-                  setIsAddModalOpen(false);
-                  setIsAnyModalOpen(false);
-                  reset();
-                }}
-              >
-                Отмена
-              </button>
-            </div>
-            {isCreateFailed && (
-              <p className="save-error">Не удалось сохранить статус</p>
-            )}
-          </form>
+              <div className="stage-modal-buttons">
+                <button className="add-button" disabled={isSubmitting}>
+                  Сохранить
+                </button>
+                <button
+                  className="cancel-button"
+                  disabled={isSubmitting}
+                  onClick={(evt) => {
+                    evt.preventDefault();
+                    setIsAddModalOpen(false);
+                    setIsAnyModalOpen(false);
+                    reset();
+                  }}
+                >
+                  Отмена
+                </button>
+              </div>
+              {isCreateFailed && (
+                <p className="save-error">Не удалось сохранить статус</p>
+              )}
+            </form>
+          </div>
         )}
       </>
     );

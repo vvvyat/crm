@@ -52,4 +52,23 @@ const FormatName = (user: Student | UserInfo) => {
     : `${user.lastName} ${user.firstName}`;
 };
 
-export { FormatDate, GetEventStatus, FormatName };
+const GetFieldTitle = (name: string) => {
+  switch (name) {
+    case "first_name":
+      return "Имя";
+    case "last_name":
+      return "Фамилия";
+    case "surname":
+      return "Отчество";
+    case "email":
+      return "Email";
+    case "telegram_url":
+      return "Telegram";
+    case "vk_url":
+      return "ВКонтакте";
+    default:
+      return name;
+  }
+};
+
+export { FormatDate, GetEventStatus, FormatName, GetFieldTitle };

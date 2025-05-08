@@ -1,370 +1,254 @@
 export type EventData = {
-    id: number;
-    condition: string;
-    descriptionText: string;
-    title: string;
-    adminId: number;
-    managerId: number;
-    eventStartDate: string;
-    eventEndDate: string;
-    enrollmentStartDate: string;
-    enrollmentEndDate: string;
-    numberSeatsStudent: number;
-    hasTest: boolean;
-}
+  id: number;
+  status: EventStatus;
+  description: string;
+  title: string;
+  adminId: number;
+  eventStartDate: string;
+  eventEndDate: string;
+  enrollmentStartDate: string;
+  enrollmentEndDate: string;
+  numberSeatsStudent: number;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type Student = {
-    eventId: number;
-    studentId: number;
-    statusRequest: string;
-    firstName: string;
-    lastName: string;
-    surname: string;
-    competencies: string;
-    telegramUrl: string;
-    vkUrl: string;
-    curatorFirstName: string;
-    curatorLastName: string;
-    curatorSurname: string;
-}
+  eventId: number;
+  studentId: number;
+  statusRequest: string;
+  firstName: string;
+  lastName: string;
+  surname: string;
+  competencies: string;
+  telegramUrl: string;
+  vkUrl: string;
+  curatorFirstName: string;
+  curatorLastName: string;
+  curatorSurname: string;
+};
 
 export type Inputs = {
-    title: string;
-    descriptionText: string;
-    eventStartDate: string;
-    eventEndDate: string;
-    enrollmentStartDate: string;
-    enrollmentEndDate: string;
-    numberSeatsStudent: number;
-}
+  title: string;
+  descriptionText: string;
+  eventStartDate: string;
+  eventEndDate: string;
+  enrollmentStartDate: string;
+  enrollmentEndDate: string;
+  numberSeatsStudent: number;
+};
 
 export type CreateUpdateEvent = {
-    title: string;
-    descriptionText: string;
-    adminId: number;
-    eventStartDate: string;
-    eventEndDate: string;
-    enrollmentStartDate: string;
-    enrollmentEndDate: string;
-    numberSeatsStudent: number;
-    hasTest: boolean;
-    testUrl: string | null;
-}
+  title: string;
+  description: string;
+  adminId: number;
+  eventStartDate: string;
+  eventEndDate: string;
+  enrollmentStartDate: string;
+  enrollmentEndDate: string;
+  numberSeatsStudent: number;
+  hasTest: boolean;
+  testUrl: string | null;
+};
 
 export enum EventStatus {
-    Preparation = "PREPARATION",
-    RegistrationIsOpen = "REGISTRATION_OPEN",
-    NoPlacesLeft = "NO_SEATS",
-    RegistrationIsClosed = "REGISTRATION_CLOSED",
-    InProgress = "IN_PROGRESS",
-    Completed = "FINISHED",
-    Hidden = "HIDDEN",
-    Deleted = "DELETED",
+  Preparation = "PREPARATION",
+  RegistrationIsOpen = "REGISTRATION_OPEN",
+  NoPlacesLeft = "NO_SEATS",
+  RegistrationIsClosed = "REGISTRATION_CLOSED",
+  InProgress = "IN_PROGRESS",
+  Completed = "FINISHED",
+  Hidden = "HIDDEN",
+  Deleted = "DELETED",
 }
 
-export const SERVER_URL = 'https://localhost/api'
+export const SERVER_URL = "https://localhost/api";
 
 export type AuthorizationInputs = {
-    email: string;
-    password: string;
-}
+  email: string;
+  password: string;
+};
 
 export enum Roles {
-    Administrator = "ADMIN",
+  Administrator = "ADMIN",
 }
 
 export type RegistrationInputs = {
-    lastName: string;
-    firstName: string;
-    surname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    competencies: string;
-    role: Roles;
-    telegramUrl: string;
-    vkUrl: string;
-}
+  lastName: string;
+  firstName: string;
+  surname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  competencies: string;
+  role: Roles;
+  telegramUrl: string;
+  vkUrl: string;
+};
 
 export type ManagerRegistrationInputs = {
-    lastName: string;
-    firstName: string;
-    surname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    telegramUrl: string;
-    vkUrl: string;
-}
+  lastName: string;
+  firstName: string;
+  surname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  telegramUrl: string;
+  vkUrl: string;
+};
 
 export type RegistrationPayload = {
-    firstName: string;
-    lastName: string;
-    surname: string;
-    email: string;
-    sign: string;
-    telegramUrl: string;
-    vkUrl: string;
-    role: Roles;
-    competencies: string;
-}
+  firstName: string;
+  lastName: string;
+  surname: string;
+  email: string;
+  sign: string;
+  telegramUrl: string;
+  vkUrl: string;
+  role: Roles;
+  competencies: string;
+};
 
 export type ManagerRegistrationPayload = {
-    firstName: string;
-    lastName: string;
-    surname: string;
-    email: string;
-    sign: string;
-    telegramUrl: string;
-    vkUrl: string;
-}
+  firstName: string;
+  lastName: string;
+  surname: string;
+  email: string;
+  sign: string;
+  telegramUrl: string;
+  vkUrl: string;
+};
 
 export type UserInfo = {
-    id: number;
-    firstName: string;
-    lastName: string;
-    surname: string;
-    telegramUrl: string;
-    vkUrl: string;
-    role_enum: Roles;
-    competencies: string;
-}
+  id: number;
+  firstName: string;
+  lastName: string;
+  surname: string;
+  telegramUrl: string;
+  vkUrl: string;
+  role_enum: Roles;
+  competencies: string;
+};
 
 export type EditProfile = {
-    firstName: string;
-    lastName: string;
-    surname: string;
-    telegramUrl: string;
-    vkUrl: string;
-    competencies: string;
-}
+  firstName: string;
+  lastName: string;
+  surname: string;
+  telegramUrl: string;
+  vkUrl: string;
+  competencies: string;
+};
 
 export type EmailInputs = {
-    oldEmail: string;
-    newEmail: string;
-}
+  oldEmail: string;
+  newEmail: string;
+};
 
 export type PasswordInputs = {
-    oldPassword: string;
-    newPassword: string;
-}
+  oldPassword: string;
+  newPassword: string;
+};
 
 export type Message = {
-    id: number;
-    eventId: number;
-    text: string;
-    messageStatus: string;
-    editDate: string;
-}
+  id: number;
+  eventId: number;
+  text: string;
+  messageStatus: string;
+  editDate: string;
+};
 
 export type UpdateMessage = {
-    messageId: number;
-    text: string;
-}
+  messageId: number;
+  text: string;
+};
 
 export type Status = {
-    id: number;
-    name: string;
-    isSystem: boolean;
-    displayOrder: number;
-    updatedAt: string;
-}
+  id: number;
+  name: string;
+  isSystem: boolean;
+  displayOrder: number;
+  updatedAt: string;
+};
 
 export type CreateUpdateStatus = {
-    name: string;
-    displayOrder: number;
-}
+  name: string;
+  displayOrder: number;
+};
 
 export type StatusFormInputs = {
-    name: string;
-}
+  name: string;
+};
 
 export type UpdateStatusOrder = {
-    statusId: number; 
-    payload: CreateUpdateStatus;
-}
+  statusId: number;
+  payload: CreateUpdateStatus;
+};
 
-/*
-type Participant = {
-    id: number;
-    name: string;
-}
+export type FormsStandardField = {
+  id: number;
+  name: string;
+  type: string;
+  isRequired: boolean;
+  displayOrder: number;
+  options: string[];
+};
 
-export type StageData = {
-    id: number;
-    title: string; 
-    participants: Participant[]
-}
+export type FormsSystemField = {
+  id: number;
+  name: string;
+  type: string;
+  isRequired: boolean;
+  displayOrder: number;
+};
 
-export const Stages: StageData[] = [
-    {
-        id: 50,
-        title: 'Отправила(а) персональные данные',
-        participants: [
-            {
-                id: 1,
-                name: 'Иванов Иван Иванович',
-            },
-            {
-                id: 2,
-                name: 'Петров Петр Петрович',
-            },
-            {
-                id: 3,
-                name: 'Сидорова Анна Сергеевна',
-            },
-            {
-                id: 4,
-                name: 'Смирнов Алексей Викторович',
-            },
-        ],
-    },
-    {
-        id: 13131313,
-        title: 'Отправила(а) персональные данные',
-        participants: [
-            {
-                id: 1,
-                name: 'Иванов Иван Иванович',
-            },
-            {
-                id: 2,
-                name: 'Петров Петр Петрович',
-            },
-            {
-                id: 3,
-                name: 'Сидорова Анна Сергеевна',
-            },
-            {
-                id: 4,
-                name: 'Смирнов Алексей Викторович',
-            },
-            {
-                id: 5,
-                name: 'Иванов Иван Иванович',
-            },
-            {
-                id: 6,
-                name: 'Петров Петр Петрович',
-            },
-            {
-                id: 7,
-                name: 'Сидорова Анна Сергеевна',
-            },
-            {
-                id: 8,
-                name: 'Смирнов Алексей Викторович',
-            },
-            {
-                id: 9,
-                name: 'Иванов Иван Иванович',
-            },
-            {
-                id: 10,
-                name: 'Петров Петр Петрович',
-            },
-        ],
-    },
-    {
-        id: 1212121,
-        title: 'Отправила(а) персональные данные',
-        participants: [
-            {
-                id: 1,
-                name: 'Иванов Иван Иванович',
-            },
-            {
-                id: 2,
-                name: 'Петров Петр Петрович',
-            },
-            {
-                id: 3,
-                name: 'Сидорова Анна Сергеевна',
-            },
-            {
-                id: 4,
-                name: 'Смирнов Алексей Викторович',
-            },
-        ],
-    },
-    {
-        id: 60,
-        title: 'Прошел(ла) тестирование',
-        participants: [
-            {
-                id: 5,
-                name: 'Кузнецова Екатерина Андреевна',
-            },
-            {
-                id: 6,
-                name: 'Николаев Николай Степанович',
-            },
-            {
-                id: 7,
-                name: 'Васильева Мария Павловна',
-            },
-        ],
-    },
-    {
-        id: 70,
-        title: 'Добавлен(а) в организационный чат',
-        participants: [
-            {
-                id: 8,
-                name: 'Орлов Сергей Валерьевич',
-            },
-            {
-                id: 9,
-                name: 'Федотова Ольга Дмитриевна',
-            },
-            {
-                id: 10,
-                name: 'Зайцева Светлана Игоревна',
-            },
-            {
-                id: 11,
-                name: 'Баранов Василий Александрович',
-            },
-            {
-                id: 12,
-                name: 'Лебедев Максим Сергеевич',
-            },
-        ],
-    },
-    {
-        id: 80,
-        title: 'Приступил(а) к практике',
-        participants: [
-            {
-                id: 13,
-                name: 'Мартынова Дарья Юрьевна',
-            },
-            {
-                id: 14,
-                name: 'Гусев Андрей Николаевич',
-            },
-        ],
-    },
-    {
-        id: 90,
-        title: 'Завершил(а) прохождение практики',
-        participants: [
-            {
-                id: 15,
-                name: 'Тихомирова Анастасия Викторовна',
-            },
-            {
-                id: 16,
-                name: 'Корнева Юлия Владимировна',
-            },
-            {
-                id: 17,
-                name: 'Савельев Валентин Павлович',
-            },
-            {
-                id: 18,
-                name: 'Шульгина Светлана Анатольевна',
-            },
-        ],
-    },
-]*/
+export type Form = {
+  formId: number;
+  eventId: number;
+  title: string;
+  isTemplate: boolean;
+  systemFields: FormsSystemField[];
+  customFields: FormsStandardField[];
+};
+
+type CustomField = {
+  isRequired: boolean;
+  displayOrder: number;
+};
+
+type CustomFields = {
+  [key: number]: CustomField;
+};
+
+type SystemFields = {
+  [key: number]: number;
+};
+
+export type CreateUpdateForm = {
+  eventId: number;
+  title: string;
+  isTemplate: boolean;
+  customFields: CustomFields;
+  systemFields: SystemFields;
+};
+
+export type CreateFormInputs = {
+  title: string;
+};
+
+type Prors = {
+  [key: string]: string;
+};
+
+export type StudentRequest = {
+  id: number;
+  eventId: number;
+  statusId: number;
+  formData: Prors;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RequestData = {
+  eventId: number;
+  formData: Record<string, string | number>
+}

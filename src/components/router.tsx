@@ -25,12 +25,14 @@ import { MainNavigation as AdminNavigation } from "./administrator/main-navigati
 import { EventNavigation as AdminEventNavigation } from "./administrator/event-navigation";
 
 import { KanbanBoard } from "./administrator/kanban-board";
-import { StudentDataForms } from "./administrator/student-data-forms";
+import { StudentDataForms } from "./administrator/forms/forms-list";
 import { RobotsTriggersSettings } from "./administrator/robots-triggers-settings";
 
 // студент
 import { EventInfo as StudentEventInfo } from "./student-event-info";
 import { EventsList } from "./events-list";
+import { CreateForm } from "./administrator/forms/create-form";
+import { SendStudentData } from "./send/send";
 
 export const App: React.FC = React.memo(() => {
   const router = createBrowserRouter(
@@ -56,6 +58,7 @@ export const App: React.FC = React.memo(() => {
           >
             <Route index element={<EventsList />}></Route>
             <Route path="event/:id" element={<StudentEventInfo />}></Route>
+            <Route path="event/:id/send" element={<SendStudentData />}></Route>
           </Route>
 
           <Route
@@ -87,6 +90,14 @@ export const App: React.FC = React.memo(() => {
               <Route
                 path="student-data-forms"
                 element={<StudentDataForms />}
+              ></Route>
+              <Route
+                path="student-data-forms/create-form"
+                element={<CreateForm />}
+              ></Route>
+              <Route
+                path="student-data-forms/:formId"
+                element={<CreateForm />}
               ></Route>
               <Route
                 path="setting-up-robots-and-triggers"

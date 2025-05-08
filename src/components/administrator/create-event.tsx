@@ -26,7 +26,7 @@ export const CreateEvent: React.FC = React.memo(() => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     createNewEvent({
       title: data.title,
-      descriptionText: data.descriptionText,
+      description: data.descriptionText,
       adminId: userInfo ? userInfo.id : 0,
       eventStartDate: moment(data.eventStartDate).format(),
       eventEndDate: moment(data.eventEndDate).format(),
@@ -63,7 +63,7 @@ export const CreateEvent: React.FC = React.memo(() => {
             required: true,
             maxLength: 70,
             validate: (title) =>
-              title.trim().length === 0 ||
+              title.trim().length > 0 ||
               "Название должно содержать символы кроме пробела.",
           })}
         />
@@ -84,7 +84,7 @@ export const CreateEvent: React.FC = React.memo(() => {
           {...register("descriptionText", {
             required: true,
             validate: (descriptionText) =>
-              descriptionText.trim().length === 0 ||
+              descriptionText.trim().length > 0 ||
               "Описание должно содержать символы кроме пробела.",
           })}
         ></textarea>

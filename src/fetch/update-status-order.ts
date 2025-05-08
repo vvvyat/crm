@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { SERVER_URL, UpdateStatusOrder } from "../consts";
 
-export function useUpdateStatusOrderMutation() {
+export function useUpdateStatusOrderMutation(eventId: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-status-order"],
     mutationFn: async ({statusId, payload}: UpdateStatusOrder) => {
       const res = await axios.put(
-        `${SERVER_URL}/api/statuses/${statusId}`,
+        `${SERVER_URL}/events/${eventId}/statuses/${statusId}`,
         payload,
         {
           headers: {
@@ -19,7 +19,7 @@ export function useUpdateStatusOrderMutation() {
       return res.data;
     },
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ["event-statuses"] });
+      queryClient.invalidateQueries({ queryKey: ["event-statuses", eventId] });
     },
   });
 }
