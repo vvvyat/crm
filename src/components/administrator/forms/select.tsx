@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormsStandardField } from "../../../consts";
 import { ConfigProvider, Select, Switch } from "antd";
 
 export const MySelect: React.FC<{
   field: FormsStandardField;
   addedFields: FormsStandardField[];
-  setAddedFields: React.Dispatch<React.SetStateAction<FormsStandardField[]>>;
+  setAddedFields: React.Dispatch<
+    React.SetStateAction<FormsStandardField[] | undefined>
+  >;
 }> = React.memo(({ field, addedFields, setAddedFields }) => {
+  const [fieldName, setFieldName] = useState(
+    `${field.name}${field.isRequired ? "*" : ""}`
+  );
+
   return (
-    <div
-      className="field-container"
-      key={field.id}
-    >
+    <div className="field-container" key={field.id}>
       <ConfigProvider
         theme={{
           token: {
@@ -34,12 +37,13 @@ export const MySelect: React.FC<{
               optionSelectedBg: "#dedab4",
               optionSelectedColor: "#000000",
               selectorBg: "#c7bf9e",
+              colorTextPlaceholder: "#757575",
             },
           },
         }}
       >
         <Select
-          placeholder={field.name}
+          placeholder={fieldName}
           className="manager select"
           popupClassName="manager-popup"
           notFoundContent="Не найдено"
@@ -66,7 +70,10 @@ export const MySelect: React.FC<{
             <Switch
               size="small"
               defaultChecked
-              onChange={(isChecked) => (field.isRequired = isChecked)}
+              onChange={(isChecked) => {
+                field.isRequired = isChecked;
+                setFieldName(`${field.name}${field.isRequired ? "*" : ""}`);
+              }}
             />
             <p>Обязательное поле</p>
           </div>
@@ -78,7 +85,7 @@ export const MySelect: React.FC<{
           title="Удалить"
           onClick={() => {
             setAddedFields(
-              addedFields.filter((deleteField) => field.id !== deleteField.id)
+              addedFields.filter((addedField) => addedField.id !== field.id)
             );
           }}
         ></img>

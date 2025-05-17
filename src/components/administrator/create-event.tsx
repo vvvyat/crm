@@ -77,17 +77,19 @@ export const CreateEvent: React.FC = React.memo(() => {
           <span className="warning">{errors.title.message}</span>
         )}
 
-        <textarea
-          placeholder="Описание"
-          autoComplete="off"
-          disabled={blocker.state === "blocked"}
-          {...register("descriptionText", {
-            required: true,
-            validate: (descriptionText) =>
-              descriptionText.trim().length > 0 ||
-              "Описание должно содержать символы кроме пробела.",
-          })}
-        ></textarea>
+        <div className="textarea-wrapper">
+          <textarea
+            placeholder="Описание"
+            autoComplete="off"
+            disabled={blocker.state === "blocked"}
+            {...register("descriptionText", {
+              required: true,
+              validate: (descriptionText) =>
+                descriptionText.trim().length > 0 ||
+                "Описание должно содержать символы кроме пробела.",
+            })}
+          ></textarea>
+        </div>
         {errors.descriptionText && (
           <span className="warning">Обязательное поле!</span>
         )}
@@ -98,7 +100,6 @@ export const CreateEvent: React.FC = React.memo(() => {
         <div>
           <label className="date-lable">Срок проведения</label>
 
-          <label className="date-from-lable">Начало:</label>
           <input
             type="date"
             disabled={blocker.state === "blocked"}
@@ -111,7 +112,8 @@ export const CreateEvent: React.FC = React.memo(() => {
             <span className="date-warning">Обязательное поле!</span>
           )}
 
-          <label className="date-to-lable">Конец:</label>
+          <span className="date-spliter">—</span>
+
           <input
             type="date"
             disabled={blocker.state === "blocked"}
@@ -137,11 +139,8 @@ export const CreateEvent: React.FC = React.memo(() => {
         </div>
 
         <div>
-          <label className="enrollment-date-lable">
-            Срок зачисления студентов
-          </label>
+          <label className="date-lable">Срок зачисления студентов</label>
 
-          <label className="enrollment-date-from-lable">Начало:</label>
           <input
             type="date"
             disabled={blocker.state === "blocked"}
@@ -154,7 +153,8 @@ export const CreateEvent: React.FC = React.memo(() => {
             <span className="date-warning">Обязательное поле!</span>
           )}
 
-          <label className="enrollment-date-to-lable">Конец:</label>
+          <span className="date-spliter">—</span>
+
           <input
             type="date"
             disabled={blocker.state === "blocked"}
@@ -225,7 +225,7 @@ export const CreateEvent: React.FC = React.memo(() => {
       </form>
 
       {blocker.state === "blocked" && (
-        <div className="warning-modal">
+        <div className="warning-modal create-warning-modal">
           <p className="warning-text">
             Изменения будут утеряны.
             <br />

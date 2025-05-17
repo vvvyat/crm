@@ -70,7 +70,7 @@ a {
 
 .short-event-info {
     display: grid;
-    grid-template-columns: 89vw 11vw;
+    grid-template-columns: 86vw 14vw;
     height: 100%;
 }
 
@@ -146,14 +146,15 @@ nav button, .logo {
 
 .delete-button, .save-button, .close-button {
     background: #c7bf9e !important;
-    padding: 16px 0;
+    padding: 13px 30px;
     font-size: 20px;
     border: 5px solid #d9d9d9;
-    width: 20%;
-    margin-bottom: 30px;
+    min-width: 24%;
+    width: fit-content;
 }
 
 .send-request-button, .show-more-button {
+    width: 100%;
     background: #dedab4 !important;
     padding: 16px 0;
     font-size: 16px;
@@ -181,15 +182,6 @@ nav button, .logo {
     margin: 0;
 }
 
-.short-event-info .manager {
-    width: 44.8%;
-}
-
-.short-event-info .close-button {
-    position: absolute;
-    top: 80vh;
-}
-
 .more-info li {
     list-style-image: url(../img/marker.svg);
     padding-left: 20px;
@@ -201,7 +193,6 @@ nav button, .logo {
     font-size: 16px;
     border: 5px solid #c7bf9e;
     width: 20%;
-    margin-bottom: 30px;
     margin-left: 40px;
 }
 
@@ -251,21 +242,25 @@ nav button, .logo {
     width: 44.8%;
 }
 
-input[type=date] {
-    margin-left: 10px;
+.date-lable {
+    padding-right: 10px;
+}
+
+.date-spliter {
+    margin: 0 10px;
 }
 
 .save-button {
     margin-top: 30px;
 }
 
-.event-info-container .title, .event-info-container .discription, .event-info-container .eventDates,  .event-info-container .numberSeats,
-.event-info-container .manager, .event-info-container .chatUrl, .event-info-container .enrollmentDates {
+.event-info-container .title, .event-info-container .discription, .event-info-container .eventDates, 
+.event-info-container .numberSeats, .event-info-container .enrollmentDates {
     padding: 17px;
     background-color: #c7bf9e;
     border: 5px solid #d9d9d9;
     border-radius: 32px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .event-info-container .title {
@@ -323,13 +318,17 @@ input[type=date] {
     border: 5px solid #c7bf9e;
     border-radius: 32px;
     position: absolute;
-    top: 50%;
+    top: 33%;
     left: 50%;
     margin-left: -13%;
     margin-top: -114px;
     padding: 0 80px;
     height: 228px;
     width: 26%;
+}
+
+.create-warning-modal {
+    top: 50%;
 }
 
 .edit-warning-modal {
@@ -480,6 +479,7 @@ button:disabled {
     font-size: 24px;
     margin-top: 35px;
     font-weight: 700;
+    padding-left: 10px;
 }
 
 .edit-profile-form .name-field {
@@ -639,6 +639,7 @@ button:disabled {
 }
 
 .login-main {
+    margin: auto 0;
     padding: 0 140px;
 }
 
@@ -834,7 +835,7 @@ button:disabled {
     position: relative;
 }
 
-.crm-module {
+.crm-module, .send-container {
     scrollbar-width: thin;
     scrollbar-color: #d9d9d9 #c7bf9e;
     scrollbar-gutter: stable;
@@ -866,7 +867,7 @@ button:disabled {
 }
 
 .stage-header {
-    height: 16vh;
+    height: 12vh;
     align-content: center;
     margin: 0 20px;
 
@@ -887,6 +888,10 @@ button:disabled {
 .stage .participants-list {
     height: 50vh;
     overflow: hidden;
+}
+
+.participants-list-message {
+    height: 50vh;
 }
 
 .stage .participant {
@@ -980,10 +985,22 @@ button:disabled {
 
 .stage-student-info-modal {
     top: 10%;
-    left: 34%;
-    padding: 20px 60px;
+    left: 24%;
+    padding: 0 40px;
     padding-top: 0;
-    width: 24%;
+    width: 40%;
+}
+
+.stage-student-info-modal .stage-modal-buttons {
+    margin: 20px 0;
+}
+
+.stage-student-info-modal-content {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #c7bf9e transparent;
 }
 
 .delete-confirm-modal {
@@ -1003,7 +1020,7 @@ button:disabled {
 }
 
 .delete-stage-modal {
-    padding-bottom: 0;
+    padding-bottom: 20px;
     min-height: 26%;
     height: fit-content;
     display: flex;
@@ -1035,7 +1052,7 @@ button:disabled {
     background: #c7bf9e !important;
     padding: 13px 30px;
     font-size: 16px;
-    min-width: 36%;
+    min-width: 40%;
     width: fit-content;
     height: fit-content;
     text-align: center;
@@ -1052,7 +1069,7 @@ button:disabled {
     padding: 5px;
 }
 
-.stage-buttons, .forms-list-item-buttons {
+.stage-buttons {
     display: none;
 }
 
@@ -1097,27 +1114,6 @@ button:disabled {
     padding: 27px 0;
 }
 
-.form-radio-group {
-    width: 100%;
-}
-
-.forms-list-item {
-    background-color: #c7bf9e;
-    border: 5px solid #d9d9d9;
-    border-radius: 32px;
-    height: 60px;
-}
-
-.forms-list-item:hover {
-    justify-content: space-between;
-}
-
-.form-radio-group .ant-list-items {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .edit-form {
     display: flex;
     flex-direction: column;
@@ -1153,6 +1149,12 @@ button:disabled {
     font-family: 'Philosopher', Arial, Helvetica, sans-serif;
 }
 
+.edit-form .warning {
+    margin-left: 18px;
+    margin-top: -15px;
+    margin-bottom: -5px;
+}
+
 .create-form-buttons {
     display: flex;
     gap: 40px;
@@ -1161,13 +1163,11 @@ button:disabled {
 .create-form-buttons button {
     padding: 13px;
     border: 5px solid #d9d9d9;
-    margin-bottom: 20px;
-    min-width: 180px;
+    min-width: 220px;
 }
 
 .create-form-buttons .create-button {
     background-color: #c7bf9e !important;
-    border: 5px solid #d9d9d9;
 }
 
 .create-form-buttons .go-back-button {
@@ -1251,4 +1251,244 @@ button:disabled {
     height: fit-content;
     align-items: center;
     padding: 0 10px;
+}
+
+.send-container {
+    display: flex;
+    margin: 0 4vw;
+}
+
+.send-form-container {
+    margin: 0;
+    padding: 0;
+    height: 76vh;
+    width: 55vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.send-container h2 {
+    text-align: center;
+    margin: 27px 0;
+}
+
+.send-container img {
+    margin: auto;
+}
+
+.send-form input {
+    width: 100%;
+}
+
+.send-form button {
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.textarea-wrapper {
+    background-color: #c7bf9e;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    padding: 13px;
+    width: 100%;
+}
+
+.send-form textarea {
+    min-height: 160px;
+    width: 100%;
+    resize: none;
+    overflow-y: auto;
+    border: none;
+    border-radius: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #d9d9d9 transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.send-form .warning {
+    margin-left: 18px;
+}
+
+.send-form .save-error {
+    text-align: center;
+    margin: 0;
+    margin-top: 5px;
+}
+
+.send-form-container .go-back-button {
+    background: #d9d9d9 !important;
+    padding: 13px 30px;
+    font-size: 16px;
+    border: 5px solid #c7bf9e;
+    min-width: 24%;
+    width: fit-content;
+    margin-top: 20px;
+}
+
+.nav-link-go-back-button {
+    margin: 0 auto;
+}
+
+.add-new-event-form .textarea-wrapper, .edit-event-form .textarea-wrapper {
+    width: 97%;
+}
+
+.add-new-event-form textarea, .edit-event-form textarea {
+    width: 100%;
+    resize: none;
+    overflow-y: auto;
+    border: none;
+    border-radius: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #d9d9d9 transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.forms-list-item {
+    background-color: #c7bf9e;
+    border: 5px solid #d9d9d9;
+    border-radius: 32px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.form-radio-group {
+    width: 100%;
+}
+
+.css-dev-only-do-not-override-2f9lp0 .ant-list-split .ant-list-item {
+    border-block-end: 5px solid #d9d9d9 !important;
+}
+
+.forms-list-item-buttons img {
+    margin-top: 7px;
+}
+
+.triggers-robots-header {
+    display: flex;
+    font-weight: 700;
+    border-top: 5px solid #d9d9d9;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    min-height: 30px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.triggers-robots-header img {
+    display: none;
+}
+
+.triggers:hover img, .robots:hover img {
+    display: block;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.triggers-robots-header img:hover {
+    background-color: #dedab4;
+}
+
+.stages-container-robots-triggers {
+    margin-top: 27px;
+}
+
+.robots .participants-list, .triggers .participants-list, .robots .list-message, .triggers .list-message {
+    height: 26vh;
+}
+
+.stage .robot-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3px;
+}
+
+.stage .robot-trigger p {
+    width: 100%;
+}
+
+.stage .robot-trigger .robot-trigger-buttons {
+    display: none;
+}
+
+.stage .robot-trigger:hover .robot-trigger-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stage .robot-trigger .robot-trigger-buttons img {
+    padding: 3px;
+    border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.stage .robot-trigger .robot-trigger-buttons img:hover {
+    border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.add-robot-modal {
+    top: 11%;
+    left: 31.5%;
+    width: 30%;
+    padding: 20px 40px;
+}
+
+.robot-type-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-robot-modal .textarea-wrapper {
+    background-color: #dedab4;
+    border: 5px solid #c7bf9e;
+    border-radius: 32px;
+    padding: 13px;
+    width: 94%;
+}
+
+.add-robot-modal textarea {
+    background: #dedab4 !important;
+    outline: none;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 13px;
+    font-family: 'Philosopher', Arial, Helvetica, sans-serif;
+    width: 100%;
+    min-height: 80px;
+    resize: none;
+    overflow-y: auto;
+    border: none;
+    scrollbar-width: thin;
+    scrollbar-color: #c7bf9e transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-fields .warning {
+    margin-top: -15px;
+    margin-bottom: -5px;
+}
+
+.add-robot-modal .save-error {
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.add-stage-modal .save-error, .delete-stage-modal .save-error {
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: center;
 }

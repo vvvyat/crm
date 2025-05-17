@@ -4,21 +4,24 @@ import { ConfigProvider, Select } from "antd";
 import { useFormsStandardFieldsQuery } from "../../../fetch/forms-standard-fields";
 
 export const AddFieldSelect: React.FC<{
-  addedFields: FormsStandardField[];
-  setAddedFields: React.Dispatch<React.SetStateAction<FormsStandardField[]>>;
+  addedFields: FormsStandardField[] | undefined;
+  setAddedFields: React.Dispatch<
+    React.SetStateAction<FormsStandardField[] | undefined>
+  >;
 }> = React.memo(({ addedFields, setAddedFields }) => {
   const { data: formStandardFields } = useFormsStandardFieldsQuery();
 
   const [selectedField, setSelectedField] = useState(null);
 
   const handleChange = (value: number) => {
+    if (!addedFields) return;
     if (formStandardFields) {
       const selectedField = formStandardFields.find(
         (field) => field.id === value
       );
       if (
         selectedField &&
-        !addedFields.find((field) => field.id === selectedField.id)
+        !addedFields.find((field) => field.name === selectedField.name)
       ) {
         selectedField.isRequired = true;
         selectedField.displayOrder = addedFields.length + 1;
