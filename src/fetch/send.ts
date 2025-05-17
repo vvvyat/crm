@@ -12,7 +12,7 @@ export function useSendRequestMutation(
   return useMutation({
     mutationKey: ["send-request"],
     mutationFn: async (payload: RequestData) => {
-      const res = await axios.post(`${SERVER_URL}/events/post`, payload);
+      const res = await axios.post(`${SERVER_URL}/applications`, payload);
       return res.data;
     },
     onSuccess() {

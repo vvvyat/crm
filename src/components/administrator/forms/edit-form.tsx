@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import { useFormsSystemFieldsQuery } from "../../../fetch/forms-system-fields";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useCreateEditFormMutation } from "../../../fetch/create-edit-form";
-import {
-  CreateFormInputs,
-  FormsStandardField,
-  FormsSystemField,
-} from "../../../consts";
+import { useEditFormMutation } from "../../../fetch/edit-form";
+import { CreateFormInputs, FormsStandardField } from "../../../consts";
 import { SystemInput } from "./system-input";
 import { Textarea } from "./textarea";
 import { MySelect } from "./select";
 import { MyInput } from "./input";
 import { AddFieldSelect } from "./add-field-select";
+import { useFormQuery } from "../../../fetch/form";
+import { useFormsStandardFieldsQuery } from "../../../fetch/forms-standard-fields";
 
-export const CreateForm: React.FC = React.memo(() => {
+export const EditForm: React.FC = React.memo(() => {
   const params = useParams();
-
   const [isFailed, setIsFailed] = useState(false);
+  const [addedFields, setAddedFields] = useState<
+    FormsStandardField[] | undefined
+  >();
 
   const {
     reset,
@@ -26,49 +25,58 @@ export const CreateForm: React.FC = React.memo(() => {
     formState: { errors, isSubmitting },
   } = useForm<CreateFormInputs>();
 
-  const {
-    data: formSystemFields,
-    isLoading: systemFieldsLoading,
-    isError: systemFieldsError,
-  } = useFormsSystemFieldsQuery();
+  const { data: form, isLoading, isError } = useFormQuery(Number(params.id));
+  const { data: formStandardFields } = useFormsStandardFieldsQuery();
 
-  const { mutateAsync: createForm } = useCreateEditFormMutation(
-    setIsFailed,
-    reset
-  );
+  const { mutateAsync: createForm } = useEditFormMutation(setIsFailed, reset);
 
-  const [addedFields, setAddedFields] = useState<FormsStandardField[]>([]);
-  const [systemFields] = useState<FormsSystemField[]>(
-    formSystemFields ? formSystemFields : []
-  );
+  useEffect(() => {
+    if (form) {
+      reset({
+        title: form.title,
+      });
+      setAddedFields(
+        form.customFields.map((field) => {
+          return {
+            ...field,
+            id: formStandardFields?.find((f) => f.name === field.name)?.id,
+          };
+        })
+      );
+    }
+  }, [form, reset, formStandardFields]);
 
   const onSubmit: SubmitHandler<CreateFormInputs> = async (data) => {
     createForm({
       eventId: Number(params.id),
       title: data.title,
       isTemplate: true,
-      customFields: addedFields.reduce(
-        (a, field) => ({
-          ...a,
-          [field.id]: {
-            isRequired: field.isRequired,
-            displayOrder: field.displayOrder,
-          },
-        }),
-        {}
-      ),
-      systemFields: systemFields.reduce(
-        (a, field) => ({ ...a, [field.id]: field.displayOrder }),
-        {}
-      ),
+      customFields: addedFields
+        ? addedFields.reduce(
+            (a, field) => ({
+              ...a,
+              [field.id || 0]: {
+                isRequired: field.isRequired,
+                displayOrder: field.displayOrder,
+              },
+            }),
+            {}
+          )
+        : {},
+      systemFields: form
+        ? form.systemFields.reduce(
+            (a, field) => ({ ...a, [field.id]: field.displayOrder }),
+            {}
+          )
+        : {},
     });
   };
 
-  if (systemFieldsLoading) {
+  if (isLoading) {
     return <p className="fetch-warnings">Загрузка...</p>;
-  } else if (systemFieldsError) {
+  } else if (isError) {
     return <p className="fetch-warnings">При загрузке произошла ошибка</p>;
-  } else if (formSystemFields) {
+  } else if (form) {
     return (
       <>
         <form onSubmit={handleSubmit(onSubmit)} className="edit-form">
@@ -94,18 +102,19 @@ export const CreateForm: React.FC = React.memo(() => {
             <span className="warning">{errors.title.message}</span>
           )}
 
-          {systemFields
+          {form.systemFields
             .sort((a, b) => a.displayOrder - b.displayOrder)
             .map((field) => (
-              <SystemInput field={field} />
+              <SystemInput key={field.id} field={field} />
             ))}
 
           {addedFields
-            .sort((a, b) => a.displayOrder - b.displayOrder)
+            ?.sort((a, b) => a.displayOrder - b.displayOrder)
             .map((field) => {
               if (field.type === "textarea") {
                 return (
                   <Textarea
+                    key={field.id}
                     field={field}
                     addedFields={addedFields}
                     setAddedFields={setAddedFields}
@@ -114,6 +123,7 @@ export const CreateForm: React.FC = React.memo(() => {
               } else if (field.type === "select") {
                 return (
                   <MySelect
+                    key={field.id}
                     field={field}
                     addedFields={addedFields}
                     setAddedFields={setAddedFields}
@@ -122,6 +132,7 @@ export const CreateForm: React.FC = React.memo(() => {
               }
               return (
                 <MyInput
+                  key={field.id}
                   field={field}
                   addedFields={addedFields}
                   setAddedFields={setAddedFields}
@@ -136,7 +147,7 @@ export const CreateForm: React.FC = React.memo(() => {
 
           <div className="create-form-buttons">
             <button disabled={isSubmitting} className="create-button">
-              Создать
+              Сoxранить изменения
             </button>
             <NavLink to={`/admin/event/${params.id}/student-data-forms`}>
               <button disabled={isSubmitting} className="go-back-button">

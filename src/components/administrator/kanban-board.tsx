@@ -48,9 +48,10 @@ export const KanbanBoard: React.FC = React.memo(() => {
   const { mutateAsync: updateStatusOrder } = useUpdateStatusOrderMutation(Number(params.id));
 
   const onSubmit: SubmitHandler<StatusFormInputs> = async (data) => {
+    const maxDisplayOrder = statuses?.reduce((prev, current) => (prev && prev.displayOrder > current.displayOrder) ? prev : current).displayOrder
     createStatus({
       name: data.name,
-      displayOrder: statuses ? statuses.length + 1 : 1,
+      displayOrder: maxDisplayOrder ? maxDisplayOrder + 1 : 1,
     });
   };
 
@@ -204,7 +205,7 @@ export const KanbanBoard: React.FC = React.memo(() => {
                 </button>
               </div>
               {isCreateFailed && (
-                <p className="save-error">Не удалось сохранить статус</p>
+                <p className="save-error">Не удалось сохранить статус.</p>
               )}
             </form>
           </div>

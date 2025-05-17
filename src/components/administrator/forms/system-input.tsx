@@ -8,7 +8,7 @@ export const SystemInput: React.FC<{
   return (
     <input
       key={field.id}
-      placeholder={GetFieldTitle(field.name)}
+      placeholder={`${GetFieldTitle(field.name)}${field.isRequired ? "**" : ""}`}
       type={field.type}
     />
   );

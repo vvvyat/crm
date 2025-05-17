@@ -185,7 +185,7 @@ export type UpdateStatusOrder = {
 };
 
 export type FormsStandardField = {
-  id: number;
+  id: number | undefined;
   name: string;
   type: string;
   isRequired: boolean;
@@ -235,7 +235,7 @@ export type CreateFormInputs = {
   title: string;
 };
 
-type Prors = {
+export type Prors = {
   [key: string]: string;
 };
 
@@ -250,5 +250,65 @@ export type StudentRequest = {
 
 export type RequestData = {
   eventId: number;
-  formData: Record<string, string | number>
+  formData: { [key: string]: string | number };
+};
+
+export enum RobotType {
+  Message = "SEND_MESSAGE",
+  MessageWithLink = "SEND_MESSAGE_WITH_LINK",
+  MessageWithTest = "SEND_TEST",
 }
+
+export type Robot = {
+  id: number;
+  statusId: number;
+  name: string;
+  type: RobotType;
+  parameters: Prors;
+  position: number;
+};
+
+export type AddRobotWithLink = {
+  name: string;
+  type: RobotType;
+  message: string;
+  link: string;
+};
+
+export type AddRobot = {
+  name: string;
+  type: RobotType;
+  message: string;
+};
+
+export type EditRobotWithLink = {
+  name: string;
+  message: string;
+  link: string;
+};
+
+export type EditRobot = {
+  name: string;
+  message: string;
+};
+
+export type RobotWithLinkInputs = {
+  name: string;
+  type: RobotType;
+  message: string;
+  link: string;
+};
+
+export type RobotInputs = {
+  name: string;
+  type: RobotType;
+  message: string;
+};
+
+export type Trigger = {
+  id: number;
+  name: string;
+  type: string;
+  parameters: Prors;
+  createdAt: string;
+};

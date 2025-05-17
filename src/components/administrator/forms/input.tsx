@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormsStandardField } from "../../../consts";
 import { ConfigProvider, Switch } from "antd";
 
 export const MyInput: React.FC<{
   field: FormsStandardField;
   addedFields: FormsStandardField[];
-  setAddedFields: React.Dispatch<React.SetStateAction<FormsStandardField[]>>;
+  setAddedFields: React.Dispatch<
+    React.SetStateAction<FormsStandardField[] | undefined>
+  >;
 }> = React.memo(({ field, addedFields, setAddedFields }) => {
+  const [fieldName, setFieldName] = useState(
+    `${field.name}${field.isRequired ? "*" : ""}`
+  );
+
   return (
-    <div
-      className="field-container"
-      key={field.id}
-    >
-      <input placeholder={field.name} type={field.type} />
+    <div className="field-container" key={field.id}>
+      <input placeholder={fieldName} type={field.type} />
       <div className="field-config-line">
         <ConfigProvider
           theme={{
@@ -30,7 +33,10 @@ export const MyInput: React.FC<{
             <Switch
               size="small"
               defaultChecked
-              onChange={(isChecked) => (field.isRequired = isChecked)}
+              onChange={(isChecked) => {
+                field.isRequired = isChecked;
+                setFieldName(`${field.name}${field.isRequired ? "*" : ""}`);
+              }}
             />
             <p>Обязательное поле</p>
           </div>
@@ -41,8 +47,9 @@ export const MyInput: React.FC<{
           height="18"
           title="Удалить"
           onClick={() => {
+            console.log(field.name)
             setAddedFields(
-              addedFields.filter((deleteField) => field.id !== deleteField.id)
+              addedFields.filter((addedField) => addedField.id !== field.id)
             );
           }}
         ></img>

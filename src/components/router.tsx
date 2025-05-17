@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Authorization } from "./authorization";
-import { Header } from "./header";
+import { Header } from "./administrator/header";
 
 // профиль
 import { ProfileNavigation } from "./profile/profile-navigation";
@@ -26,13 +26,14 @@ import { EventNavigation as AdminEventNavigation } from "./administrator/event-n
 
 import { KanbanBoard } from "./administrator/kanban-board";
 import { StudentDataForms } from "./administrator/forms/forms-list";
-import { RobotsTriggersSettings } from "./administrator/robots-triggers-settings";
+import { RobotsTriggersSettings } from "./administrator/robots-triggers/robots-triggers-settings";
 
 // студент
 import { EventInfo as StudentEventInfo } from "./student-event-info";
 import { EventsList } from "./events-list";
-import { CreateForm } from "./administrator/forms/create-form";
-import { SendStudentData } from "./send/send";
+import { EditForm } from "./administrator/forms/edit-form";
+import { SendStudentData } from "./send";
+import { StudentHeader } from "./student-header";
 
 export const App: React.FC = React.memo(() => {
   const router = createBrowserRouter(
@@ -49,7 +50,7 @@ export const App: React.FC = React.memo(() => {
           <Route
             element={
               <>
-                <Header />
+                <StudentHeader />
                 <main className="main">
                   <Outlet />
                 </main>
@@ -92,12 +93,8 @@ export const App: React.FC = React.memo(() => {
                 element={<StudentDataForms />}
               ></Route>
               <Route
-                path="student-data-forms/create-form"
-                element={<CreateForm />}
-              ></Route>
-              <Route
-                path="student-data-forms/:formId"
-                element={<CreateForm />}
+                path="student-data-forms/edit-form/:formId"
+                element={<EditForm />}
               ></Route>
               <Route
                 path="setting-up-robots-and-triggers"

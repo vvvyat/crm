@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Status, StatusFormInputs } from "../../consts";
+import { Prors, Status, StatusFormInputs } from "../../consts";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -7,49 +7,7 @@ import { ConfigProvider, List } from "antd";
 import { useDeleteStatusMutation } from "../../fetch/delete-status";
 import { useUpdateStatusMutation } from "../../fetch/update-status";
 import { useParams } from "react-router-dom";
-
-const participants = [
-  {
-    id: 1,
-    name: "Иванов Иван Иванович",
-  },
-  {
-    id: 2,
-    name: "Петров Петр Петрович",
-  },
-  {
-    id: 3,
-    name: "Сидорова Анна Сергеевна",
-  },
-  {
-    id: 4,
-    name: "Смирнов Алексей Викторович",
-  },
-  {
-    id: 5,
-    name: "Кузнецова Екатерина Андреевна",
-  },
-  {
-    id: 6,
-    name: "Николаев Николай Степанович",
-  },
-  {
-    id: 7,
-    name: "Васильева Мария Павловна",
-  },
-  {
-    id: 8,
-    name: "Орлов Сергей Валерьевич",
-  },
-  {
-    id: 9,
-    name: "Федотова Ольга Дмитриевна",
-  },
-  {
-    id: 10,
-    name: "Зайцева Светлана Игоревна",
-  },
-];
+import { useRequestsQuery } from "../../fetch/requests";
 
 export const EventStatus: React.FC<{
   status: Status;
@@ -57,12 +15,18 @@ export const EventStatus: React.FC<{
   setIsAnyModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }> = React.memo(({ status, isAnyModalOpen, setIsAnyModalOpen }) => {
   const params = useParams();
-  
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isStudentInfoModalOpen, setIsStudentInfoModalOpen] = useState(false);
   const [isDeleteFailed, setIsDeleteFailed] = useState(false);
   const [isEditFailed, setIsEditFailed] = useState(false);
+  const [studentData, setStudentData] = useState<Prors>({});
+
+  const { data: participants, isError } = useRequestsQuery(
+    Number(params.id),
+    status.id
+  );
 
   const {
     register,
@@ -111,20 +75,6 @@ export const EventStatus: React.FC<{
     transition,
   };
 
-  const studentFakeData = {
-    eventId: 1,
-    formData: {
-      "Фамилия": "Иванов",
-      "Имя": "Иван",
-      "Отчество": "Иванович",
-      "Email": "ivan@example.com",
-      "Telegram": "https://t.me/ivanov",
-      "ВКонтакте": "https://vk.com/ivanov",
-      "Курс обучения": "3",
-      "Навыки и компетенции": "Figma",
-      }
-  }
-
   return (
     <>
       <div
@@ -166,45 +116,62 @@ export const EventStatus: React.FC<{
             ></img>
           </div>
         </div>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimaryHover: "black",
-              colorPrimary: "black",
-              fontSize: 16,
-              fontFamily: "Philosopher",
-              colorText: "black",
-            },
-            components: {
-              Pagination: {
-                itemInputBg: "#d9d9d9",
+        {isError && (
+          <p className="participants-list-message">
+            При загрузке произошла ошибка.
+          </p>
+        )}
+        {!isError && participants && participants.length > 0 && (
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimaryHover: "black",
+                colorPrimary: "black",
+                fontSize: 16,
+                fontFamily: "Philosopher",
+                colorText: "black",
               },
-            },
-          }}
-        >
-          <List
-            className="participants-list"
-            itemLayout="vertical"
-            pagination={{
-              align: "center",
-              hideOnSinglePage: true,
-              showLessItems: true,
-              simple: true,
-              pageSize: 4,
+              components: {
+                Pagination: {
+                  itemInputBg: "#d9d9d9",
+                },
+              },
             }}
-            dataSource={participants}
-            renderItem={(item) => (
-              <List.Item className="participant" key={item.id} onClick={() => {
-                if (!isAnyModalOpen) {
-                  setIsStudentInfoModalOpen(true)
-                  setIsAnyModalOpen(true);
-                }
-              }}>
-                <p>{item.name}</p>
-              </List.Item>
-            )}
-          />
-        </ConfigProvider>
+          >
+            <List
+              className="participants-list"
+              itemLayout="vertical"
+              pagination={{
+                align: "center",
+                hideOnSinglePage: true,
+                showLessItems: true,
+                simple: true,
+                pageSize: 4,
+              }}
+              dataSource={participants}
+              renderItem={(item) => (
+                <List.Item
+                  className="participant"
+                  key={item.id}
+                  onClick={() => {
+                    if (!isAnyModalOpen) {
+                      setStudentData(item.formData);
+                      setIsStudentInfoModalOpen(true);
+                      setIsAnyModalOpen(true);
+                    }
+                  }}
+                >
+                  <p>{`${item.formData["last_name"]} ${
+                    item.formData["first_name"]
+                  } ${item.formData["surname"] || ""}`}</p>
+                </List.Item>
+              )}
+            />
+          </ConfigProvider>
+        )}
+        {!isError && participants?.length === 0 && (
+          <p className="participants-list-message">Нет участников.</p>
+        )}
       </div>
 
       {isEditModalOpen && (
@@ -250,6 +217,7 @@ export const EventStatus: React.FC<{
                   setIsEditModalOpen(false);
                   setIsAnyModalOpen(false);
                   reset();
+                  setIsEditFailed(false)
                 }}
               >
                 Отмена
@@ -280,6 +248,7 @@ export const EventStatus: React.FC<{
                 onClick={() => {
                   setIsDeleteConfirmOpen(false);
                   setIsAnyModalOpen(false);
+                  setIsDeleteFailed(false)
                 }}
               >
                 Отмена
@@ -294,28 +263,64 @@ export const EventStatus: React.FC<{
 
       {isStudentInfoModalOpen && (
         <div className="stage-modal-container">
-          <div className="stage-modal stage-student-info-modal">
-            {Object.keys(studentFakeData.formData).map((key, index) => {
-              return <p className="student-info-field"><b>{key}</b>: {Object.values(studentFakeData.formData)[index]}</p>
-            })}
-            <div className="test-result">
-              <img src="/../../img/star.svg"
-              width="30"
-              height="30"/>
-              <p><b>Результаты тестирования:</b> 87/100</p>
+          <div className="stage-student-info-modal stage-modal">
+            <div className="stage-student-info-modal-content">
+              <p className="student-info-field">
+                <b>Фамилия</b>: {studentData["last_name"]}
+              </p>
+              <p className="student-info-field">
+                <b>Имя</b>: {studentData["first_name"]}
+              </p>
+              <p className="student-info-field">
+                <b>Отчество</b>: {studentData["surname"]}
+              </p>
+              <p className="student-info-field">
+                <b>Email</b>: {studentData["email"]}
+              </p>
+              <p className="student-info-field">
+                <b>Telegram</b>: {studentData["telegram_url"]}
+              </p>
+              <p className="student-info-field">
+                <b>ВКонтакте</b>: {studentData["vk_url"]}
+              </p>
+              {Object.keys(studentData).map((key, index) => {
+                if (
+                  ![
+                    "last_name",
+                    "first_name",
+                    "surname",
+                    "email",
+                    "telegram_url",
+                    "vk_url",
+                  ].find((systemKey) => systemKey === key)
+                ) {
+                  return (
+                    <p className="student-info-field">
+                      <b>{key}</b>: {Object.values(studentData)[index]}
+                    </p>
+                  );
+                }
+              })}
+              <div className="test-result">
+                <img src="/../../img/star.svg" width="30" height="30" />
+                <p>
+                  <b>Результаты тестирования:</b> 87/100
+                </p>
+              </div>
             </div>
             <div className="stage-modal-buttons">
               <button
                 className="cancel-button"
                 disabled={isSubmitting}
                 onClick={() => {
+                  setStudentData({});
                   setIsStudentInfoModalOpen(false);
                   setIsAnyModalOpen(false);
                 }}
               >
                 Закрыть
               </button>
-              </div>
+            </div>
           </div>
         </div>
       )}
