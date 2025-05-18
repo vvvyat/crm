@@ -1,26 +1,34 @@
 import React, { useState } from "react";
-import { Robot, Status } from "../../../consts";
+import { Robot, Status, Trigger } from "../../../consts";
 import { ConfigProvider, List } from "antd";
-//import { useParams } from "react-router-dom";
 import { useRobotsQuery } from "../../../fetch/status-robots";
 import { useTriggersQuery } from "../../../fetch/status-triggers";
 import { AddRobotModal } from "./add-robot-modal";
 import { EditRobotModal } from "./edit-robot-modal";
+import { DeleteRobotModal } from "./delete-robot-modal";
+import { AddTriggerModal } from "./add-trigger-modal";
+import { DeleteTriggerModal } from "./delete-trigger-modal";
+import { EditTriggerModal } from "./edit-trigger-modal";
 
 export const EventStatus: React.FC<{
   status: Status;
 }> = React.memo(({ status }) => {
-  //const params = useParams();
 
   const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
 
   const [isAddRobotModalOpen, setIsAddRobotModalOpen] = useState(false);
-  const [isEditRobotModalOpen, setIsEditRobotModalOpen] = useState(false)
-  const [robot, setRobot] = useState<Robot | undefined>()
+  const [isEditRobotModalOpen, setIsEditRobotModalOpen] = useState(false);
+  const [isDeleteRobotConfirmOpen, setIsDeleteRobotConfirmOpen] = useState(false);
+  const [robot, setRobot] = useState<Robot | undefined>();
 
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isAddTriggerModalOpen, setIsAddTriggerModalOpen] = useState(false);
+  const [isEditTriggerModalOpen, setIsEditTriggerModalOpen] = useState(false);
+  const [isDeleteTriggerConfirmOpen, setIsDeleteTriggerConfirmOpen] = useState(false);
+  const [trigger, setTrigger] = useState<Trigger | undefined>();
 
-  const { data: triggers, isError: triggersError } = useTriggersQuery(status.id);
+  const { data: triggers, isError: triggersError } = useTriggersQuery(
+    status.id
+  );
   const { data: robots, isError: robotsError } = useRobotsQuery(status.id);
 
   return (
@@ -40,7 +48,10 @@ export const EventStatus: React.FC<{
               width="20"
               height="20"
               title="Добавить"
-              onClick={() => {}}
+              onClick={() => {
+                setIsAddTriggerModalOpen(true);
+                setIsAnyModalOpen(true);
+              }}
             />
           </div>
           {triggersError && (
@@ -56,35 +67,18 @@ export const EventStatus: React.FC<{
                   fontFamily: "Philosopher",
                   colorText: "black",
                 },
-                components: {
-                  Pagination: {
-                    itemInputBg: "#d9d9d9",
-                  },
-                },
               }}
             >
               <List
                 className="participants-list"
                 itemLayout="vertical"
-                pagination={{
-                  align: "center",
-                  hideOnSinglePage: true,
-                  showLessItems: true,
-                  simple: true,
-                  pageSize: 2,
-                }}
                 dataSource={triggers}
                 renderItem={(item) => (
                   <List.Item
-                    className="participant robot-trigger"
+                    className="participant robot-trigger trigger"
                     key={item.id}
-                    onClick={() => {
-                      if (!isAnyModalOpen) {
-                        setIsAnyModalOpen(true);
-                      }
-                    }}
                   >
-                    <p>{item.name}</p>
+                    <p>{item.name.length > 27 ? `${item.name.slice(0, 27)}...` : item.name}</p>
                     <div className="robot-trigger-buttons">
                       <img
                         src="/../../img/edit-icon.svg"
@@ -93,7 +87,8 @@ export const EventStatus: React.FC<{
                         title="Редактировать"
                         onClick={() => {
                           if (!isAnyModalOpen) {
-                            setIsEditRobotModalOpen(true);
+                            setTrigger(item);
+                            setIsEditTriggerModalOpen(true);
                             setIsAnyModalOpen(true);
                           }
                         }}
@@ -105,7 +100,8 @@ export const EventStatus: React.FC<{
                         title="Удалить"
                         onClick={() => {
                           if (!isAnyModalOpen) {
-                            setIsDeleteConfirmOpen(true);
+                            setTrigger(item);
+                            setIsDeleteTriggerConfirmOpen(true);
                             setIsAnyModalOpen(true);
                           }
                         }}
@@ -130,8 +126,8 @@ export const EventStatus: React.FC<{
               height="20"
               title="Добавить"
               onClick={() => {
-                setIsAddRobotModalOpen(true)
-                setIsAnyModalOpen(true)
+                setIsAddRobotModalOpen(true);
+                setIsAnyModalOpen(true);
               }}
             />
           </div>
@@ -171,7 +167,7 @@ export const EventStatus: React.FC<{
                     className="participant robot-trigger"
                     key={item.id}
                   >
-                    <p>{item.name}</p>
+                    <p>{item.name.length > 24 ? `${item.name.slice(0, 24)}...` : item.name}</p>
                     <div className="robot-trigger-buttons">
                       <img
                         src="/../../img/edit-icon.svg"
@@ -180,7 +176,7 @@ export const EventStatus: React.FC<{
                         title="Редактировать"
                         onClick={() => {
                           if (!isAnyModalOpen) {
-                            setRobot(item)
+                            setRobot(item);
                             setIsEditRobotModalOpen(true);
                             setIsAnyModalOpen(true);
                           }
@@ -193,7 +189,8 @@ export const EventStatus: React.FC<{
                         title="Удалить"
                         onClick={() => {
                           if (!isAnyModalOpen) {
-                            setIsDeleteConfirmOpen(true);
+                            setRobot(item)
+                            setIsDeleteRobotConfirmOpen(true);
                             setIsAnyModalOpen(true);
                           }
                         }}
@@ -210,41 +207,57 @@ export const EventStatus: React.FC<{
         </div>
       </div>
 
-      {isAddRobotModalOpen && <AddRobotModal statusId={Number(status.id)} setIsAddRobotModalOpen={setIsAddRobotModalOpen} setIsAnyModalOpen={setIsAnyModalOpen}/>}
+      {isAddTriggerModalOpen && (
+        <AddTriggerModal
+          statusId={Number(status.id)}
+          setIsAddTriggerModalOpen={setIsAddTriggerModalOpen}
+          setIsAnyModalOpen={setIsAnyModalOpen}
+        />
+      )}
 
-      {isEditRobotModalOpen && <EditRobotModal statusId={Number(status.id)} robot={robot} setIsEditRobotModalOpen={setIsEditRobotModalOpen} setIsAnyModalOpen={setIsAnyModalOpen}/>}
+      {isEditTriggerModalOpen && (
+        <EditTriggerModal
+          statusId={Number(status.id)}
+          trigger={trigger}
+          setIsEditTriggerModalOpen={setIsEditTriggerModalOpen}
+          setIsAnyModalOpen={setIsAnyModalOpen}
+        />
+      )}
 
-      {isDeleteConfirmOpen && <></>}     
+      {isDeleteTriggerConfirmOpen && (
+        <DeleteTriggerModal
+          statusId={Number(status.id)}
+          trigger={trigger}
+          setIsDeleteConfirmOpen={setIsDeleteTriggerConfirmOpen}
+          setIsAnyModalOpen={setIsAnyModalOpen}
+        />
+      )}
+
+      {isAddRobotModalOpen && (
+        <AddRobotModal
+          statusId={Number(status.id)}
+          setIsAddRobotModalOpen={setIsAddRobotModalOpen}
+          setIsAnyModalOpen={setIsAnyModalOpen}
+        />
+      )}
+
+      {isEditRobotModalOpen && (
+        <EditRobotModal
+          statusId={Number(status.id)}
+          robot={robot}
+          setIsEditRobotModalOpen={setIsEditRobotModalOpen}
+          setIsAnyModalOpen={setIsAnyModalOpen}
+        />
+      )}
+
+      {isDeleteRobotConfirmOpen && (
+        <DeleteRobotModal
+          statusId={Number(status.id)}
+          robot={robot}
+          setIsDeleteConfirmOpen={setIsDeleteRobotConfirmOpen}
+          setIsAnyModalOpen={setIsAnyModalOpen}
+        />
+      )}
     </>
   );
 });
-
-/*
-<div className="stage-modal-container">
-          <div className="stage-modal delete-stage-modal">
-            <h2>Вы уверены, что хотите удалить этот этап?</h2>
-            <div className="stage-modal-buttons">
-              <button
-                className="delete-button"
-                disabled={isSubmitting}
-                onClick={async () => deleteStatus()}
-              >
-                Удалить
-              </button>
-              <button
-                className="cancel-button"
-                disabled={isSubmitting}
-                onClick={() => {
-                  setIsDeleteConfirmOpen(false);
-                  setIsAnyModalOpen(false);
-                }}
-              >
-                Отмена
-              </button>
-            </div>
-            {isDeleteFailed && (
-              <p className="save-error">Не удалось удалить статус</p>
-            )}
-          </div>
-        </div>
-*/

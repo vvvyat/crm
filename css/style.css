@@ -1400,6 +1400,10 @@ button:disabled {
     height: 26vh;
 }
 
+.trigger {
+    min-height: 80px;
+}
+
 .stage .robot-trigger {
     display: flex;
     justify-content: space-between;
@@ -1430,14 +1434,14 @@ button:disabled {
     border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-.add-robot-modal {
+.add-robot-modal, .add-trigger-modal {
     top: 11%;
     left: 31.5%;
     width: 30%;
     padding: 20px 40px;
 }
 
-.robot-type-radio-group {
+.robot-type-radio-group, .trigger-type-radio-group {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -1481,7 +1485,7 @@ button:disabled {
     margin-bottom: -5px;
 }
 
-.add-robot-modal .save-error {
+.add-robot-modal .save-error, .delete-robot-modal .save-error, .add-trigger-modal .save-error {
     margin-top: 10px;
     margin-bottom: 0;
     text-align: center;
@@ -1491,4 +1495,18 @@ button:disabled {
     margin-top: 10px;
     margin-bottom: 0;
     text-align: center;
+}
+
+.select-popup {
+    background-color: #dedab4;
+}
+
+.test-warning {
+    margin-top: 5px;
+}
+
+.test-field {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }

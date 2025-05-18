@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Prors, Status, StatusFormInputs } from "../../consts";
+import { Props, Status, StatusFormInputs } from "../../consts";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ export const EventStatus: React.FC<{
   const [isStudentInfoModalOpen, setIsStudentInfoModalOpen] = useState(false);
   const [isDeleteFailed, setIsDeleteFailed] = useState(false);
   const [isEditFailed, setIsEditFailed] = useState(false);
-  const [studentData, setStudentData] = useState<Prors>({});
+  const [studentData, setStudentData] = useState<Props>({});
 
   const { data: participants, isError } = useRequestsQuery(
     Number(params.id),

@@ -11,7 +11,7 @@ export function useEditRobotMutation(
 ) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["edit-robot", robotId],
+    mutationKey: ["edit-robot", statusId, robotId],
     mutationFn: async (payload: EditRobot | EditRobotWithLink) => {
       const res = await axios.put(`${SERVER_URL}/robots/${statusId}/${robotId}`, payload, {
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
