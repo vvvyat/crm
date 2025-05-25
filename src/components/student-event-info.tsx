@@ -9,7 +9,7 @@ export const MoreInfo: React.FC<{
 }> = React.memo(({ event }) => {
   return (
     <div className="more-info">
-      <img src="../../img/pin.svg" width={46} height={41}></img>
+      <img src="../../img/pin.svg" width={45} height={45}></img>
       <ul>
         <li>
           <b>Срок проведения:</b>

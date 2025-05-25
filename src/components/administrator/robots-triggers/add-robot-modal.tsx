@@ -49,7 +49,7 @@ export const AddRobotModal: React.FC<{
   return (
     <>
       <div className="stage-modal-container">
-        <div className="stage-modal add-robot-modal">
+        <div className="stage-modal add-robot-modal" style={isSettingsModalOpen ? {display: "none"} : {}}>
           <h2>Добавление робота</h2>
           <ConfigProvider
             theme={{

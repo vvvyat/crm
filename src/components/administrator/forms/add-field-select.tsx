@@ -47,14 +47,15 @@ export const AddFieldSelect: React.FC<{
         components: {
           Select: {
             colorTextPlaceholder: "black",
-            activeOutlineColor: "#d9d9d9",
-            hoverBorderColor: "#d9d9d9",
-            activeBorderColor: "#d9d9d9",
-            optionActiveBg: "#dedab4",
+            activeOutlineColor: "#fbc164",
+            hoverBorderColor: "#fbc164",
+            activeBorderColor: "#fbc164",
+            colorBorder: "#fbc164",
+            optionActiveBg: "#eaeae9",
             optionFontSize: 16,
-            optionSelectedBg: "#dedab4",
+            optionSelectedBg: "#eaeae9",
             optionSelectedColor: "#000000",
-            selectorBg: "#c7bf9e",
+            selectorBg: "#a2bfbb",
           },
         },
       }}

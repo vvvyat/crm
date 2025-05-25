@@ -235,15 +235,15 @@ export type CreateFormInputs = {
   title: string;
 };
 
-export type Prors = {
-  [key: string]: string;
+export type Props = {
+  [key: string]: string | number;
 };
 
 export type StudentRequest = {
   id: number;
   eventId: number;
   statusId: number;
-  formData: Prors;
+  formData: Props;
   createdAt: string;
   updatedAt: string;
 };
@@ -264,7 +264,7 @@ export type Robot = {
   statusId: number;
   name: string;
   type: RobotType;
-  parameters: Prors;
+  parameters: Props;
   position: number;
 };
 
@@ -309,6 +309,32 @@ export type Trigger = {
   id: number;
   name: string;
   type: string;
-  parameters: Prors;
+  parameters: Props;
   createdAt: string;
 };
+
+export type AddTrigger = {
+  triggerId: number;
+  parameters: Props;
+};
+
+export enum TriggerType {
+  LinkClick = "LINK_CLICK",
+  TestResult = "TEST_RESULT",
+}
+
+export enum TriggerTypeId {
+  LinkClick = 1,
+  TestResult = 2,
+}
+
+export type TriggerLinkInputs = {
+  link: string;
+};
+
+export type TriggerTestInputs = {
+  value: number;
+  condition: string;
+};
+
+export const TG_BOT_URL = "https://t.me/uralintern_student_bot";

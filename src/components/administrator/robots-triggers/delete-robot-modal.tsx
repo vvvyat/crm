@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Robot } from "../../../consts";
 import { useDeleteRobotMutation } from "../../../fetch/delete-robot";
 
-export const AddRobotModal: React.FC<{
+export const DeleteRobotModal: React.FC<{
   statusId: number;
   robot: Robot | undefined;
   setIsDeleteConfirmOpen: React.Dispatch<React.SetStateAction<boolean>>;

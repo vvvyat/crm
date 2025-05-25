@@ -24,7 +24,7 @@ export const Textarea: React.FC<{
             },
             components: {
               Switch: {
-                handleBg: "#c7bf9e",
+                handleBg: "#a2bfbb",
               },
             },
           }}

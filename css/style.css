@@ -1,6 +1,6 @@
 body {
     font-family: 'Philosopher', Arial, Helvetica, sans-serif;
-    background-color: #dedab4;
+    background-color: #eaeae9;
     font-size: 16px;
     margin: 0;
 }
@@ -35,8 +35,8 @@ p {
 }
 
 header {
-    background-color: #c7bf9e;
-    border-bottom: 5px solid #d9d9d9;
+    background-color: #a2bfbb;
+    border-bottom: 5px solid #fbc164;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -75,18 +75,18 @@ a {
 }
 
 aside {
-    border-left: 5px solid #d9d9d9;
-    background-color: #c7bf9e;
+    border-left: 5px solid #fbc164;
+    background-color: #a2bfbb;
     padding: 75px 5%;
     display: flex;
     flex-direction: column;
 }
 
 nav {
-    border-right: 5px solid #d9d9d9;
+    border-right: 5px solid #fbc164;
     display: flex;
     flex-direction: column;
-    background-color: #c7bf9e;
+    background-color: #a2bfbb;
     width: 11vw;
     height: 100%;
 }
@@ -98,14 +98,14 @@ nav button, .logo {
     border: none;
     border-radius: 0;
     font-weight: 400;
-    border-bottom: 5px solid #d9d9d9;
-    background-color: #c7bf9e;
+    border-bottom: 5px solid #fbc164;
+    background-color: #a2bfbb;
 }
 
 .logo {
     cursor: pointer;
     border: none;
-    border-right: 5px solid #d9d9d9;
+    border-right: 5px solid #fbc164;
     font-size: 24px;
     font-weight: 400;
     box-sizing: content-box;
@@ -119,15 +119,15 @@ nav button, .logo {
 .event {
     margin-top: 36px;
     padding: 20px;
-    background-color: #c7bf9e;
+    background-color: #a2bfbb;
     border-radius: 32px;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     cursor: pointer;
 }
 
 .event h2 {
     margin: 0;
-    background-color: #dedab4;
+    background-color: #eaeae9;
     border-radius: 32px;
     padding: 5px 125px 15px 25px;
     display: block;
@@ -145,29 +145,29 @@ nav button, .logo {
 }
 
 .delete-button, .save-button, .close-button {
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     padding: 13px 30px;
     font-size: 20px;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     min-width: 24%;
     width: fit-content;
 }
 
 .send-request-button, .show-more-button {
     width: 100%;
-    background: #dedab4 !important;
+    background: #eaeae9 !important;
     padding: 16px 0;
     font-size: 16px;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     margin-bottom: 20px;
 }
 
 .more-info {
     position: absolute;
-    background: #d9d9d9 !important;
+    background: #eaeae9 !important;
     padding: 16px;
     padding-bottom: 40px;
-    border: 5px solid #c7bf9e;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     position: absolute;
     top: 55vh;
@@ -182,16 +182,16 @@ nav button, .logo {
     margin: 0;
 }
 
-.more-info li {
-    list-style-image: url(../img/marker.svg);
-    padding-left: 20px;
+.more-info li::marker {
+    color: #fbc164;
+    font-size: 40px;
 }
 
 .delete-event-button, .hide-event-button {
-    background: #d9d9d9 !important;
+    background: #fbc164 !important;
     padding: 16px 0;
     font-size: 16px;
-    border: 5px solid #c7bf9e;
+    border: 5px solid #a2bfbb;
     width: 20%;
     margin-left: 40px;
 }
@@ -216,14 +216,14 @@ nav button, .logo {
 }
 
 .event-form input, .event-form textarea, .profile-form input, .profile-form textarea {
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     outline: none;
     color: #000000;
     font-size: 16px;
     font-weight: 400;
     padding: 13px;
     font-family: 'Philosopher', Arial, Helvetica, sans-serif;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     border-radius: 32px;
 }
 
@@ -257,8 +257,8 @@ nav button, .logo {
 .event-info-container .title, .event-info-container .discription, .event-info-container .eventDates, 
 .event-info-container .numberSeats, .event-info-container .enrollmentDates {
     padding: 17px;
-    background-color: #c7bf9e;
-    border: 5px solid #d9d9d9;
+    background-color: #a2bfbb;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     margin-bottom: 20px;
 }
@@ -291,7 +291,7 @@ nav button, .logo {
 
 .counter {
     text-align: center;
-    border-right: 5px solid #d9d9d9;
+    border-right: 5px solid #fbc164;
 }
 
 .event-form .edit-event-label, .login-form {
@@ -314,8 +314,8 @@ nav button, .logo {
 }
 
 .warning-modal {
-    background-color: #d9d9d9;
-    border: 5px solid #c7bf9e;
+    background-color: #eaeae9;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     position: absolute;
     top: 33%;
@@ -349,7 +349,7 @@ nav button, .logo {
 
 .warning-modal button {
     display: inline;
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     padding: 16px 0;
     font-size: 20px;
     border: none;
@@ -367,7 +367,7 @@ nav button, .logo {
 }
 
 .nav-active button {
-    background-color: #dedab4;
+    background-color: #eaeae9;
 }
 
 .message-form {
@@ -386,14 +386,14 @@ nav button, .logo {
 }
 
 .message-form textarea {
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     outline: none;
     color: #000000;
     font-size: 16px;
     font-family: 'Philosopher', Arial, Helvetica, sans-serif;
     margin-bottom: 45px;
     padding: 20px;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     height: 126px;
     resize: vertical;
@@ -412,11 +412,11 @@ nav button, .logo {
 }
 
 .manager-popup {
-    background-color: #c7bf9e;
+    background-color: #a2bfbb;
 }
 
 .role-popup {
-    background-color: #d9d9d9;
+    background-color: #fbc164;
 }
 
 .add-new-event-form .manager, .edit-event-form .manager {
@@ -578,9 +578,9 @@ button:disabled {
 }
 
 .login-form input {
-    border: 5px solid #c7bf9e;
+    border: 5px solid #fbc164;
     border-radius: 32px;
-    background: #d9d9d9 !important;
+    background: #eaeae9 !important;
     outline: none;
     color: #000000;
     font-size: 16px;
@@ -599,6 +599,7 @@ button:disabled {
 }
 
 .authorization {
+    background-color: #a2bfbb;
     height: 100vh;
     display: grid;
     grid-template-columns: 50% 50%;
@@ -644,10 +645,10 @@ button:disabled {
 }
 
 .login-button {
-    background: #c7bf9e !important;
+    background: #fbc164 !important;
     padding: 10px 0;
     font-size: 20px;
-    border: 5px solid #d9d9d9;
+    border: none;
     width: 50%;
     align-self: center;
 }
@@ -666,9 +667,9 @@ button:disabled {
 }
 
 .registration form input, .registration form textarea {
-    border: 5px solid #c7bf9e;
+    border: 5px solid #a2bfbb;
     border-radius: 32px;
-    background: #d9d9d9 !important;
+    background: #fbc164 !important;
     outline: none;
     color: #000000;
     font-size: 16px;
@@ -719,10 +720,10 @@ button:disabled {
 }
 
 .registr-button {
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     padding: 10px 0;
     font-size: 20px;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     width: 30%;
 }
 
@@ -764,9 +765,9 @@ button:disabled {
     width: 40%;
     margin-top: -115px;
     margin-left: -20%;
-    border: 5px solid #c7bf9e;
+    border: 5px solid #a2bfbb;
     border-radius: 32px;
-    background-color: #d9d9d9;
+    background-color: #fbc164;
 }
 
 .success-registration-modal p {
@@ -776,7 +777,7 @@ button:disabled {
 }
 
 .success-registration-modal button {
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     padding: 13px 0;
     width: 34%;
     font-size: 20px;
@@ -820,8 +821,8 @@ button:disabled {
 .invite-manager-container .referal-reg-link {
     margin-top: 30px;
     font-weight: 400;
-    background-color: #c7bf9e;
-    border: 5px solid #d9d9d9;
+    background-color: #a2bfbb;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     padding: 13px;
     width: 80%;
@@ -837,7 +838,7 @@ button:disabled {
 
 .crm-module, .send-container {
     scrollbar-width: thin;
-    scrollbar-color: #d9d9d9 #c7bf9e;
+    scrollbar-color: #fbc164 transparent;
     scrollbar-gutter: stable;
 }
 
@@ -860,8 +861,8 @@ button:disabled {
     width: 220px;
     height: fit-content;
     word-wrap: break-word; 
-    background-color: #c7bf9e;
-    border: 5px solid #d9d9d9;
+    background-color: #a2bfbb;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     overflow: hidden;
 }
@@ -903,7 +904,7 @@ button:disabled {
     height: 60px;
     margin-bottom: 10px;
 
-    background-color: #dedab4;
+    background-color: #eaeae9;
     text-align: center;
     padding: 0 10px;
 }
@@ -913,12 +914,12 @@ button:disabled {
 }
 
 .crm-module::-webkit-scrollbar-track {
-    background: #c7bf9e;
+    background: #a2bfbb;
     border-radius: 10px;
 }
 
 .crm-module::-webkit-scrollbar-thumb {
-    background-color: #d9d9d9;
+    background-color: #fbc164;
     border-radius: 30px;
 }
 
@@ -928,8 +929,8 @@ button:disabled {
     align-items: center;
     height: fit-content;
     width: fit-content;
-    background-color: #d9d9d9 !important;
-    border: 5px solid #c7bf9e;
+    background-color: #fbc164 !important;
+    border: 5px solid #a2bfbb;
     font-size: 16px;
     padding: 0 30px;
 }
@@ -938,8 +939,8 @@ button:disabled {
     align-items: center;
     height: fit-content;
     width: fit-content;
-    background-color: #d9d9d9 !important;
-    border: 5px solid #c7bf9e;
+    background-color: #fbc164 !important;
+    border: 5px solid #a2bfbb;
     font-size: 16px;
     padding: 16px 30px;
 }
@@ -948,8 +949,8 @@ button:disabled {
     align-items: center;
     height: fit-content;
     width: fit-content;
-    background-color: #d9d9d9 !important;
-    border: 5px solid #c7bf9e;
+    background-color: #fbc164 !important;
+    border: 5px solid #fbc164;
     padding: 10px 30px;
 }
 
@@ -959,6 +960,10 @@ button:disabled {
     justify-content: end;
     margin-right: 4vw;
     padding: 27px 0;
+}
+
+.crm-buttons button {
+    border: 5px solid #fbc164;
 }
 
 .stage-modal-container, .modal-container {
@@ -971,9 +976,33 @@ button:disabled {
     backdrop-filter: blur(5px);
 }
 
-.stage-modal {
-    background-color: #d9d9d9;
-    border: 5px solid #c7bf9e;
+.send-container .modal-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: calc(100% - 75px);;
+    width: 100%;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+}
+
+.send-container .modal p {
+    padding: 0;
+    margin: 0;
+}
+
+.modal-text {
+    text-align: center;
+}
+
+.send-container .modal h2 {
+    padding: 0;
+    margin: 0;
+}
+
+.stage-modal, .send-container .modal {
+    background-color: #eaeae9;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     position: absolute;
     top: 28%;
@@ -981,6 +1010,28 @@ button:disabled {
     padding: 20px;
     height: fit-content;
     width: 40%;
+}
+
+.send-container .modal {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.copy-link-container {
+    background-color: #a2bfbb;
+    border: 5px solid #fbc164;
+    border-radius: 32px;
+    padding: 10px 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 92%;
+}
+
+.copy-link-container .link {
+    width: 100%;
 }
 
 .stage-student-info-modal {
@@ -1000,12 +1051,12 @@ button:disabled {
     max-height: 400px;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #c7bf9e transparent;
+    scrollbar-color: #fbc164 transparent;
 }
 
 .delete-confirm-modal {
-    background-color: #d9d9d9;
-    border: 5px solid #c7bf9e;
+    background-color: #fbc164;
+    border: 5px solid #a2bfbb;
     border-radius: 32px;
     position: absolute;
     top: 28%;
@@ -1035,9 +1086,9 @@ button:disabled {
 }
 
 .stage-modal input {
-    border: 5px solid #c7bf9e;
+    border: 5px solid #fbc164;
     border-radius: 32px;
-    background: #dedab4 !important;
+    background: #a2bfbb !important;
     outline: none;
     color: #000000;
     font-size: 16px;
@@ -1048,8 +1099,8 @@ button:disabled {
     width: 94%;
 }
 
-.stage-modal button, .delete-confirm-modal button {
-    background: #c7bf9e !important;
+.stage-modal button, .delete-confirm-modal button, .close-modal-button {
+    background: #a2bfbb !important;
     padding: 13px 30px;
     font-size: 16px;
     min-width: 40%;
@@ -1074,7 +1125,7 @@ button:disabled {
 }
 
 .stage-buttons img:hover, .forms-list-item-buttons img:hover {
-    background-color: #dedab4;
+    background-color: #eaeae9;
     border-radius: 5px;
 }
 
@@ -1125,9 +1176,9 @@ button:disabled {
 
 .edit-form input {
     width: 50%;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     border-radius: 32px;
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     outline: none;
     color: #000000;
     font-size: 16px;
@@ -1138,9 +1189,9 @@ button:disabled {
 
 .edit-form textarea {
     min-height: 100px;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     border-radius: 32px;
-    background: #c7bf9e !important;
+    background: #a2bfbb !important;
     outline: none;
     color: #000000;
     font-size: 16px;
@@ -1162,17 +1213,17 @@ button:disabled {
 
 .create-form-buttons button {
     padding: 13px;
-    border: 5px solid #d9d9d9;
+    border: 5px solid #fbc164;
     min-width: 220px;
 }
 
 .create-form-buttons .create-button {
-    background-color: #c7bf9e !important;
+    background-color: #fbc164 !important;
 }
 
 .create-form-buttons .go-back-button {
-    background-color: #d9d9d9 !important;
-    border: 5px solid #c7bf9e;
+    background-color: #a2bfbb !important;
+    border: 5px solid #a2bfbb;
 }
 
 .form-name::placeholder {
@@ -1204,7 +1255,7 @@ button:disabled {
 }
 
 .field-container img:hover {
-    background-color: #c7bf9e;
+    background-color: #a2bfbb;
 }
 
 .field-container .toogle {
@@ -1242,9 +1293,9 @@ button:disabled {
 }
 
 .test-result {
-    border: 5px solid #dedab4;
+    border: 5px solid #fbc164;
     border-radius: 32px;
-    background-color: #c7bf9e;
+    background-color: #a2bfbb;
     display: flex;
     gap: 10px;
     width: fit-content;
@@ -1286,8 +1337,8 @@ button:disabled {
 }
 
 .textarea-wrapper {
-    background-color: #c7bf9e;
-    border: 5px solid #d9d9d9;
+    background-color: #a2bfbb;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     padding: 13px;
     width: 100%;
@@ -1301,7 +1352,7 @@ button:disabled {
     border: none;
     border-radius: 0;
     scrollbar-width: thin;
-    scrollbar-color: #d9d9d9 transparent;
+    scrollbar-color: #fbc164 transparent;
     padding: 0;
     margin: 0;
 }
@@ -1317,17 +1368,27 @@ button:disabled {
 }
 
 .send-form-container .go-back-button {
-    background: #d9d9d9 !important;
+    background: #a2bfbb !important;
     padding: 13px 30px;
     font-size: 16px;
-    border: 5px solid #c7bf9e;
+    border: none;
     min-width: 24%;
     width: fit-content;
     margin-top: 20px;
 }
 
+.send-form-container .save-button {
+    background: #fbc164 !important;
+    border: 5px solid #fbc164;
+}
+
 .nav-link-go-back-button {
     margin: 0 auto;
+}
+
+.add-new-event-form .save-button {
+    background-color: #fbc164 !important;
+    border: 5px solid #fbc164;
 }
 
 .add-new-event-form .textarea-wrapper, .edit-event-form .textarea-wrapper {
@@ -1341,14 +1402,14 @@ button:disabled {
     border: none;
     border-radius: 0;
     scrollbar-width: thin;
-    scrollbar-color: #d9d9d9 transparent;
+    scrollbar-color: #fbc164 transparent;
     padding: 0;
     margin: 0;
 }
 
 .forms-list-item {
-    background-color: #c7bf9e;
-    border: 5px solid #d9d9d9;
+    background-color: #a2bfbb;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     height: 60px;
     margin-bottom: 20px;
@@ -1359,7 +1420,7 @@ button:disabled {
 }
 
 .css-dev-only-do-not-override-2f9lp0 .ant-list-split .ant-list-item {
-    border-block-end: 5px solid #d9d9d9 !important;
+    border-block-end: 5px solid #fbc164 !important;
 }
 
 .forms-list-item-buttons img {
@@ -1369,7 +1430,7 @@ button:disabled {
 .triggers-robots-header {
     display: flex;
     font-weight: 700;
-    border-top: 5px solid #d9d9d9;
+    border-top: 5px solid #fbc164;
     padding-top: 5px;
     padding-bottom: 10px;
     min-height: 30px;
@@ -1389,7 +1450,7 @@ button:disabled {
 }
 
 .triggers-robots-header img:hover {
-    background-color: #dedab4;
+    background-color: #eaeae9;
 }
 
 .stages-container-robots-triggers {
@@ -1398,6 +1459,10 @@ button:disabled {
 
 .robots .participants-list, .triggers .participants-list, .robots .list-message, .triggers .list-message {
     height: 26vh;
+}
+
+.trigger {
+    min-height: 80px;
 }
 
 .stage .robot-trigger {
@@ -1430,29 +1495,29 @@ button:disabled {
     border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-.add-robot-modal {
+.add-robot-modal, .add-trigger-modal {
     top: 11%;
     left: 31.5%;
     width: 30%;
     padding: 20px 40px;
 }
 
-.robot-type-radio-group {
+.robot-type-radio-group, .trigger-type-radio-group {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 .add-robot-modal .textarea-wrapper {
-    background-color: #dedab4;
-    border: 5px solid #c7bf9e;
+    background-color: #a2bfbb;
+    border: 5px solid #fbc164;
     border-radius: 32px;
     padding: 13px;
     width: 94%;
 }
 
 .add-robot-modal textarea {
-    background: #dedab4 !important;
+    background: #a2bfbb !important;
     outline: none;
     color: #000000;
     font-size: 16px;
@@ -1465,7 +1530,7 @@ button:disabled {
     overflow-y: auto;
     border: none;
     scrollbar-width: thin;
-    scrollbar-color: #c7bf9e transparent;
+    scrollbar-color: #fbc164 transparent;
     margin: 0;
     padding: 0;
 }
@@ -1481,7 +1546,7 @@ button:disabled {
     margin-bottom: -5px;
 }
 
-.add-robot-modal .save-error {
+.add-robot-modal .save-error, .delete-robot-modal .save-error, .add-trigger-modal .save-error {
     margin-top: 10px;
     margin-bottom: 0;
     text-align: center;
@@ -1491,4 +1556,30 @@ button:disabled {
     margin-top: 10px;
     margin-bottom: 0;
     text-align: center;
+}
+
+.select-popup {
+    background-color: #a2bfbb;
+}
+
+.test-warning {
+    margin-top: 5px;
+}
+
+.test-field {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.add-new-event-form .warning {
+    margin-bottom: 13px;
+}
+
+.profile-form .save-button, .edit-event-form .save-button {
+    background-color: #fbc164 !important;
+}
+
+.edit-event-form .hide-event-button, .edit-event-form .delete-event-button{
+    background-color: #a2bfbb !important;
 }
