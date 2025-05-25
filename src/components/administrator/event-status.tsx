@@ -80,10 +80,10 @@ export const EventStatus: React.FC<{
       <div
         className="stage"
         ref={setNodeRef}
+        key={status.id}
         style={style}
         {...attributes}
         {...listeners}
-        key={`${status.id}`}
       >
         <div className="stage-header">
           <p>
@@ -102,18 +102,20 @@ export const EventStatus: React.FC<{
                 }
               }}
             ></img>
-            <img
-              src="/../../img/delete-icon.svg"
-              width="18"
-              height="18"
-              title="Удалить"
-              onClick={() => {
-                if (!isAnyModalOpen) {
-                  setIsDeleteConfirmOpen(true);
-                  setIsAnyModalOpen(true);
-                }
-              }}
-            ></img>
+            {!status.isSystem && (
+              <img
+                src="/../../img/delete-icon.svg"
+                width="18"
+                height="18"
+                title="Удалить"
+                onClick={() => {
+                  if (!isAnyModalOpen) {
+                    setIsDeleteConfirmOpen(true);
+                    setIsAnyModalOpen(true);
+                  }
+                }}
+              ></img>
+            )}
           </div>
         </div>
         {isError && (
@@ -133,7 +135,7 @@ export const EventStatus: React.FC<{
               },
               components: {
                 Pagination: {
-                  itemInputBg: "#d9d9d9",
+                  itemInputBg: "#eaeae9",
                 },
               },
             }}
@@ -217,7 +219,7 @@ export const EventStatus: React.FC<{
                   setIsEditModalOpen(false);
                   setIsAnyModalOpen(false);
                   reset();
-                  setIsEditFailed(false)
+                  setIsEditFailed(false);
                 }}
               >
                 Отмена
@@ -248,7 +250,7 @@ export const EventStatus: React.FC<{
                 onClick={() => {
                   setIsDeleteConfirmOpen(false);
                   setIsAnyModalOpen(false);
-                  setIsDeleteFailed(false)
+                  setIsDeleteFailed(false);
                 }}
               >
                 Отмена

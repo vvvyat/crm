@@ -24,7 +24,7 @@ export const MyInput: React.FC<{
             },
             components: {
               Switch: {
-                handleBg: "#c7bf9e",
+                handleBg: "#a2bfbb",
               },
             },
           }}
@@ -47,7 +47,7 @@ export const MyInput: React.FC<{
           height="18"
           title="Удалить"
           onClick={() => {
-            console.log(field.name)
+            console.log(field.name);
             setAddedFields(
               addedFields.filter((addedField) => addedField.id !== field.id)
             );

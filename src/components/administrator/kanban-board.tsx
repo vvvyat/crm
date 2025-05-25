@@ -28,7 +28,11 @@ export const KanbanBoard: React.FC = React.memo(() => {
   const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
   const [isCreateFailed, setIsCreateFailed] = useState(false);
 
-  const { data: statuses, isLoading, isError } = useEventStatusesQuery(Number(params.id));
+  const {
+    data: statuses,
+    isLoading,
+    isError,
+  } = useEventStatusesQuery(Number(params.id));
 
   const {
     register,
@@ -45,14 +49,25 @@ export const KanbanBoard: React.FC = React.memo(() => {
     reset
   );
 
-  const { mutateAsync: updateStatusOrder } = useUpdateStatusOrderMutation(Number(params.id));
+  const { mutateAsync: updateStatusOrder } = useUpdateStatusOrderMutation(
+    Number(params.id)
+  );
 
   const onSubmit: SubmitHandler<StatusFormInputs> = async (data) => {
-    const maxDisplayOrder = statuses?.reduce((prev, current) => (prev && prev.displayOrder > current.displayOrder) ? prev : current).displayOrder
-    createStatus({
-      name: data.name,
-      displayOrder: maxDisplayOrder ? maxDisplayOrder + 1 : 1,
-    });
+    if (statuses && statuses.length > 0) {
+      const maxDisplayOrder = statuses.reduce((prev, current) =>
+        prev && prev.displayOrder > current.displayOrder ? prev : current
+      ).displayOrder;
+      createStatus({
+        name: data.name,
+        displayOrder: maxDisplayOrder + 1,
+      });
+    } else {
+      createStatus({
+        name: data.name,
+        displayOrder: 1,
+      });
+    }
   };
 
   const sensors = useSensors(
@@ -120,7 +135,9 @@ export const KanbanBoard: React.FC = React.memo(() => {
                 ></img>
               </button>
             </NavLink>
-            <NavLink to={`/admin/event/${params.id}/setting-up-robots-and-triggers`}>
+            <NavLink
+              to={`/admin/event/${params.id}/setting-up-robots-and-triggers`}
+            >
               <button className="nav-button-with-img" disabled={isAnyModalOpen}>
                 <p>Настройка роботов и триггеров</p>
                 <img

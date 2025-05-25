@@ -330,9 +330,11 @@ export enum TriggerTypeId {
 
 export type TriggerLinkInputs = {
   link: string;
-}
+};
 
 export type TriggerTestInputs = {
   value: number;
   condition: string;
-}
+};
+
+export const TG_BOT_URL = "https://t.me/uralintern_student_bot";

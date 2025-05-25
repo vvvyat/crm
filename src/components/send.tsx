@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useFormQuery } from "../fetch/form";
 import { GetFieldTitle } from "../utils";
-import { ConfigProvider, Select } from "antd";
+import { ConfigProvider, Select, message } from "antd";
 import { useSendRequestMutation } from "../fetch/send";
+import { TG_BOT_URL } from "../consts";
 
 export const SendStudentData: React.FC = React.memo(() => {
   const params = useParams();
+  const navigate = useNavigate();
+
   const [isSendFailed, setIsSendFailed] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const {
     register,
@@ -20,6 +25,7 @@ export const SendStudentData: React.FC = React.memo(() => {
 
   const { mutateAsync: sendRequest } = useSendRequestMutation(
     setIsSendFailed,
+    setIsSuccessModalOpen,
     reset
   );
 
@@ -353,7 +359,10 @@ export const SendStudentData: React.FC = React.memo(() => {
                   Не удалось отправить заявку на мероприятие.
                 </p>
               )}
-              <NavLink className="nav-link-go-back-button" to="/event/3">
+              <NavLink
+                className="nav-link-go-back-button"
+                to={`/event/${params.id}`}
+              >
                 <button disabled={isSubmitting} className="go-back-button">
                   Вернуться к мероприятию
                 </button>
@@ -362,6 +371,59 @@ export const SendStudentData: React.FC = React.memo(() => {
           </div>
         </div>
         <img src="../../../img/form.png" height="341" width="405" />
+
+        {isSuccessModalOpen && (
+          <div className="modal-container">
+            <div className="modal">
+              <h2>Ваша заявка на участие в мероприятии отправлена.</h2>
+              <p className="modal-text">
+                Чтобы получать уведомления о дальнейших дествиях, начните
+                общаться с Telegram-ботом.
+              </p>
+              <ConfigProvider
+                theme={{
+                  token: {
+                    fontFamily: "Philosopher",
+                    fontSize: 16,
+                  },
+                  components: {
+                    Message: {
+                      contentBg: "#eaeae9",
+                    },
+                  },
+                }}
+              >
+                {contextHolder}
+              </ConfigProvider>
+              <div className="copy-link-container">
+                {TG_BOT_URL.length > 100 ? (
+                  <p className="link">{TG_BOT_URL.slice(0, 100)}...</p>
+                ) : (
+                  <p className="link">{TG_BOT_URL}</p>
+                )}
+                <img
+                  src="../../img/copy.svg"
+                  width="26"
+                  height="25"
+                  title="Скопировать"
+                  onClick={() => {
+                    navigator.clipboard.writeText(TG_BOT_URL).then(() => {
+                      messageApi.open({
+                        content: "Скопировано",
+                      });
+                    });
+                  }}
+                ></img>
+              </div>
+              <button
+                className="close-modal-button"
+                onClick={() => navigate("/")}
+              >
+                Закрыть
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

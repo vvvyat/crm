@@ -13,17 +13,18 @@ import { EditTriggerModal } from "./edit-trigger-modal";
 export const EventStatus: React.FC<{
   status: Status;
 }> = React.memo(({ status }) => {
-
   const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
 
   const [isAddRobotModalOpen, setIsAddRobotModalOpen] = useState(false);
   const [isEditRobotModalOpen, setIsEditRobotModalOpen] = useState(false);
-  const [isDeleteRobotConfirmOpen, setIsDeleteRobotConfirmOpen] = useState(false);
+  const [isDeleteRobotConfirmOpen, setIsDeleteRobotConfirmOpen] =
+    useState(false);
   const [robot, setRobot] = useState<Robot | undefined>();
 
   const [isAddTriggerModalOpen, setIsAddTriggerModalOpen] = useState(false);
   const [isEditTriggerModalOpen, setIsEditTriggerModalOpen] = useState(false);
-  const [isDeleteTriggerConfirmOpen, setIsDeleteTriggerConfirmOpen] = useState(false);
+  const [isDeleteTriggerConfirmOpen, setIsDeleteTriggerConfirmOpen] =
+    useState(false);
   const [trigger, setTrigger] = useState<Trigger | undefined>();
 
   const { data: triggers, isError: triggersError } = useTriggersQuery(
@@ -78,7 +79,11 @@ export const EventStatus: React.FC<{
                     className="participant robot-trigger trigger"
                     key={item.id}
                   >
-                    <p>{item.name.length > 27 ? `${item.name.slice(0, 27)}...` : item.name}</p>
+                    <p>
+                      {item.name.length > 27
+                        ? `${item.name.slice(0, 27)}...`
+                        : item.name}
+                    </p>
                     <div className="robot-trigger-buttons">
                       <img
                         src="/../../img/edit-icon.svg"
@@ -146,7 +151,7 @@ export const EventStatus: React.FC<{
                 },
                 components: {
                   Pagination: {
-                    itemInputBg: "#d9d9d9",
+                    itemInputBg: "#eaeae9",
                   },
                 },
               }}
@@ -167,7 +172,11 @@ export const EventStatus: React.FC<{
                     className="participant robot-trigger"
                     key={item.id}
                   >
-                    <p>{item.name.length > 24 ? `${item.name.slice(0, 24)}...` : item.name}</p>
+                    <p>
+                      {item.name.length > 24
+                        ? `${item.name.slice(0, 24)}...`
+                        : item.name}
+                    </p>
                     <div className="robot-trigger-buttons">
                       <img
                         src="/../../img/edit-icon.svg"
@@ -189,7 +198,7 @@ export const EventStatus: React.FC<{
                         title="Удалить"
                         onClick={() => {
                           if (!isAnyModalOpen) {
-                            setRobot(item)
+                            setRobot(item);
                             setIsDeleteRobotConfirmOpen(true);
                             setIsAnyModalOpen(true);
                           }
