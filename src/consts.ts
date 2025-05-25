@@ -236,14 +236,16 @@ export type CreateFormInputs = {
 };
 
 export type Props = {
-  [key: string]: string | number;
+  [key: string]: string;
 };
 
 export type StudentRequest = {
   id: number;
   eventId: number;
   statusId: number;
-  formData: Props;
+  formData: {
+    [key: string]: string;
+  };
   createdAt: string;
   updatedAt: string;
 };
@@ -309,13 +311,17 @@ export type Trigger = {
   id: number;
   name: string;
   type: string;
-  parameters: Props;
+  parameters: {
+    [key: string]: string | number;
+  };
   createdAt: string;
 };
 
 export type AddTrigger = {
   triggerId: number;
-  parameters: Props;
+  parameters: {
+    [key: string]: string | number;
+  };
 };
 
 export enum TriggerType {

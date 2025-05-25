@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { SERVER_URL, Props } from "../consts";
+import { SERVER_URL } from "../consts";
 
 export function useEditTriggerMutation(
   statusId: number,
@@ -12,7 +12,7 @@ export function useEditTriggerMutation(
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["edit-trigger", statusId, triggerId],
-    mutationFn: async (payload: Props) => {
+    mutationFn: async (payload: { [key: string]: string | number }) => {
       const res = await axios.patch(
         `${SERVER_URL}/status-triggers/${statusId}/${triggerId}/parameters`,
         payload,
