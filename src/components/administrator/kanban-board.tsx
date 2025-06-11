@@ -94,13 +94,12 @@ export const KanbanBoard: React.FC = React.memo(() => {
     if (oldIndex >= 0 && newIndex >= 0) {
       newStatusesOrder.forEach((status, index) => {
         status.displayOrder = index + 1;
-        updateStatusOrder({
-          statusId: status.id,
-          payload: {
-            name: status.name,
-            displayOrder: status.displayOrder,
-          },
-        });
+      });
+      updateStatusOrder({
+        orders: newStatusesOrder.reduce(
+          (a, status) => ({ ...a, [status.id]: status.displayOrder }),
+          {}
+        ),
       });
     }
   };

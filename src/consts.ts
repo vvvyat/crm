@@ -62,7 +62,7 @@ export enum EventStatus {
   Deleted = "DELETED",
 }
 
-export const SERVER_URL = "https://localhost/api";
+export const SERVER_URL = "https://130.193.58.39/api";
 
 export type AuthorizationInputs = {
   email: string;
@@ -180,9 +180,10 @@ export type StatusFormInputs = {
 };
 
 export type UpdateStatusOrder = {
-  statusId: number;
-  payload: CreateUpdateStatus;
-};
+  orders: {
+    [key: string]: number;
+  };
+}
 
 export type FormsStandardField = {
   id: number | undefined;
