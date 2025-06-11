@@ -6,9 +6,9 @@ export function useUpdateStatusOrderMutation(eventId: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-status-order"],
-    mutationFn: async ({statusId, payload}: UpdateStatusOrder) => {
+    mutationFn: async (payload: UpdateStatusOrder) => {
       const res = await axios.put(
-        `${SERVER_URL}/events/${eventId}/statuses/${statusId}`,
+        `${SERVER_URL}/events/${eventId}/statuses/reorder`,
         payload,
         {
           headers: {
